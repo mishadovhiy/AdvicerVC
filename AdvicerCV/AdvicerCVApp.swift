@@ -11,7 +11,7 @@ import SwiftUI
 struct AdvicerCVApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView()
         }
     }
 }
