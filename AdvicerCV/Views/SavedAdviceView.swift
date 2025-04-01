@@ -1,21 +1,18 @@
+//
+//  SavedAdviceView.swift
+//  AdvicerCV
+//
+//  Created by Mykhailo Dovhyi on 01.04.2025.
+//
+
 import SwiftUI
 
 struct SavedAdviceView: View {
     @ObservedObject var viewModel: AdviceViewModel
-    
+    @EnvironmentObject var db: DB
+
     var body: some View {
-        List {
-            ForEach(viewModel.adviceSections) { section in
-                Section(header: Text(section.title).font(.headline)) {
-                    ForEach(section.items, id: \.self) { item in
-                        Text(item)
-                            .padding(.vertical, 4)
-                    }
-                }
-            }
-        }
-        .listStyle(InsetGroupedListStyle())
-        .navigationTitle("CV Advice")
+        Text("")
     }
 }
 

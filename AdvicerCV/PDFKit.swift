@@ -7,12 +7,24 @@
 
 import PDFKit
 
+#warning("refactoring: move to model")
 extension String {
+    static func pdfToData(from pdfURL: URL) -> Data? {
+        if pdfURL.startAccessingSecurityScopedResource() {
+            defer { pdfURL.stopAccessingSecurityScopedResource() }
+            
+            guard let pdfDocument = PDFDocument(url: pdfURL) else {
+                print("Could not load PDF.")
+                return nil
+            }
+        }
+        return nil
+    }
     static func extractTextAfterTitle(from pdfURL: URL, title: String) -> String? {
         print(pdfURL.absoluteString, " erfwedawsa")
         if pdfURL.startAccessingSecurityScopedResource() {
             defer { pdfURL.stopAccessingSecurityScopedResource() }
-            
+#warning("from data indeed url")
             guard let pdfDocument = PDFDocument(url: pdfURL) else {
                 print("Could not load PDF.")
                 return nil

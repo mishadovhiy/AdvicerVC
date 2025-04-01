@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PromtOpenAI {
+enum PromtOpenAI:Codable {
     case advice(Advice)
     
     var promt:String {
@@ -30,7 +30,7 @@ generate advice for iOS Developer CV, skills:\(advice.skills ?? ""), my top skil
 }
 
 extension PromtOpenAI {
-    struct Advice {
+    struct Advice:Codable {
         let skills:String?
         
         enum Keys:String, CaseIterable, ResponseKeys {

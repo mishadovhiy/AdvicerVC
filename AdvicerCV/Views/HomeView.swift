@@ -1,106 +1,91 @@
+//
+//  HomeView.swift
+//  AdvicerCV
+//
+//  Created by Mykhailo Dovhyi on 01.04.2025.
+//
+
 import SwiftUI
-import UniformTypeIdentifiers
 
 struct HomeView: View {
-    @StateObject private var viewModel = AdviceViewModel()
-    @State private var isDocumentPickerPresented = false
-    @State private var navigateToAdvice = false
+    @StateObject var db:DB = .init()
+    @StateObject private var viewModel = HomeViewModel()
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                Image(systemName: "doc.text.magnifyingglass")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .foregroundColor(.blue)
-                
-                Text("CV Advisor")
-                    .font(.largeTitle)
-                    .bold()
-                
-                VStack(spacing: 16) {
-                    Button(action: {
-                        isDocumentPickerPresented = true
-                    }) {
-                        HStack {
-                            Image(systemName: "arrow.up.doc")
-                            Text("Upload CV")
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    }
-                    
-                    NavigationLink(destination: SavedAdviceView(viewModel: viewModel)) {
-                        HStack {
-                            Image(systemName: "list.bullet.clipboard")
-                            Text("My Advices")
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+        VStack {
+            tabBarButtons
+            HStack {
+                contenView
+            }
+        }
+        .environmentObject(db)
+        .sheet(isPresented: $viewModel.isDocumentSelecting) {
+            DocumentPicker(onDocumentPicked: {
+                viewModel.processDocument($0, db: &db.db)
+            })
+        }
+    }
+    
+    var contenView: some View {
+        ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
+            switch tab {
+            case .home:homeView
+                    .frame(maxWidth: viewModel.selectedTab == .home ? .infinity : 0)
+                    .animation(.bouncy, value: viewModel.selectedTab)
+                    .clipped()
+            case .advices:
+                AdviceListView(selectedDocument: $viewModel.selectedDocument)
+                    .frame(maxWidth: viewModel.selectedTab == .advices ? .infinity : 0)
+                    .animation(.bouncy, value: viewModel.selectedTab)
+                    .clipped()
+            case .settings:
+                Text("Settings")
+                    .frame(maxWidth: viewModel.selectedTab == .settings ? .infinity : 0)
+                    .animation(.bouncy, value: viewModel.selectedTab)
+                    .clipped()
+            }
+        }
+
+    }
+    
+    var homeView: some View {
+        VStack {
+            Spacer()
+            uploadButton
+            Spacer()
+        }
+    }
+    
+    var uploadButton: some View {
+        Button(action: {
+            viewModel.isDocumentSelecting = true
+        }) {
+            HStack {
+                Image(systemName: "arrow.up.doc")
+                Text("Upload CV")
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+        }
+    }
+    
+    var tabBarButtons: some View {
+        HStack {
+            Text("\(db.db.coduments.count)")
+            ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
+                Button(tab.title) {
+                    withAnimation {
+                        viewModel.selectedTab = tab
                     }
                 }
-                .padding(.horizontal)
-                
-                Spacer()
             }
-            .padding()
-            .navigationBarHidden(true)
-            .sheet(isPresented: $isDocumentPickerPresented) {
-                DocumentPicker(
-                    types: viewModel.documentTypes,
-                    onDocumentPicked: { url in
-                        viewModel.processDocument(url)
-                        navigateToAdvice = true
-                    }
-                )
-            }
-            .background(
-                NavigationLink(
-                    destination: SavedAdviceView(viewModel: viewModel),
-                    isActive: $navigateToAdvice,
-                    label: { EmptyView() }
-                )
-            )
         }
     }
 }
 
-struct DocumentPicker: UIViewControllerRepresentable {
-    let types: [UTType]
-    let onDocumentPicked: (URL) -> Void
-    
-    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let picker = UIDocumentPickerViewController(forOpeningContentTypes: types)
-        picker.delegate = context.coordinator
-        return picker
-    }
-    
-    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    class Coordinator: NSObject, UIDocumentPickerDelegate {
-        let parent: DocumentPicker
-        
-        init(_ parent: DocumentPicker) {
-            self.parent = parent
-        }
-        
-        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-            guard let url = urls.first else { return }
-            parent.onDocumentPicked(url)
-        }
-    }
-}
 
 #Preview {
     HomeView()
