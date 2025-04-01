@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
 class HomeViewModel: ObservableObject {
     @Published var adviceSections: [AdviceSection] = []
     @Published var selectedTab: PresentingTab = .home
-    @Published var selectedDocument:DataBase.Document? {
+    @Published var selectedDocument:Document? {
         willSet {
             if selectedTab != .advices {
                 withAnimation {
@@ -35,19 +35,24 @@ class HomeViewModel: ObservableObject {
 
     
     // MARK: - Document Processing
-    func processDocument(_ url: URL, db:inout DataBase) {
+    func processDocument(_ url: URL, completion:@escaping()->()) {
         self.loading = .document
         let data = String.pdfToData(from: url)!
         let test = String.extractTextAfterTitle(from: url, title: "Skills")
-        let newDocument:DataBase.Document = .init(data: data, url: url, request: .advice(.init(skills: test)))
-        db.coduments.update(newDocument)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-            withAnimation {
-                self.selectedDocument = newDocument
+        let advice = PromtOpenAI.Advice.init(skills: test)
+        var newDocument:Document = .init(data: data, url: url, request: .advice(advice))
+        DispatchQueue(label: "api", qos: .userInitiated).async {
+            NetworkModel().advice(advice) { response in
+                newDocument.response = response
+                print(response, " gterfwedasx ")
+                DispatchQueue.main.async {
+                    self.selectedDocument = newDocument
+                    completion()
+                }
             }
-        })
+        }
     }
-} 
+}
 
 extension HomeViewModel {
     enum Loading:String {

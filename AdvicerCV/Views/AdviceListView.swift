@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct AdviceListView: View {
-    @Binding var selectedDocument:DataBase.Document?
+    @Binding var selectedDocument:Document?
     @EnvironmentObject var db: AppData
-
+    let regenerateAdvicePressed:()->()
     var body: some View {
         NavigationView {
             List(db.db.coduments, id:\.url?.absoluteString) { item in
@@ -21,7 +21,7 @@ struct AdviceListView: View {
                         }
                     }
                 VStack {
-                    NavigationLink("", destination: AdviceView(document: $selectedDocument), isActive: .init(get: {
+                    NavigationLink("", destination: AdviceView(document: $selectedDocument, regeneratePressed: regenerateAdvicePressed), isActive: .init(get: {
                         selectedDocument != nil
                     }, set: { newValue in
                         if !newValue {
@@ -32,14 +32,10 @@ struct AdviceListView: View {
                 }
                 .hidden()
             }
+            .frame(width: db.deviceSize.width)
         }
-        .interactiveDismissDisabled()
 
 
     }
     
-}
-
-#Preview {
-    AdviceListView(selectedDocument: .constant(nil))
 }

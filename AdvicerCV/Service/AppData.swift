@@ -8,7 +8,7 @@
 import Foundation
 
 class AppData:ObservableObject {
-    private let dbkey = "db2"
+    private let dbkey = "db3"
     @Published var deviceSize:CGSize = .zero
     @Published var db:DataBase = .init() {
         didSet {
@@ -55,25 +55,6 @@ class AppData:ObservableObject {
 
 struct DataBase: Codable {
     var coduments:[Document] = []
-    struct Document: Codable {
-        var data:Data?
-        var url:URL?
-        var request:PromtOpenAI? = nil
-    }
+    
 }
 
-extension [DataBase.Document] {
-    mutating func update(_ newValue:DataBase.Document) {
-        var found = false
-        for i in 0..<self.count {
-            if !found && self[i].url?.absoluteString == newValue.url?.absoluteString {
-                found = true
-                self[i] = newValue
-                return
-            }
-        }
-        if !found {
-            self.append(newValue)
-        }
-    }
-}

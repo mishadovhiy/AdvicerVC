@@ -9,20 +9,19 @@ import SwiftUI
 
 struct AdviceView: View {
     @EnvironmentObject var db: AppData
-    @Binding var document:DataBase.Document?
-
+    @Binding var document:Document?
+    let regeneratePressed:()->()
+    
     var body: some View {
         ScrollView(.horizontal) {
             HStack(spacing:0) {
                 PDFKitView(pdfData: document?.data)
                     .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
                 ScrollView(.vertical, content: {
-                    VStack(content:  {
-                        Color(.blue)
-                    })
+                    rightControlView
                         .frame(width: db.deviceSize.width - (db.deviceSize.width / 10), height: db.deviceSize.height)
                 })
-                    
+                
             }
         }
         .background(.red)
@@ -30,6 +29,12 @@ struct AdviceView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.orange)
     }
+    
+    var rightControlView: some View {
+        VStack {
+            Text("your skills")
+            Text(document?.response?.value(for: .skillsGrade) ?? "")
+            Color(.blue)
+        }
+    }
 }
-
-

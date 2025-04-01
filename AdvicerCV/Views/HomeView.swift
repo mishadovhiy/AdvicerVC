@@ -29,8 +29,14 @@ struct HomeView: View {
         .environmentObject(db)
         .sheet(isPresented: $viewModel.isDocumentSelecting) {
             DocumentPicker(onDocumentPicked: {
-                viewModel.processDocument($0, db: &db.db)
+                self.loadDocument($0)
             })
+        }
+    }
+    
+    func loadDocument(_ url:URL) {
+        viewModel.processDocument(url) {
+            self.db.db.coduments.update(self.viewModel.selectedDocument!)
         }
     }
     
@@ -42,7 +48,14 @@ struct HomeView: View {
                     .animation(.bouncy, value: viewModel.selectedTab)
                     .clipped()
             case .advices:
-                AdviceListView(selectedDocument: $viewModel.selectedDocument)
+                AdviceListView(selectedDocument: $viewModel.selectedDocument, regenerateAdvicePressed: {
+                    if let url = viewModel.selectedDocument?.url {
+                        viewModel.selectedTab = .home
+                        viewModel.selectedDocument = nil
+                        self.loadDocument(url)
+
+                    }
+                })
                     .frame(maxWidth: viewModel.selectedTab == .advices ? .infinity : 0)
                     .animation(.bouncy, value: viewModel.selectedTab)
                     .clipped()
@@ -77,6 +90,7 @@ struct HomeView: View {
             .background(Color.blue)
             .foregroundColor(.white)
             .cornerRadius(10)
+            .frame(maxHeight: 50)
         }
     }
     

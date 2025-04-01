@@ -19,6 +19,12 @@ enum PromtOpenAI:Codable {
             return """
 generate advice for iOS Developer CV, skills:\(advice.skills ?? ""), my top skills:SwiftUI,UIKit, optionaly with WatchKit but i like it, desireble job duties:iOS application development,in a cross plutform team. Structure advice response in keys: \(properties)
 """
+            //generate request
+            //choose cv button
+            //job title
+            //top skills
+            //desireble job or job duties
+            //
         }
     }
     var isValid:Bool {
