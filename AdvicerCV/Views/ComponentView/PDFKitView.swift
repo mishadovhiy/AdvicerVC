@@ -10,17 +10,27 @@ import UIKit
 import PDFKit
 
 struct PDFKitView: UIViewRepresentable {
-    var pdfData: Data
-
+    var pdfData: Data?
     func makeUIView(context: Context) -> PDFView {
         let pdfView = PDFView()
-        pdfView.autoScales = true 
+        pdfView.autoScales = true
+        print("erfwedfr")
+        pdfView.document = PDFDocument(data: pdfData ?? .init())
         return pdfView
     }
 
     func updateUIView(_ uiView: PDFView, context: Context) {
-        if let document = PDFDocument(data: pdfData) {
-            uiView.document = document
+        print(pdfData?.count, "fwedas")
+        if pdfData?.isEmpty ?? true {
+            print(pdfData?.count, "ETGRFWDA")
+
+            return
         }
+        if let pdfData {
+            if let document = PDFDocument(data: pdfData) {
+                uiView.document = document
+            }
+        }
+        
     }
 }

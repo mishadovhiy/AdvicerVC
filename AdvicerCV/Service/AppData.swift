@@ -9,6 +9,7 @@ import Foundation
 
 class AppData:ObservableObject {
     private let dbkey = "db2"
+    @Published var deviceSize:CGSize = .zero
     @Published var db:DataBase = .init() {
         didSet {
             if dataLoaded {

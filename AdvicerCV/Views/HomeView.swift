@@ -8,16 +8,21 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var db:DB = .init()
+    @StateObject var db:AppData = .init()
     @StateObject private var viewModel = HomeViewModel()
     
     var body: some View {
-        VStack {
-            tabBarButtons
-            HStack {
-                contenView
+        GeometryReader(content: { proxy in
+            VStack {
+                tabBarButtons
+                HStack(spacing:0) {
+                    contenView
+                }
             }
-        }
+            .onChange(of: proxy.size) { newValue in
+                db.deviceSize = newValue
+            }
+        })
         .environmentObject(db)
         .sheet(isPresented: $viewModel.isDocumentSelecting) {
             DocumentPicker(onDocumentPicked: {

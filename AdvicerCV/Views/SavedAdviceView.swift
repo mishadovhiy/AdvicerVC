@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SavedAdviceView: View {
     @ObservedObject var viewModel: AdviceViewModel
-    @EnvironmentObject var db: DB
+    @EnvironmentObject var db: AppData
 
     var body: some View {
         Text("")

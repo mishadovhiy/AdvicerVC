@@ -8,18 +8,41 @@
 import SwiftUI
 
 struct AdviceView: View {
-    @EnvironmentObject var db: DB
-    let document:DataBase.Document?
-    
+    @EnvironmentObject var db: AppData
+    @Binding var document:DataBase.Document?
+
     var body: some View {
-        if let document = document?.data {
-            PDFKitView(pdfData: document)
-        } else {
-            Text("error loading document")
+        VStack {
+//
+
+
+            
+            
+                
+            
         }
+
+
+        ScrollView(.horizontal, content: {
+            VStack(content:  {
+                if let document = document?.data, !document.isEmpty {
+                    PDFKitView(pdfData: document)
+                }
+            })
+            .frame(maxWidth: db.deviceSize.width)
+            .background(.blue)
+            ScrollView(.vertical, content: {
+                VStack {
+                    
+                }
+            })
+            .frame(width: db.deviceSize.width)
+        })
+        .background(.red)
+        .transition(.asymmetric(insertion: .scale, removal: .scale))
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.orange)
     }
 }
 
-#Preview {
-    AdviceView(document: .init())
-}
+

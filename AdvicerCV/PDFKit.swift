@@ -17,6 +17,7 @@ extension String {
                 print("Could not load PDF.")
                 return nil
             }
+            return pdfDocument.dataRepresentation()
         }
         return nil
     }

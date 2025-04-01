@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AdviceListView: View {
     @Binding var selectedDocument:DataBase.Document?
-    @EnvironmentObject var db: DB
+    @EnvironmentObject var db: AppData
 
     var body: some View {
         NavigationView {
@@ -20,27 +20,24 @@ struct AdviceListView: View {
                             selectedDocument = item
                         }
                     }
-            }
-            .background {
-                navigationLinks
+                VStack {
+                    NavigationLink("", destination: AdviceView(document: $selectedDocument), isActive: .init(get: {
+                        selectedDocument != nil
+                    }, set: { newValue in
+                        if !newValue {
+                            selectedDocument = nil
+                        }
+                    }))
+
+                }
+                .hidden()
             }
         }
+        .interactiveDismissDisabled()
+
+
     }
     
-    var navigationLinks: some View {
-        VStack {
-            NavigationLink("", destination: AdviceView(document: selectedDocument), isActive: .init(get: {
-                selectedDocument != nil
-            }, set: { newValue in
-                if !newValue {
-                    withAnimation {
-                        selectedDocument = nil
-                    }
-                }
-            }))
-        }
-        .hidden()
-    }
 }
 
 #Preview {
