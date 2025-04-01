@@ -22,6 +22,9 @@ struct HomeView: View {
             .onChange(of: proxy.size) { newValue in
                 db.deviceSize = newValue
             }
+            .onAppear {
+                db.deviceSize = proxy.size
+            }
         })
         .environmentObject(db)
         .sheet(isPresented: $viewModel.isDocumentSelecting) {

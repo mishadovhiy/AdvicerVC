@@ -12,32 +12,19 @@ struct AdviceView: View {
     @Binding var document:DataBase.Document?
 
     var body: some View {
-        VStack {
-//
-
-
-            
-            
-                
-            
-        }
-
-
-        ScrollView(.horizontal, content: {
-            VStack(content:  {
-                if let document = document?.data, !document.isEmpty {
-                    PDFKitView(pdfData: document)
-                }
-            })
-            .frame(maxWidth: db.deviceSize.width)
-            .background(.blue)
-            ScrollView(.vertical, content: {
-                VStack {
+        ScrollView(.horizontal) {
+            HStack(spacing:0) {
+                PDFKitView(pdfData: document?.data)
+                    .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
+                ScrollView(.vertical, content: {
+                    VStack(content:  {
+                        Color(.blue)
+                    })
+                        .frame(width: db.deviceSize.width - (db.deviceSize.width / 10), height: db.deviceSize.height)
+                })
                     
-                }
-            })
-            .frame(width: db.deviceSize.width)
-        })
+            }
+        }
         .background(.red)
         .transition(.asymmetric(insertion: .scale, removal: .scale))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
