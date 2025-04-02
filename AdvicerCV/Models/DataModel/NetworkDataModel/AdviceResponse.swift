@@ -12,7 +12,7 @@ struct AdviceResponse:Codable {
     func value(for key:PromtOpenAI.Advice.Keys) -> String {
         dict[key.rawValue] ?? ""
     }
-    
+    var date:Date = .init()
     init(data: [String : String]) {
         self.dict = data
     }

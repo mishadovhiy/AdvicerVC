@@ -9,15 +9,23 @@ import Foundation
 
 enum PromtOpenAI:Codable {
     case advice(Advice)
-    
+    var advice:Advice? {
+        switch self {
+        case .advice(let advice):
+            return advice
+        }
+    }
     var promt:String {
         switch self {
         case .advice(let advice):
             let properties = PromtOpenAI.Advice.Keys.allCases.compactMap { key in
                 "<\(key.identifier)>(\(key.valueDescription))</\(key.identifier)>"
             }.joined()
+            let values = advice.allValues.map { (key: Advice.RetriveTitles, value: String) in
+                "\(key.rawValue.addSpaceBeforeCapitalizedLetters):\(value)"
+            }.joined(separator: ",")
             return """
-generate advice for iOS Developer CV, skills:\(advice.skills ?? ""), my top skills:SwiftUI,UIKit, optionaly with WatchKit but i like it, desireble job duties:iOS application development,in a cross plutform team. Structure advice response in keys: \(properties)
+generate advice for iOS Developer CV, \(values), my top skills:SwiftUI,UIKit, optionaly with WatchKit but i like it, desireble job duties:iOS application development,in a cross plutform team. Structure advice response in keys: \(properties)
 """
             //generate request
             //choose cv button
@@ -30,14 +38,54 @@ generate advice for iOS Developer CV, skills:\(advice.skills ?? ""), my top skil
     var isValid:Bool {
         switch self {
         case .advice(let advice):
-            ![advice.skills].contains(where: {$0?.isEmpty ?? true})
+            ![advice.allValues].contains(where: {$0?.isEmpty ?? true})
         }
     }
 }
 
 extension PromtOpenAI {
     struct Advice:Codable {
-        let skills:String?
+        
+        private var dict:[String:String] = [:]
+        
+        init(_ dict:[String:String]) {
+            self.dict = dict
+        }
+        
+        func text(for key:RetriveTitles) -> String {
+            dict[key.rawValue] ?? ""
+        }
+        
+        var allValues:[RetriveTitles:String] {
+            var values:[RetriveTitles:String] = [:]
+            RetriveTitles.allCases.forEach { key in
+                values.updateValue(text(for: key), forKey: key)
+            }
+            return values
+        }
+        //discribes titles to retrive from cv
+        enum RetriveTitles: String, CaseIterable {
+            case skills
+            case workingHistory
+            case summary
+            case education
+            case contacts
+            
+            var alternative:[String] {
+                switch self {
+                case .workingHistory:["workHistory", "workExperience", "workingExperience"]
+                case .contacts:["contactInformation"]
+                default:
+                    []
+                }
+            }
+            
+            var titles:[String] {
+                var title = [rawValue]
+                title.append(contentsOf: alternative)
+                return title.compactMap({$0.addSpaceBeforeCapitalizedLetters.capitalized})
+            }
+        }
         
         enum Keys:String, CaseIterable, ResponseKeys {
             case cvCompletnessGrade

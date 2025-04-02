@@ -13,13 +13,25 @@ struct AdviceListView: View {
     let regenerateAdvicePressed:()->()
     var body: some View {
         NavigationView {
-            List(db.db.coduments, id:\.url?.absoluteString) { item in
-                Text(item.url?.absoluteString ?? "9")
-                    .onTapGesture {
-                        withAnimation {
-                            selectedDocument = item
+            VStack {
+                LazyVGrid(columns: [.init(), .init()]) {
+                    ForEach(db.db.coduments, id:\.url?.absoluteString) { item in
+                        VStack {
+                            Text(item.url?.lastPathComponent ?? "-")
+                            PDFKitView(pdfData: item.data)
+                            
+                        }
+                        .aspectRatio(1, contentMode: .fit)
+                        .background(Color.secondary)
+                        .cornerRadius(10)
+                        .onTapGesture {
+                            withAnimation {
+                                selectedDocument = item
+                            }
                         }
                     }
+                }
+                Spacer()
                 VStack {
                     NavigationLink("", destination: AdviceView(document: $selectedDocument, regeneratePressed: regenerateAdvicePressed), isActive: .init(get: {
                         selectedDocument != nil
@@ -28,14 +40,19 @@ struct AdviceListView: View {
                             selectedDocument = nil
                         }
                     }))
-
+                    
                 }
                 .hidden()
             }
             .frame(width: db.deviceSize.width)
+            .background {
+                ClearBackgroundView()
+            }
         }
-
-
+        .background {
+            ClearBackgroundView()
+        }
+        
     }
     
 }

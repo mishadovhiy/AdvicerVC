@@ -19,7 +19,7 @@ struct AdviceView: View {
                     .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
                 ScrollView(.vertical, content: {
                     rightControlView
-                        .frame(width: db.deviceSize.width - (db.deviceSize.width / 10), height: db.deviceSize.height)
+                        .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
                 })
                 
             }
@@ -31,10 +31,15 @@ struct AdviceView: View {
     }
     
     var rightControlView: some View {
-        VStack {
-            Text("your skills")
-            Text(document?.response?.value(for: .skillsGrade) ?? "")
-            Color(.blue)
+        let cvContent = document?.request?.advice?.allValues ?? [:]
+        return VStack {
+            Text("Retrived content")
+            ForEach(cvContent.keys.compactMap({$0.rawValue}), id:\.self) { item in
+                VStack {
+                    Text((PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts).rawValue.addSpaceBeforeCapitalizedLetters.capitalized)
+                    Text(cvContent[.init(rawValue: item) ?? .contacts] ?? "")
+                }
+            }
         }
     }
 }

@@ -13,11 +13,14 @@ struct HomeView: View {
     
     var body: some View {
         GeometryReader(content: { proxy in
-            VStack {
+            VStack(spacing:-10) {
                 tabBarButtons
                 HStack(spacing:0) {
                     contenView
                 }
+                .padding(.bottom, 5)
+                .background(viewModel.selectedTab.color)
+                .cornerRadius(20)
             }
             .onChange(of: proxy.size) { newValue in
                 db.deviceSize = newValue
@@ -95,16 +98,24 @@ struct HomeView: View {
     }
     
     var tabBarButtons: some View {
-        HStack {
-            Text("\(db.db.coduments.count)")
+        HStack(spacing:-10) {
             ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
-                Button(tab.title) {
+                Button(tab.title + (tab == .advices ? " (\(db.db.coduments.count))" : "")) {
                     withAnimation {
                         viewModel.selectedTab = tab
                     }
                 }
+                .zIndex(viewModel.selectedTab == tab ? 10 : 1)
+                .padding(.top, 7)
+                .padding(.bottom, 12)
+                .padding(.horizontal, 20)
+                .background(tab.color)
+                .cornerRadius(10)
+                .animation(.easeInOut, value: viewModel.selectedTab)
             }
+            Spacer()
         }
+        .padding(.leading, 25)
     }
 }
 

@@ -8,9 +8,9 @@
 import Foundation
 import SwiftUI
 import UniformTypeIdentifiers
+import PDFKit
 
 class HomeViewModel: ObservableObject {
-    @Published var adviceSections: [AdviceSection] = []
     @Published var selectedTab: PresentingTab = .home
     @Published var selectedDocument:Document? {
         willSet {
@@ -29,28 +29,41 @@ class HomeViewModel: ObservableObject {
     @Published var loading:Loading? = nil
     @Published var isDocumentSelecting = false
 
-    init() {
-        adviceSections = AdviceSection.mockSections
-    }
-
     
     // MARK: - Document Processing
     func processDocument(_ url: URL, completion:@escaping()->()) {
         self.loading = .document
-        let data = String.pdfToData(from: url)!
-        let test = String.extractTextAfterTitle(from: url, title: "Skills")
-        let advice = PromtOpenAI.Advice.init(skills: test)
-        var newDocument:Document = .init(data: data, url: url, request: .advice(advice))
-        DispatchQueue(label: "api", qos: .userInitiated).async {
-            NetworkModel().advice(advice) { response in
-                newDocument.response = response
-                print(response, " gterfwedasx ")
-                DispatchQueue.main.async {
-                    self.selectedDocument = newDocument
-                    completion()
+        let data = PDFDocument.pdfToData(from: url)!
+        let test = PDFDocument.extractTextAfterTitle(from: data, titles: PromtOpenAI.Advice.RetriveTitles.allCases.compactMap({$0.titles}).flatMap({$0}))
+        var adviceResult:[String:String] = [:]
+        print("fsda ", test, " rtgerfds")
+
+        PromtOpenAI.Advice.RetriveTitles.allCases.forEach { key in
+            key.titles.forEach { title in
+                if let value = test[title], !value.isEmpty {
+                    adviceResult.updateValue(test[title] ?? "", forKey: key.rawValue)
+
                 }
             }
         }
+        print(adviceResult, " rtgdfsda ")
+        let advice = PromtOpenAI.Advice.init(adviceResult)
+        print(advice.allValues, " rgtefrds")
+        var newDocument:Document = .init(data: data, url: url, request: .advice(advice))
+        print("promtsfd ", newDocument.request?.promt, " efrweda ")
+                            self.selectedDocument = newDocument
+        completion()
+
+//        DispatchQueue(label: "api", qos: .userInitiated).async {
+//            NetworkModel().advice(advice) { response in
+//                newDocument.response = response
+//                print(response, " gterfwedasx ")
+//                DispatchQueue.main.async {
+//                    self.selectedDocument = newDocument
+//                    completion()
+//                }
+//            }
+//        }
     }
 }
 
@@ -64,5 +77,16 @@ extension HomeViewModel {
         case settings
         var title:String {
             rawValue.addSpaceBeforeCapitalizedLetters.uppercased()}
+        
+        var color:Color {
+            switch self {
+            case .home:
+                    .orange
+            case .advices:
+                    .brown
+            case .settings:
+                    .green
+            }
+        }
     }
 }
