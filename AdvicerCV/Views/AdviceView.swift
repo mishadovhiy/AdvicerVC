@@ -32,8 +32,10 @@ struct AdviceView: View {
     
     var rightControlView: some View {
         let cvContent = document?.request?.advice?.allValues ?? [:]
+        let work = document?.request?.advice?.extractWorkExperience(from: cvContent[.workingHistory] ?? "").years
         return VStack {
             Text("Retrived content")
+            Text("work" + (work ?? ""))
             ForEach(cvContent.keys.compactMap({$0.rawValue}), id:\.self) { item in
                 VStack {
                     Text((PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts).rawValue.addSpaceBeforeCapitalizedLetters.capitalized)
