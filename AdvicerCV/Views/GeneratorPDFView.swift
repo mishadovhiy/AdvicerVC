@@ -10,21 +10,32 @@ import UIKit
 
 struct GeneratorPDFView: View {
     @State var viewModel = GeneratorPDFViewModel()
+    @State var generalColorsPresenting = false
+    @State var generalFontsPresenting = false
+    @State var generalSpacesPresenting = false
+    
     var body: some View {
         VStack {
             AttributedTextView(attributedString: self.viewModel.attrubute, didPressLink: { link, at in
                 viewModel.linkSelected = (link, at)
+                if link.lowercased().contains("workExperience".lowercased()) {
+                    let id = link.lowercased().replacingOccurrences(of: "workExperience".lowercased(), with: "")
+                    print(id, "ythrgtfd")
+                    if id.isEmpty {
+                        withAnimation {
+                            self.viewModel.editingWorkExperience = .init()
+                            self.viewModel.cvContent.workExperience.append(.init(from: .now, id: self.viewModel.editingWorkExperience!))
+                        }
+                    } else {
+                        withAnimation {
+                            self.viewModel.editingWorkExperience = .init(uuidString: id)
+                        }
+                    }
+                    
+                }
             })
             .frame(maxHeight: .infinity)
-            ScrollView {
-                VStack {
-                    Spacer()
-                    Button("export") {
-                        viewModel.exportPressed()
-                    }.frame(height: 44)
-                }
-            }
-            .frame(maxHeight: .infinity)
+            generalEditor
         }
         .sheet(isPresented: $viewModel.isExportPresenting) {
             ActivityViewController(activityItems: [viewModel.exportingURL ?? .init(string: "https://mishadovhiy.com")!])
@@ -32,8 +43,107 @@ struct GeneratorPDFView: View {
         .onAppear {
             viewModel.cvContent = .mock
         }
+        .background(.black)
     }
 
+    var workExperienceEditor: some View {
+        VStack {
+            //date
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.orange)
+                .frame(height: 1000)
+        }
+        .navigationBarItems(trailing: HStack {
+            Button("delete") {
+                viewModel.cvContent.workExperience.removeAll(where: {
+                    $0.id == self.viewModel.editingWorkExperience
+                })
+                withAnimation {
+                    self.viewModel.editingWorkExperience = nil
+                }
+            }
+        })
+    }
+
+    var valueEditorView: some View {
+        ScrollView(.vertical) {
+            VStack {
+                if let id = viewModel.editingWorkExperience {
+                    self.workExperienceEditor
+                }
+            }
+            .opacity(0.2)
+            
+        }
+
+
+    }
+    
+    var generalEditor: some View {
+        NavigationView {
+            ScrollView(.horizontal) {
+                HStack {
+                    NavigationLink(destination: HStack {
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                    }, isActive: $generalColorsPresenting) {
+                        Text("Colors")
+                    }
+                    NavigationLink(destination: HStack {
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                    }, isActive: $generalFontsPresenting) {
+                        Text("Fonts")
+                    }
+                    NavigationLink(destination: HStack {
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                        Text("color")
+                    }, isActive: $generalSpacesPresenting) {
+                        Text("Spaces")
+                    }
+                    
+                    Text("sdfdsf")
+                    Text("sdfdsf")
+
+                    Text("sdfdsf")
+
+                    Text("sdfdsf")
+                    
+                    Button("export") {
+                        viewModel.exportPressed()
+                    }
+                    .background(.red)
+                    
+                    NavigationLink("", destination: valueEditorView, isActive: $viewModel.isPresentingValueEditor)
+                        .hidden()
+                }
+            }
+            .background(.red)
+        }
+        .frame(maxHeight: viewModel.isPresentingValueEditor ? .infinity : 45)
+        .animation(.smooth, value: viewModel.isPresentingValueEditor)
+        .background {
+            ClearBackgroundView()
+        }
+    }
 
 }
 
