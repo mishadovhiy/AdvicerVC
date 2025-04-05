@@ -37,6 +37,8 @@
 		82A310E72D7BDD3700E2737F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A310E22D7BDD3700E2737F /* HomeViewModel.swift */; };
 		82A310E82D7BDD3700E2737F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A310E42D7BDD3700E2737F /* HomeView.swift */; };
 		82A310EC2D7BDD9D00E2737F /* PDFKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A310EB2D7BDD9D00E2737F /* PDFKit.swift */; };
+		82E100FD2DA08492008AFEB4 /* CVContent_mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E100FC2DA08492008AFEB4 /* CVContent_mock.swift */; };
+		82E100FF2DA084B8008AFEB4 /* CVContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E100FE2DA084B8008AFEB4 /* CVContent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +73,8 @@
 		82A310E22D7BDD3700E2737F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		82A310E42D7BDD3700E2737F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		82A310EB2D7BDD9D00E2737F /* PDFKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKit.swift; sourceTree = "<group>"; };
+		82E100FC2DA08492008AFEB4 /* CVContent_mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CVContent_mock.swift; sourceTree = "<group>"; };
+		82E100FE2DA084B8008AFEB4 /* CVContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CVContent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +144,8 @@
 			isa = PBXGroup;
 			children = (
 				8289D8C22D9C46A5001B6C40 /* Document.swift */,
+				82E100FE2DA084B8008AFEB4 /* CVContent.swift */,
+				82E100FC2DA08492008AFEB4 /* CVContent_mock.swift */,
 				820368C12D9AABFC00218754 /* NetworkDataModel */,
 			);
 			path = DataModel;
@@ -290,6 +296,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82E100FF2DA084B8008AFEB4 /* CVContent.swift in Sources */,
 				8289D8A42D9B40D1001B6C40 /* AppData.swift in Sources */,
 				8289D8BA2D9B666A001B6C40 /* AdviceViewModel.swift in Sources */,
 				8289D8DB2D9CA1D3001B6C40 /* Advice.swift in Sources */,
@@ -301,6 +308,7 @@
 				8289D8DD2D9D6782001B6C40 /* GenerateAdviceView.swift in Sources */,
 				8289D8D42D9C6037001B6C40 /* ClearBackgroundView.swift in Sources */,
 				8289D8DF2D9D692B001B6C40 /* GeneratorPDFView.swift in Sources */,
+				82E100FD2DA08492008AFEB4 /* CVContent_mock.swift in Sources */,
 				8289D8E92D9DD0A0001B6C40 /* ActivityViewController.swift in Sources */,
 				820368BD2D9AAB6C00218754 /* NetworkModel.swift in Sources */,
 				820368C82D9AB25900218754 /* Request.swift in Sources */,

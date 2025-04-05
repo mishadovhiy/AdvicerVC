@@ -70,7 +70,44 @@ extension PromtOpenAI {
             case summary
             case education
             case contacts
+            case portfolio
+            case jobTitle
+            case jobTitleDescription
             
+            var needDates:Bool {
+                switch self {
+                case .workingHistory, .education, .portfolio:true
+                default:false
+                }
+            }
+            
+            var pdfPreviewTitlePlaceholder:String {
+                switch self {
+                case .skills:
+                    "Enter skill name"
+                case .workingHistory:
+                    "Enter company name"
+                case .summary:
+                    ""
+                case .education:
+                    "Enter univertsity name"
+                case .contacts:
+                    "Enter contact type"
+                case .portfolio:
+                    "Enter project name"
+                case .jobTitle:
+                    "Enter job title"
+                case .jobTitleDescription:
+                    "Enter CV Description"
+                }
+            }
+            
+            var openAIUsed:Bool {
+                switch self {
+                case .portfolio, .contacts, .jobTitle, .jobTitleDescription:false
+                default:true
+                }
+            }
             var alternative:[String] {
                 switch self {
                 case .workingHistory:["workHistory", "workExperience", "workingExperience"]

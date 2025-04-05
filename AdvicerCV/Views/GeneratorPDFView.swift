@@ -18,8 +18,12 @@ struct GeneratorPDFView: View {
         VStack {
             AttributedTextView(attributedString: self.viewModel.attrubute, didPressLink: { link, at in
                 viewModel.linkSelected = (link, at)
-                if link.lowercased().contains("workExperience".lowercased()) {
-                    let id = link.lowercased().replacingOccurrences(of: "workExperience".lowercased(), with: "")
+                if let key = GeneratorPDFViewModel.CVContent.Key.allCases.first(where: {
+                    link.lowercased().contains($0.rawValue.lowercased())
+                    
+                }) {
+                    viewModel.editingPropertyKey = key
+                    let id = link.lowercased().replacingOccurrences(of: key.rawValue.lowercased(), with: "")
                     print(id, "ythrgtfd")
                     if id.isEmpty {
                         withAnimation {
@@ -31,8 +35,8 @@ struct GeneratorPDFView: View {
                             self.viewModel.editingWorkExperience = .init(uuidString: id)
                         }
                     }
-                    
                 }
+
             })
             .frame(maxHeight: .infinity)
             generalEditor
@@ -49,18 +53,16 @@ struct GeneratorPDFView: View {
     var workExperienceEditor: some View {
         VStack {
             //date
+            TextField("title:", text: $viewModel.editingPropertyTitle)
             RoundedRectangle(cornerRadius: 12)
                 .fill(.orange)
                 .frame(height: 1000)
+            
         }
+        .navigationTitle(viewModel.editingPropertyKey?.titles.first ?? "?")
         .navigationBarItems(trailing: HStack {
             Button("delete") {
-                viewModel.cvContent.workExperience.removeAll(where: {
-                    $0.id == self.viewModel.editingWorkExperience
-                })
-                withAnimation {
-                    self.viewModel.editingWorkExperience = nil
-                }
+                viewModel.deleteSelectedItemPressed()
             }
         })
     }
