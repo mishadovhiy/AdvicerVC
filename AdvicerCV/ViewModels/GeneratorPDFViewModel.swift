@@ -30,21 +30,22 @@ struct GeneratorPDFViewModel {
     var editingWorkExperience:UUID? = nil
     var editingPropertyKey:CVContent.Key? = nil
 
-    var editingPropertyTitle:String {
+    private var editingValue:CVContent.WorkExperience? {
         get {
             cvContent.dict[editingPropertyKey ?? .contacts]?.first(where: {
                 $0.id == editingWorkExperience
-            })?.title ?? ""
+            })
         }
         set {
             let dictionary = cvContent.dict[editingPropertyKey ?? .contacts] ?? []
             for i in 0..<dictionary.count {
                 if dictionary[i].id == self.editingWorkExperience {
-                    cvContent.dict[editingPropertyKey ?? .contacts]?[i].title = newValue
+                    cvContent.dict[editingPropertyKey ?? .contacts]?[i] = newValue ?? .init()
                 }
             }
         }
     }
+    
     mutating func deleteSelectedItemPressed() {
         if let key = editingPropertyKey,
            let id = editingWorkExperience
@@ -151,5 +152,61 @@ extension GeneratorPDFViewModel {
 
         ]))
         return mutable
+    }
+}
+
+extension GeneratorPDFViewModel {
+    var editingPropertyDateFrom:Date {
+        get {
+            editingValue?.from ?? .init()
+        }
+        set {
+            editingValue?.from = newValue
+        }
+    }
+    
+    var editingPropertyDateTo:Date {
+        get {
+            editingValue?.to ?? .init()
+        }
+        set {
+            editingValue?.to = newValue
+        }
+    }
+    
+    
+    var editingNeedLeftSpace:Bool {
+        get {
+            editingValue?.needLeftSpace ?? false
+        }
+        set {
+            editingValue?.needLeftSpace = newValue
+        }
+    }
+    var editingPropertyTitleDescription:String {
+        get {
+            editingValue?.titleDesctiption ?? ""
+        }
+        set {
+            editingValue?.titleDesctiption = newValue
+        }
+    }
+    
+    var editingPropertyTitle:String {
+        get {
+            editingValue?.title ?? ""
+        }
+        set {
+            editingValue?.title = newValue
+        }
+    }
+    
+    var editingPropertyText:String {
+        get {
+            editingValue?.text ?? ""
+        }
+        set {
+            editingValue?.text = newValue
+        }
     }
 }

@@ -54,6 +54,10 @@ struct GeneratorPDFView: View {
         VStack {
             //date
             TextField("title:", text: $viewModel.editingPropertyTitle)
+            TextField("description:", text: $viewModel.editingPropertyTitleDescription)
+            Toggle("Need left space", isOn: $viewModel.editingNeedLeftSpace)
+            TextField("Text", text: $viewModel.editingPropertyText)
+
             RoundedRectangle(cornerRadius: 12)
                 .fill(.orange)
                 .frame(height: 1000)
@@ -68,7 +72,7 @@ struct GeneratorPDFView: View {
     }
 
     var valueEditorView: some View {
-        ScrollView(.vertical) {
+        ScrollView(.vertical, showsIndicators: false) {
             VStack {
                 if let id = viewModel.editingWorkExperience {
                     self.workExperienceEditor

@@ -96,16 +96,16 @@ extension GeneratorPDFViewModel {
         }
         
         private var data:[String:[WorkExperience]] = [:]
-
+        
         var dict:[Key:[WorkExperience]] {
             get {
-                let dict = self.data.map { (key: String, value: [WorkExperience]) in
+                let dict = self.data.map { (key, value) in
                     (Key(rawValue: key) ?? .contacts, value)
                 }
                 return Dictionary(uniqueKeysWithValues: dict)
             }
             set {
-                let array = newValue.map { (key: Key, value: [WorkExperience]) in
+                let array = newValue.map { (key, value) in
                     (key.rawValue, value)
                 }
                 self.data = Dictionary(uniqueKeysWithValues: array)
@@ -121,19 +121,20 @@ extension GeneratorPDFViewModel {
         
         
         struct WorkExperience:Codable {
-                    var from:Date? = nil
-                    var to:Date? = nil
-                    var title:String = ""
-                    var titleDesctiption:String = ""
-                    var text:String = ""
-                    var bottomList:[String] = []
-                    var id:UUID = .init()
-                }
-//        struct Skill:Codable {
-//            let name:String
-//            var description:String
-//            var id:UUID = .init()
-//        }
+            var from:Date? = nil
+            var to:Date? = nil
+            var title:String = ""
+            var titleDesctiption:String = ""
+            var text:String = ""
+            var bottomList:[String] = []
+            var needLeftSpace:Bool = false
+            var id:UUID = .init()
+        }
+        //        struct Skill:Codable {
+        //            let name:String
+        //            var description:String
+        //            var id:UUID = .init()
+        //        }
     }
     struct Appearence:Codable {
         var color:[ContentType:String] = [:]
