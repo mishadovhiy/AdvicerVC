@@ -16,29 +16,14 @@ struct GeneratorPDFView: View {
     
     var body: some View {
         VStack {
-            AttributedTextView(attributedString: self.viewModel.attrubute, didPressLink: { link, at in
-                viewModel.linkSelected = (link, at)
-                if let key = GeneratorPDFViewModel.CVContent.Key.allCases.first(where: {
-                    link.lowercased().contains($0.rawValue.lowercased())
-                    
-                }) {
-                    viewModel.editingPropertyKey = key
-                    let id = link.lowercased().replacingOccurrences(of: key.rawValue.lowercased(), with: "")
-                    print(id, "ythrgtfd")
-                    if id.isEmpty {
-                        withAnimation {
-                            self.viewModel.editingWorkExperience = .init()
-                            self.viewModel.cvContent.workExperience.append(.init(from: .now, id: self.viewModel.editingWorkExperience!))
-                        }
-                    } else {
-                        withAnimation {
-                            self.viewModel.editingWorkExperience = .init(uuidString: id)
-                        }
-                    }
-                }
-
-            })
-            .frame(maxHeight: .infinity)
+            ScrollView(.horizontal) {
+                AttributedTextView(attributedString: self.viewModel.attrubute, didPressLink: { link, at in
+                    viewModel.linkSelected(link)
+                })
+                .frame(width: PDFGeneratorModel.pdfWidth)
+                .frame(maxHeight: .infinity)
+                .background(.white)
+            }
             generalEditor
         }
         .sheet(isPresented: $viewModel.isExportPresenting) {

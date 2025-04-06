@@ -65,14 +65,14 @@ extension PromtOpenAI {
         }
         //discribes titles to retrive from cv
         enum RetriveTitles: String, CaseIterable {
-            case skills
-            case workingHistory
-            case summary
-            case education
-            case contacts
-            case portfolio
             case jobTitle
             case jobTitleDescription
+            case summary
+            case skills
+            case portfolio
+            case workingHistory
+            case education
+            case contacts
             
             var needDates:Bool {
                 switch self {
@@ -121,6 +121,21 @@ extension PromtOpenAI {
                 var title = [rawValue]
                 title.append(contentsOf: alternative)
                 return title.compactMap({$0.addSpaceBeforeCapitalizedLetters.capitalized})
+            }
+            
+            private var needPDFTitle:Bool {
+                switch self {
+                case .jobTitle, .jobTitleDescription:false
+                default:true
+                }
+            }
+            
+            var pdfTitle:String? {
+                if needPDFTitle {
+                    return titles.first ?? ""
+                } else {
+                    return nil
+                }
             }
         }
         

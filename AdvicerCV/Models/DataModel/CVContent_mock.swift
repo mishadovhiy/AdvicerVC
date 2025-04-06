@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension [GeneratorPDFViewModel.CVContent.WorkExperience] {
+extension [GeneratorPDFViewModel.CVContent.ContentItem] {
     static var mockPortfolio: Self {
         [
 .init(title: "Meal Calendar AI ", titleDesctiption: "apps.apple.com/ua/app/id6736599453", text: """
@@ -22,19 +22,7 @@ extension [GeneratorPDFViewModel.CVContent.WorkExperience] {
   """)
 ]
     }
-    static var mock: [GeneratorPDFViewModel.CVContent.WorkExperience] {[
-        .init(from: .init(), to: nil, title: "Some name", text: """
-            Creating API Requests, NodeJS, MySQL
-            - Created application from scratch, to generate collages from stored images in FileManager
-            - Created Framework to add subtitles to the video, for Flutter project, with AVFoundation
-            - Supporting applications, bug fixing, implemented Keychain, admob, gCloud safesearch, firebase
-            database integration for projects:
-            1. apps.apple.com/ua/app/ai-tattoo-generator-design/id6471490412
-            2. apps.apple.com/ua/app/fantasy-ai-character-chat/id6468505908 , and more
-            UIKIT, AppGroup, AVFoundation for video editing, OpenAI, Admob, Keychain, FileManager, FireBase
-            DataBase, Keychain, StoreKit, Remote Notifications, adMob, gCloud Services API, form-data body
-            """, bottomList: ["skill"]),
-        .init(from: Calendar.current.date(byAdding: .year, value: -1, to: .init())!, to: nil, title: "Engenious – Remote (contract) - iOS Developer ", text: "some long text", bottomList: ["skill"]),
+    static var mock: [GeneratorPDFViewModel.CVContent.ContentItem] {[
         .init(from:Calendar.current.date(byAdding: .year, value: -2, to: .init())!, to:Calendar.current.date(byAdding: .year, value: -1, to: .init())!, title: "Engenious – Remote (contract) - iOS Developer ", titleDesctiption: "apps.apple.com/ua/app/gochamp/id6448703105", text: """
             Bugfixing, refactoring, supporting daily sport planner app with video tutorials. Cross-platform team as Solo
             iOS Developer
@@ -43,7 +31,7 @@ extension [GeneratorPDFViewModel.CVContent.WorkExperience] {
             Subscriptions, Keychain, AuthenticationServices, Google API, Facebook API, RESTful API integration,
             MVVM-C
             """),
-        .init(from:Calendar.current.date(byAdding: .year, value: -3, to: .init())!, to:Calendar.current.date(byAdding: .year, value: -2, to: .init())!, title: "Black Rock South – Remote (full-time) - iOS developer ", titleDesctiption: "Black Rock South – Remote (full-time) - iOS developer ", text: """
+        .init(from:Calendar.current.date(byAdding: .year, value: -3, to: .init())!, to:Calendar.current.date(byAdding: .year, value: -2, to: .init())!, title: "Black Rock South – Remote (full-time) - iOS developer ", titleDesctiption: "https://mishadovhiy.com/#rocks", text: """
             - As a solo iOS Developer, created iGaming social media app and messenger app by designs from Figma
             - Collaborated closely with a cross-platform team to ensure iOS application behaves and looks the same
             on all platforms
@@ -69,7 +57,6 @@ extension GeneratorPDFViewModel.CVContent {
     static var mock:GeneratorPDFViewModel.CVContent {
         .init(workExperience: .mock,
               skills: [
-            .init(title: "Languages:", titleDesctiption: "some descr"),
             .init(title: "iOS SDK:", titleDesctiption: """
         - Core iOS Development: UIKit (4), SwiftUI (2), Concurrency (async/await, GCD), CoreData,
         Combine, RxSwift, Local Authentication (FaceID/TouchID), Remote Notifications, Cocoa Touch, StoreKit

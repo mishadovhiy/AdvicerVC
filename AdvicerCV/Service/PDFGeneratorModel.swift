@@ -9,6 +9,7 @@ import UIKit
 import CoreGraphics
 
 struct PDFGeneratorModel {
+    static let pdfWidth:CGFloat = 595
     func savePDFDataToTempFile(data: Data, fileName: String) -> URL? {
         let tempDirectory = FileManager.default.temporaryDirectory
         let url = tempDirectory.appendingPathComponent(fileName)
@@ -23,7 +24,7 @@ struct PDFGeneratorModel {
     }
     
     func generatePDF(from attributedString: NSAttributedString) -> Data {
-        let width = 595
+        let width = PDFGeneratorModel.pdfWidth
         // Set up page size
         let pageSize = CGSize(width: width, height: 842) // A4 height
         let textInsets = UIEdgeInsets(top: 40, left: 40, bottom: 40, right: 40)

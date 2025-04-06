@@ -23,9 +23,10 @@ struct AttributedTextView: UIViewRepresentable {
         label.delegate = context.coordinator
         label.isEditable = false
         label.backgroundColor = .clear
-        label.dataDetectorTypes = [] // disable automatic links
+        label.dataDetectorTypes = []
         label.textContainerInset = .zero
         label.textContainer.lineFragmentPadding = 0
+        
         return label
     }
 

@@ -10,7 +10,7 @@ import SwiftUI
 extension GeneratorPDFViewModel {
     struct CVContent:Codable {
         typealias Key = PromtOpenAI.Advice.RetriveTitles
-        var workExperience:[WorkExperience] {
+        var workExperience:[ContentItem] {
             get {
                 data[Key.workingHistory.rawValue] ?? []
             }
@@ -18,7 +18,7 @@ extension GeneratorPDFViewModel {
                 data.updateValue(newValue, forKey: Key.workingHistory.rawValue)
             }
         }
-        var skills:[WorkExperience] {
+        var skills:[ContentItem] {
             get {
                 data[Key.skills.rawValue] ?? []
             }
@@ -26,7 +26,7 @@ extension GeneratorPDFViewModel {
                 data.updateValue(newValue, forKey: Key.skills.rawValue)
             }
         }
-        var summary:[WorkExperience] {
+        var summary:[ContentItem] {
             get {
                 data[Key.summary.rawValue] ?? []
             }
@@ -34,7 +34,7 @@ extension GeneratorPDFViewModel {
                 data.updateValue(newValue, forKey: Key.summary.rawValue)
             }
         }
-        var jobTitle:[WorkExperience] {
+        var jobTitle:[ContentItem] {
             get {
                 data[Key.jobTitle.rawValue] ?? []
             }
@@ -42,7 +42,7 @@ extension GeneratorPDFViewModel {
                 data.updateValue(newValue, forKey: Key.jobTitle.rawValue)
             }
         }
-        var titleDescription:[WorkExperience] {
+        var titleDescription:[ContentItem] {
             get {
                 data[Key.jobTitleDescription.rawValue] ?? []
             }
@@ -50,7 +50,7 @@ extension GeneratorPDFViewModel {
                 data.updateValue(newValue, forKey: Key.jobTitleDescription.rawValue)
             }
         }
-        var contacts:[WorkExperience] {
+        var contacts:[ContentItem] {
             get {
                 data[Key.contacts.rawValue] ?? []
             }
@@ -58,7 +58,7 @@ extension GeneratorPDFViewModel {
                 data.updateValue(newValue, forKey: Key.contacts.rawValue)
             }
         }
-        var education:[WorkExperience] {
+        var education:[ContentItem] {
             get {
                 data[Key.education.rawValue] ?? []
             }
@@ -66,7 +66,7 @@ extension GeneratorPDFViewModel {
                 data.updateValue(newValue, forKey: Key.education.rawValue)
             }
         }
-        var portfolio:[WorkExperience] {
+        var portfolio:[ContentItem] {
             get {
                 data[Key.portfolio.rawValue] ?? []
             }
@@ -75,14 +75,14 @@ extension GeneratorPDFViewModel {
             }
         }
         
-        init(workExperience:[WorkExperience] = [],
-             skills:[WorkExperience] = [],
-             summary:[WorkExperience] = [],
-             jobTitle:[WorkExperience] = [],
-             titleDescription:[WorkExperience] = [],
-             contacts:[WorkExperience] = [],
-             education:[WorkExperience] = [],
-             portfolio:[WorkExperience] = []) {
+        init(workExperience:[ContentItem] = [],
+             skills:[ContentItem] = [],
+             summary:[ContentItem] = [],
+             jobTitle:[ContentItem] = [],
+             titleDescription:[ContentItem] = [],
+             contacts:[ContentItem] = [],
+             education:[ContentItem] = [],
+             portfolio:[ContentItem] = []) {
             self.init([
                 .workingHistory:workExperience,
                 .skills:skills,
@@ -95,9 +95,9 @@ extension GeneratorPDFViewModel {
             ])
         }
         
-        private var data:[String:[WorkExperience]] = [:]
+        private var data:[String:[ContentItem]] = [:]
         
-        var dict:[Key:[WorkExperience]] {
+        var dict:[Key:[ContentItem]] {
             get {
                 let dict = self.data.map { (key, value) in
                     (Key(rawValue: key) ?? .contacts, value)
@@ -112,15 +112,13 @@ extension GeneratorPDFViewModel {
             }
         }
         
-        init(_ data:[PromtOpenAI.Advice.RetriveTitles:[WorkExperience]] = [:]) {
-            data.forEach { (key: PromtOpenAI.Advice.RetriveTitles, value: [WorkExperience]) in
+        init(_ data:[PromtOpenAI.Advice.RetriveTitles:[ContentItem]] = [:]) {
+            data.forEach { (key: PromtOpenAI.Advice.RetriveTitles, value: [ContentItem]) in
                 self.data.updateValue(value, forKey: key.rawValue)
             }
         }
         
-        
-        
-        struct WorkExperience:Codable {
+        struct ContentItem:Codable {
             var from:Date? = nil
             var to:Date? = nil
             var title:String = ""
@@ -130,24 +128,89 @@ extension GeneratorPDFViewModel {
             var needLeftSpace:Bool = false
             var id:UUID = .init()
         }
-        //        struct Skill:Codable {
-        //            let name:String
-        //            var description:String
-        //            var id:UUID = .init()
-        //        }
     }
     struct Appearence:Codable {
         var color:[ContentType:String] = [:]
         func toColor(_ key:ContentType) -> UIColor {
-            .init(hex: color[key] ?? "") ?? .white
+            .init(hex: color[key] ?? "") ?? key.defaultColor
         }
         var spaceBeforeSection:CGFloat = 15
         var spaceBeforeText:CGFloat =  5
-        
+        var font:[ContentType:FontData] = [:]
+        struct FontData:Codable {
+            var size:CGFloat = 10
+            private var weight:Int = 500
+            
+            var font:UIFont {
+                .systemFont(ofSize: size, weight: fontWeight)
+            }
+            
+            static func `default`(_ type:ContentType) -> FontData {
+                switch type {
+                case .separetor, .background:
+                        .init()
+                case .title:
+                        .init(size: 10, weight: 700)
+
+                case .description:
+                        .init()
+                case .section:
+                        .init(size: 10, weight: 700)
+                case .smallDescription:
+                        .init(size: 9)
+                case .text:
+                        .init()
+                }
+            }
+            
+            var fontWeight:UIFont.Weight {
+                get {
+                    switch self.weight {
+                    case 400:.light
+                    case 500:.regular
+                    case 600:.semibold
+                    case 700:.bold
+                    default:.regular
+                    }
+                }
+                set {
+                    var weight:Int {
+                        switch newValue {
+                        case .light:400
+                        case .regular:500
+                        case .semibold:600
+                        case .bold:700
+                        default:500
+                        }
+                    }
+                    self.weight = weight
+                }
+            }
+            
+        }
     }
     enum ContentType:String, Codable {
         case separetor, background
         case title, description, section, smallDescription //(displeys at right)
         case text
+        
+        var defaultColor:UIColor {
+            switch self {
+            case .separetor:
+                    .pdfText.withAlphaComponent(0.1)
+            case .background:
+                    .white
+            case .title:
+                    .pdfText
+            case .description:
+                    .pdfText
+            case .section:
+                    .sectionTitle
+            case .smallDescription:
+                    .pdfText
+            case .text:
+                    .pdfText
+            }
+        }
     }
 }
