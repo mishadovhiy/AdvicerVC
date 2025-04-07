@@ -14,7 +14,6 @@ struct PDFKitView: UIViewRepresentable {
     func makeUIView(context: Context) -> PDFView {
         let pdfView = PDFView()
         pdfView.autoScales = true
-        print("erfwedfr")
         pdfView.document = PDFDocument(data: pdfData ?? .init())
         return pdfView
     }

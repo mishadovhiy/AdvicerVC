@@ -14,20 +14,21 @@ struct AdviceListView: View {
     var body: some View {
         NavigationView {
             VStack {
-                LazyVGrid(columns: [.init(), .init()]) {
-                    ForEach(db.db.coduments, id:\.url?.absoluteString) { item in
-                        VStack {
-                            Text(item.url?.lastPathComponent ?? "-")
-                            PDFKitView(pdfData: item.data)
-                            
-                        }
-                        .aspectRatio(1, contentMode: .fit)
-                        .background(Color.secondary)
-                        .cornerRadius(10)
-                        .onTapGesture {
-                            withAnimation {
-                                selectedDocument = item
-                            }
+                ForEach(db.db.coduments, id:\.url?.absoluteString) { item in
+                    VStack {
+                        Text(item.url?.lastPathComponent ?? "-")
+                        PDFKitView(pdfData: item.data)
+                            .disabled(true)
+                    }
+                    .frame(maxWidth:.infinity)
+                    .frame(height:120)
+//                    .aspectRatio(1, contentMode: .fit)
+                    .background(Color.secondary)
+                    .cornerRadius(10)
+                    .clipped()
+                    .onTapGesture {
+                        withAnimation {
+                            selectedDocument = item
                         }
                     }
                 }
@@ -50,6 +51,7 @@ struct AdviceListView: View {
             .frame(width: db.deviceSize.width)
             
         }
+        .frame(maxHeight: .infinity)
         .navigationViewStyle(StackNavigationViewStyle())
         .background(ClearBackgroundView())
         

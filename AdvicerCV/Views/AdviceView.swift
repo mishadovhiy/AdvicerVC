@@ -23,11 +23,9 @@ struct AdviceView: View {
                 })
                 
             }
+            .frame(maxHeight: .infinity)
         }
-        .background(.red)
-        .transition(.asymmetric(insertion: .scale, removal: .scale))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.orange)
     }
     
     var rightControlView: some View {

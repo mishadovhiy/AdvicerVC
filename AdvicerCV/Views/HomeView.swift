@@ -13,15 +13,22 @@ struct HomeView: View {
     
     var body: some View {
         GeometryReader(content: { proxy in
-            VStack(spacing:-10) {
-                tabBarButtons
-                HStack(spacing:0) {
+            HStack() {
+                Spacer().frame(width:25)
+                VStack(spacing:0) {
                     contenView
                 }
+                .frame(maxHeight: .infinity)
                 .padding(.bottom, 5)
                 .background(viewModel.selectedTab.color)
                 .cornerRadius(20)
             }
+            .background(content: {
+                HStack(content:  {
+                    tabBarButtons
+                    Spacer()
+                })
+            })
             .onChange(of: proxy.size) { newValue in
                 db.deviceSize = newValue
             }
@@ -48,11 +55,11 @@ struct HomeView: View {
             switch tab {
             case .generator:
                 GeneratorPDFView()
-                    .frame(maxWidth: viewModel.selectedTab == .generator ? .infinity : 0)
+                    .frame(maxHeight: viewModel.selectedTab == .generator ? .infinity : 0)
                     .animation(.bouncy, value: viewModel.selectedTab)
                     .clipped()
             case .home:homeView
-                    .frame(maxWidth: viewModel.selectedTab == .home ? .infinity : 0)
+                    .frame(maxHeight: viewModel.selectedTab == .home ? .infinity : 0)
                     .animation(.bouncy, value: viewModel.selectedTab)
                     .clipped()
             case .advices:
@@ -64,12 +71,12 @@ struct HomeView: View {
 
                     }
                 })
-                    .frame(maxWidth: viewModel.selectedTab == .advices ? .infinity : 0)
+                    .frame(maxHeight: viewModel.selectedTab == .advices ? .infinity : 0)
                     .animation(.bouncy, value: viewModel.selectedTab)
                     .clipped()
             case .settings:
                 Text("Settings")
-                    .frame(maxWidth: viewModel.selectedTab == .settings ? .infinity : 0)
+                    .frame(maxHeight: viewModel.selectedTab == .settings ? .infinity : 0)
                     .animation(.bouncy, value: viewModel.selectedTab)
                     .clipped()
             }
@@ -83,6 +90,7 @@ struct HomeView: View {
             uploadButton
             Spacer()
         }
+        .frame(maxHeight: .infinity)
     }
     
     var uploadButton: some View {
@@ -103,24 +111,35 @@ struct HomeView: View {
     }
     
     var tabBarButtons: some View {
-        HStack(spacing:-10) {
-            ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
-                Button(tab.title + (tab == .advices ? " (\(db.db.coduments.count))" : "")) {
-                    withAnimation {
-                        viewModel.selectedTab = tab
+        HStack {
+            HStack {
+                ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
+                    Button(tab.title + (tab == .advices ? " (\(db.db.coduments.count))" : "")) {
+                        withAnimation {
+                            viewModel.selectedTab = tab
+                        }
                     }
+
+
+    //                .zIndex(viewModel.selectedTab == tab ? 10 : 1)
+    //                    .padding(.top, 0)
+    //                    .padding(.bottom, 0)
+    //                .padding(.horizontal, 20)
+                    .padding(.top, 15)
+                    .padding(.bottom, 5)
+                    .padding(.horizontal, 10)
+                    .background(tab.color)
+                    .cornerRadius(10)
+                    .animation(.easeInOut, value: viewModel.selectedTab)
                 }
-                .zIndex(viewModel.selectedTab == tab ? 10 : 1)
-                .padding(.top, 7)
-                .padding(.bottom, 12)
-                .padding(.horizontal, 20)
-                .background(tab.color)
-                .cornerRadius(10)
-                .animation(.easeInOut, value: viewModel.selectedTab)
             }
+            .frame(height:100)
+            .rotationEffect(.degrees(90))
+
+            .offset(x:-170)
             Spacer()
         }
-        .padding(.leading, 25)
+        .frame(alignment:.leading)
     }
 }
 

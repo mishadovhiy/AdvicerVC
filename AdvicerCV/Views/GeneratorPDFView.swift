@@ -32,7 +32,6 @@ struct GeneratorPDFView: View {
         .onAppear {
             viewModel.cvContent = .mock
         }
-        .background(.black)
     }
 
     var workExperienceEditor: some View {
@@ -127,16 +126,15 @@ struct GeneratorPDFView: View {
                     Button("export") {
                         viewModel.exportPressed()
                     }
-                    .background(.red)
                     
                     NavigationLink("", destination: valueEditorView, isActive: $viewModel.isPresentingValueEditor)
                         .hidden()
                 }
             }
-            .background(.red)
         }
         .frame(maxHeight: viewModel.largeEditorHeight ? .infinity : (generalColorsPresenting ? 60 : 45))
         .animation(.smooth, value: viewModel.isPresentingValueEditor)
+        .navigationViewStyle(StackNavigationViewStyle())
         .background {
             ClearBackgroundView()
         }
