@@ -13,7 +13,7 @@ struct GeneratorPDFViewModel {
     var cvContent:CVContent = .init()
     var appearence:Appearence = .init()
     var linkSelected:String?
-    
+    var colorSelectingFor:ContentType?
     mutating func linkSelected(_ link:String) {
         linkSelected = link
         if let key = GeneratorPDFViewModel.CVContent.Key.allCases.first(where: {
@@ -26,7 +26,25 @@ struct GeneratorPDFViewModel {
             if id.isEmpty {
                 withAnimation {
                     self.editingWorkExperience = .init()
-                    self.cvContent.workExperience.append(.init(from: .now, id: self.editingWorkExperience!))
+                    switch key {
+                    case .workingHistory:
+                        self.cvContent.workExperience.append(.init(from: .now, id: self.editingWorkExperience!))
+                    case .contacts:
+                        self.cvContent.contacts.append(.init(from: .now, id: self.editingWorkExperience!))
+                    case .education:
+                        self.cvContent.education.append(.init(from: .now, id: self.editingWorkExperience!))
+                    case .portfolio:
+                        self.cvContent.portfolio.append(.init(from: .now, id: self.editingWorkExperience!))
+                    case .skills:
+                        self.cvContent.skills.append(.init(from: .now, id: self.editingWorkExperience!))
+                    case .summary:
+                        self.editingWorkExperience = cvContent.summary.first?.id
+                    case .jobTitle:
+                        self.editingWorkExperience = cvContent.jobTitle.first?.id
+                    case .cvDescriptionTitle:
+                        self.editingWorkExperience = cvContent.titleDescription.first?.id
+
+                    }
                 }
             } else {
                 withAnimation {
@@ -35,6 +53,11 @@ struct GeneratorPDFViewModel {
             }
         }
     }
+    
+    var largeEditorHeight:Bool {
+        isPresentingValueEditor || colorSelectingFor != nil
+    }
+
     
     var isPresentingValueEditor:Bool {
         get {
@@ -203,7 +226,8 @@ extension GeneratorPDFViewModel {
         if let date = item.from {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .right
-            paragraphStyle.paragraphSpacingBefore = -12
+            paragraphStyle.lineSpacing = 0
+            //paragraphSpacingBefore = -12
             let date:NSAttributedString = .init(string: "\(item.from?.formatted(date: .complete, time: .standard) ?? "") ", attributes: [
                 .font:appearence.font[.title] ?? Appearence.FontData.default(.title).font,
                 .foregroundColor:appearence.toColor(.title),
@@ -216,7 +240,7 @@ extension GeneratorPDFViewModel {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .left
             paragraphStyle.paragraphSpacingBefore = -11
-            
+          //  paragraphStyle.paragraphSpacing = 100
             let description:NSAttributedString = .init(string: item.titleDesctiption, attributes: [
                 .foregroundColor:appearence.toColor(.smallDescription),
                 .paragraphStyle: key == .workingHistory ? paragraphStyle : NSMutableParagraphStyle(),
@@ -230,11 +254,23 @@ extension GeneratorPDFViewModel {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .left
             paragraphStyle.paragraphSpacingBefore = -11
+            let font = (appearence.font[.text] ?? Appearence.FontData.default(.text)).font
             mutable.append(.init(string: item.text + "\n", attributes: [
                 .paragraphStyle: key == .workingHistory ? paragraphStyle : NSMutableParagraphStyle(),
                 .foregroundColor: appearence.toColor(.text),
-                .font:appearence.font[.text] ?? Appearence.FontData.default(.text).font,
+                .font:font,
             ]))
+            
+            let bolds = item.boldTexts.components(separatedBy: ", ")
+            bolds.forEach { string in
+                if let range = mutable.string.range(of: string) {
+                    mutable.addAttributes([
+                        .font:UIFont.systemFont(ofSize: font.pointSize, weight: .bold)
+                    ], range: .init(range, in: mutable.string))
+
+                }
+            }
+            
         }
         return mutable
     }
@@ -292,6 +328,27 @@ extension GeneratorPDFViewModel {
         }
         set {
             editingValue?.text = newValue
+        }
+    }
+    
+    var editingboldTexts:String {
+        get {
+            editingValue?.boldTexts ?? ""
+        }
+        set {
+            editingValue?.boldTexts = newValue
+        }
+    }
+    
+    var selectingColorType: Color {
+        get {
+            .init(uiColor: .init(hex: appearence.color[colorSelectingFor ?? .background] ?? "") ?? .pdfText)
+        }
+        set {
+            if let type = colorSelectingFor {
+                appearence.color[type] = UIColor(cgColor: newValue.cgColor ?? UIColor.white.cgColor).toHex
+
+            }
         }
     }
 }

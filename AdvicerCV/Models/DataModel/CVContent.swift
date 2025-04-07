@@ -45,10 +45,10 @@ extension GeneratorPDFViewModel {
         }
         var titleDescription:[ContentItem] {
             get {
-                data[Key.jobTitleDescription.rawValue] ?? []
+                data[Key.cvDescriptionTitle.rawValue] ?? []
             }
             set {
-                data.updateValue(newValue, forKey: Key.jobTitleDescription.rawValue)
+                data.updateValue(newValue, forKey: Key.cvDescriptionTitle.rawValue)
             }
         }
         var contacts:[ContentItem] {
@@ -89,7 +89,7 @@ extension GeneratorPDFViewModel {
                 .skills:skills,
                 .summary:summary,
                 .jobTitle:jobTitle,
-                .jobTitleDescription:titleDescription,
+                .cvDescriptionTitle:titleDescription,
                 .contacts:contacts,
                 .education:education,
                 .portfolio:portfolio
@@ -127,6 +127,7 @@ extension GeneratorPDFViewModel {
             var text:String = ""
             var bottomList:[String] = []
             var needLeftSpace:Bool = false
+            var boldTexts:String = ""
             var id:UUID = .init()
         }
     }

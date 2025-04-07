@@ -11,7 +11,7 @@ struct AdviceView: View {
     @EnvironmentObject var db: AppData
     @Binding var document:Document?
     let regeneratePressed:()->()
-    
+    @State var previewPressed:[PromtOpenAI.Advice.RetriveTitles] = []
     var body: some View {
         ScrollView(.horizontal) {
             HStack(spacing:0) {
@@ -32,14 +32,33 @@ struct AdviceView: View {
     
     var rightControlView: some View {
         let cvContent = document?.request?.advice?.allValues ?? [:]
-        let work = document?.request?.advice?.extractWorkExperience(from: cvContent[.workingHistory] ?? "").years
         return VStack {
             Text("Retrived content")
-            Text("work" + (work ?? ""))
-            ForEach(cvContent.keys.compactMap({$0.rawValue}), id:\.self) { item in
+            ForEach(cvContent.keys.sorted(by: {$0.rawValue >= $1.rawValue}).filter({$0.openAIUsed}).compactMap({$0.rawValue}), id:\.self) { item in
                 VStack {
-                    Text((PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts).rawValue.addSpaceBeforeCapitalizedLetters.capitalized)
+                    Button {
+                        let key = PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts
+                        if previewPressed.contains(key) {
+                            withAnimation {
+                                previewPressed.removeAll(where: {
+                                    $0.rawValue == key.rawValue
+                                })
+                            }
+                        } else {
+                            withAnimation {
+                                previewPressed.append(key)
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Text((PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts).rawValue.addSpaceBeforeCapitalizedLetters.capitalized)
+                            Spacer()
+                            Text((cvContent[.init(rawValue: item) ?? .contacts] ?? "").isEmpty ? "not detected" : "detected")
+                        }
+                    }
+
                     Text(cvContent[.init(rawValue: item) ?? .contacts] ?? "")
+                        .lineLimit(previewPressed.contains(.init(rawValue: item) ?? .contacts) ? nil : 1)
                 }
             }
         }

@@ -46,6 +46,11 @@ struct HomeView: View {
     var contenView: some View {
         ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
             switch tab {
+            case .generator:
+                GeneratorPDFView()
+                    .frame(maxWidth: viewModel.selectedTab == .generator ? .infinity : 0)
+                    .animation(.bouncy, value: viewModel.selectedTab)
+                    .clipped()
             case .home:homeView
                     .frame(maxWidth: viewModel.selectedTab == .home ? .infinity : 0)
                     .animation(.bouncy, value: viewModel.selectedTab)

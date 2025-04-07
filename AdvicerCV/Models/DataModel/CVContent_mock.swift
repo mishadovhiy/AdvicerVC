@@ -98,7 +98,7 @@ Proven track record in integrating APIs, deploying apps to the App Store, bugdix
 reusable code that easily scales and readable for the team. Deep understanding in Memory management
 and multithreading. Additionally, have 2 years of commercial experience in Front-End web development,
 building REST API with NodeJS, PHP and MySQL database.
-""")],
+""", boldTexts: "Video Editor, AI Meal Calendar")],
               jobTitle: [.init(title: "iOS Developer")],
               titleDescription: [.init(title: """
     Kyiv, Ukraine | github.com/mishadovhiy | apps.apple.com/developer/id1511515116

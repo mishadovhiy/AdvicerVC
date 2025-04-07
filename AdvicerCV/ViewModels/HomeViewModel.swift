@@ -74,6 +74,7 @@ extension HomeViewModel {
     enum PresentingTab:String, CaseIterable {
         case home
         case advices
+        case generator
         case settings
         var title:String {
             rawValue.addSpaceBeforeCapitalizedLetters.uppercased()}
@@ -86,6 +87,7 @@ extension HomeViewModel {
                     .brown
             case .settings:
                     .green
+            case .generator:.red
             }
         }
     }

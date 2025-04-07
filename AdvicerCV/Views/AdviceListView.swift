@@ -44,14 +44,14 @@ struct AdviceListView: View {
                 }
                 .hidden()
             }
-            .frame(width: db.deviceSize.width)
             .background {
                 ClearBackgroundView()
             }
+            .frame(width: db.deviceSize.width)
+            
         }
-        .background {
-            ClearBackgroundView()
-        }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .background(ClearBackgroundView())
         
     }
     

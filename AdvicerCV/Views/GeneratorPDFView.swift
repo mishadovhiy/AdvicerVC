@@ -42,6 +42,7 @@ struct GeneratorPDFView: View {
             TextField("description:", text: $viewModel.editingPropertyTitleDescription)
             Toggle("Need left space", isOn: $viewModel.editingNeedLeftSpace)
             TextField("Text", text: $viewModel.editingPropertyText)
+            TextField("Bold text", text: $viewModel.editingboldTexts)
 
             RoundedRectangle(cornerRadius: 12)
                 .fill(.orange)
@@ -74,16 +75,21 @@ struct GeneratorPDFView: View {
         NavigationView {
             ScrollView(.horizontal) {
                 HStack {
-                    NavigationLink(destination: HStack {
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                    }, isActive: $generalColorsPresenting) {
+                    NavigationLink(destination:
+
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ColorPicker("title", selection: $viewModel.selectingColorType)
+                                Text("color")
+                                Text("color")
+                                Text("color")
+                                Text("color")
+                                Text("color")
+                                Text("color")
+                                Text("color")
+                            }
+                        }
+                    , isActive: $generalColorsPresenting) {
                         Text("Colors")
                     }
                     NavigationLink(destination: HStack {
@@ -129,7 +135,7 @@ struct GeneratorPDFView: View {
             }
             .background(.red)
         }
-        .frame(maxHeight: viewModel.isPresentingValueEditor ? .infinity : 45)
+        .frame(maxHeight: viewModel.largeEditorHeight ? .infinity : (generalColorsPresenting ? 60 : 45))
         .animation(.smooth, value: viewModel.isPresentingValueEditor)
         .background {
             ClearBackgroundView()

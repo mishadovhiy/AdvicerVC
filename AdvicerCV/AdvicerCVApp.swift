@@ -11,8 +11,8 @@ import SwiftUI
 struct AdvicerCVApp: App {
     var body: some Scene {
         WindowGroup {
-//            HomeView()
-            GeneratorPDFView()
+            HomeView()
+//            GeneratorPDFView()
         }
     }
 }
