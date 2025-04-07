@@ -16,10 +16,11 @@ struct GeneratorPDFView: View {
     
     var body: some View {
         VStack {
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 AttributedTextView(attributedString: self.viewModel.attrubute, didPressLink: { link, at in
                     viewModel.linkSelected(link)
                 })
+                .padding(.horizontal, 10)
                 .frame(width: PDFGeneratorModel.pdfWidth)
                 .frame(maxHeight: .infinity)
                 .background(.white)
@@ -72,22 +73,22 @@ struct GeneratorPDFView: View {
     
     var generalEditor: some View {
         NavigationView {
-            ScrollView(.horizontal) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     NavigationLink(destination:
 
                         ScrollView(.horizontal) {
                             HStack {
-                                ColorPicker("title", selection: $viewModel.selectingColorType)
-                                Text("color")
-                                Text("color")
-                                Text("color")
-                                Text("color")
-                                Text("color")
-                                Text("color")
-                                Text("color")
+                                ForEach(GeneratorPDFViewModel.ContentType.allCases, id:\.self) { type in
+                                    NavigationLink(type.title, destination: ColorPicker(type.title, selection: $viewModel.selectingColorType).background(.red), isActive: .init(get: {
+                                        viewModel.colorSelectingFor == type
+                                    }, set: { newValue in
+                                        viewModel.colorSelectingFor = newValue ? type : nil
+                                    }))
+                                }
                             }
                         }
+                        .background(.red)
                     , isActive: $generalColorsPresenting) {
                         Text("Colors")
                     }
@@ -115,13 +116,7 @@ struct GeneratorPDFView: View {
                     }, isActive: $generalSpacesPresenting) {
                         Text("Spaces")
                     }
-                    
-                    Text("sdfdsf")
-                    Text("sdfdsf")
 
-                    Text("sdfdsf")
-
-                    Text("sdfdsf")
                     
                     Button("export") {
                         viewModel.exportPressed()
@@ -131,13 +126,17 @@ struct GeneratorPDFView: View {
                         .hidden()
                 }
             }
+            .background {
+                ClearBackgroundView()
+            }
         }
-        .frame(maxHeight: viewModel.largeEditorHeight ? .infinity : (generalColorsPresenting ? 60 : 45))
-        .animation(.smooth, value: viewModel.isPresentingValueEditor)
         .navigationViewStyle(StackNavigationViewStyle())
         .background {
             ClearBackgroundView()
         }
+        .frame(maxHeight: viewModel.largeEditorHeight ? .infinity : (generalColorsPresenting ? 60 : 45))
+        .animation(.smooth, value: viewModel.isPresentingValueEditor)
+
     }
 
 }

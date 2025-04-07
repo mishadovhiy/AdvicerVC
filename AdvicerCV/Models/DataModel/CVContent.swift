@@ -192,11 +192,15 @@ extension GeneratorPDFViewModel {
             
         }
     }
-    enum ContentType:String, Codable {
+    enum ContentType:String, CaseIterable, Codable {
         case separetor, background
         case title, description, section, smallDescription //(displeys at right)
         case text
         case cvTitle
+        
+        var title:String {
+            rawValue.addSpaceBeforeCapitalizedLetters.capitalized
+        }
         
         var defaultColor:UIColor {
             switch self {

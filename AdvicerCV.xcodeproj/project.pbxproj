@@ -23,7 +23,6 @@
 		8289D8C32D9C46A5001B6C40 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8289D8C22D9C46A5001B6C40 /* Document.swift */; };
 		8289D8D42D9C6037001B6C40 /* ClearBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8289D8D32D9C6037001B6C40 /* ClearBackgroundView.swift */; };
 		8289D8DB2D9CA1D3001B6C40 /* Advice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8289D8DA2D9CA1D3001B6C40 /* Advice.swift */; };
-		8289D8DD2D9D6782001B6C40 /* GenerateAdviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8289D8DC2D9D6782001B6C40 /* GenerateAdviceView.swift */; };
 		8289D8DF2D9D692B001B6C40 /* GeneratorPDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8289D8DE2D9D692B001B6C40 /* GeneratorPDFView.swift */; };
 		8289D8E12D9D6DD2001B6C40 /* PDFGeneratorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8289D8E02D9D6DD2001B6C40 /* PDFGeneratorModel.swift */; };
 		8289D8E32D9D9B1A001B6C40 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8289D8E22D9D9B1A001B6C40 /* UIColor.swift */; };
@@ -58,7 +57,6 @@
 		8289D8C22D9C46A5001B6C40 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		8289D8D32D9C6037001B6C40 /* ClearBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearBackgroundView.swift; sourceTree = "<group>"; };
 		8289D8DA2D9CA1D3001B6C40 /* Advice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advice.swift; sourceTree = "<group>"; };
-		8289D8DC2D9D6782001B6C40 /* GenerateAdviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateAdviceView.swift; sourceTree = "<group>"; };
 		8289D8DE2D9D692B001B6C40 /* GeneratorPDFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratorPDFView.swift; sourceTree = "<group>"; };
 		8289D8E02D9D6DD2001B6C40 /* PDFGeneratorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFGeneratorModel.swift; sourceTree = "<group>"; };
 		8289D8E22D9D9B1A001B6C40 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -215,7 +213,6 @@
 			children = (
 				82A310E42D7BDD3700E2737F /* HomeView.swift */,
 				8289D8B52D9B61BE001B6C40 /* AdviceListView.swift */,
-				8289D8DC2D9D6782001B6C40 /* GenerateAdviceView.swift */,
 				8289D8DE2D9D692B001B6C40 /* GeneratorPDFView.swift */,
 				8289D8B72D9B6627001B6C40 /* AdviceView.swift */,
 				8289D8BD2D9B70A8001B6C40 /* ComponentView */,
@@ -305,7 +302,6 @@
 				8289D8B62D9B61BE001B6C40 /* AdviceListView.swift in Sources */,
 				8289D8B82D9B6627001B6C40 /* AdviceView.swift in Sources */,
 				8289D8C32D9C46A5001B6C40 /* Document.swift in Sources */,
-				8289D8DD2D9D6782001B6C40 /* GenerateAdviceView.swift in Sources */,
 				8289D8D42D9C6037001B6C40 /* ClearBackgroundView.swift in Sources */,
 				8289D8DF2D9D692B001B6C40 /* GeneratorPDFView.swift in Sources */,
 				82E100FD2DA08492008AFEB4 /* CVContent_mock.swift in Sources */,

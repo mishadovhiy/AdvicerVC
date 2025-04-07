@@ -14,6 +14,7 @@ struct GeneratorPDFViewModel {
     var appearence:Appearence = .init()
     var linkSelected:String?
     var colorSelectingFor:ContentType?
+    var fontSelectingFor:ContentType?
     mutating func linkSelected(_ link:String) {
         linkSelected = link
         if let key = GeneratorPDFViewModel.CVContent.Key.allCases.first(where: {
@@ -108,9 +109,13 @@ struct GeneratorPDFViewModel {
         }
     }
     
+    
+    var exportPDFPressed = false
     mutating func exportPressed() {
+        exportPDFPressed = true
         let data = model.generatePDF(from: attrubute)
         exportingURL = model.savePDFDataToTempFile(data: data, fileName: "cv.pdf")
+        exportPDFPressed = false
     }
     
     var isExportPresenting:Bool {
@@ -160,14 +165,21 @@ extension GeneratorPDFViewModel {
     }
     
     private func title(_ text:String) -> NSAttributedString {
+        let attachemnt = NSMutableAttributedString(attachment: .init(image: .init(resource: .pen).changeSize(newWidth: 20)))
+        attachemnt.addAttributes([
+            .link: URL(string: "action://\(text.replacingOccurrences(of: " ", with: ""))")!,
+        ], range: .init(location: 0, length: attachemnt.length))
+        
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
-        return .init(string: "\(text)\n".uppercased(), attributes: [
+        attachemnt.append(.init(string: "\(text)\n".uppercased(), attributes: [
             .link: URL(string: "action://\(text.replacingOccurrences(of: " ", with: ""))")!,
                 .font:appearence.font[.section] ?? Appearence.FontData.default(.section).font,
             .foregroundColor:appearence.toColor(.section),
-            .paragraphStyle:paragraphStyle
-        ])
+           // .paragraphStyle:paragraphStyle
+        ]))
+        attachemnt.addAttributes([.paragraphStyle:paragraphStyle], range: .init(location: 0, length: attachemnt.length))
+        return attachemnt
     }
     
     private var spacer:NSAttributedString {
@@ -184,12 +196,13 @@ extension GeneratorPDFViewModel {
 //        let spacerAttachment = NSTextAttachment()
 //        spacerAttachment.bounds = CGRect(x: 0, y: 0, width: 0, height: appearence.spaceBeforeText)
 //        return NSAttributedString(attachment: spacerAttachment)
-        let view = UIView()
-        view.backgroundColor = appearence.toColor(.separetor)
-        view.frame = .init(origin: .zero, size: .init(width: PDFGeneratorModel.pdfWidth, height: 1))
-        let attachment = NSTextAttachment()
-        attachment.image = view.toImage
-        return .init(attachment: attachment)
+//        let view = UIView()
+//        view.backgroundColor = appearence.toColor(.separetor)
+//        view.frame = .init(origin: .zero, size: .init(width: PDFGeneratorModel.pdfWidth, height: 1))
+//        let attachment = NSTextAttachment()
+//        attachment.image = view.toImage
+//        return .init(attachment: attachment)
+        .init()
 //        return .init(string: "\n", attributes: [
 //            .font:UIFont.systemFont(ofSize: 5),
 //        ])
@@ -209,28 +222,45 @@ extension GeneratorPDFViewModel {
             companyName = key.pdfPreviewTitlePlaceholder
         }
         if !companyName.isEmpty  {
+//            let attachment = NSTextAttachment(image: .init(resource: .pen).changeSize(newWidth: 20), attributes:[])
+            
+            let attachemnt = NSMutableAttributedString(attachment: .init(image: .init(resource: .pen).changeSize(newWidth: 20)))
+            attachemnt.addAttributes([
+                .link: URL(string: "action://\(key.rawValue)\(item.id.uuidString)")!
+            ], range: .init(location: 0, length: attachemnt.length))
+//                    return .init(attachment: attachment)
+            
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .center
             let isCVTitle = key.rawValue.lowercased().contains("title")
             let keyType: ContentType = isCVTitle ? (key == .jobTitle ? .cvTitle : .smallDescription) : .title
-            let title:NSAttributedString = .init(string: companyName + (key.pdfTextInline ? " " : "\n"), attributes: [
+            let title:NSAttributedString = .init(string: companyName + (key.pdfTextInline ? " " : "    "), attributes: [
                 .foregroundColor:appearence.toColor(keyType),
                 .font:appearence.font[keyType] ?? Appearence.FontData.default(keyType).font,
-                .link: URL(string: "action://\(key.rawValue)\(item.id.uuidString)")!,
+//                .link: URL(string: "action://\(key.rawValue)\(item.id.uuidString)")!,
                 .paragraphStyle: isCVTitle ? paragraphStyle : NSMutableParagraphStyle(),
 
             ])
+
+            if !exportPDFPressed {
+                mutable.append(attachemnt)
+                
+                mutable.append(.init(string: "  "))
+            }
             mutable.append(title)
+            if !exportPDFPressed {
+                mutable.addAttributes([.paragraphStyle:isCVTitle ? paragraphStyle : NSMutableParagraphStyle()], range: .init(location: 0, length: mutable.length))
+            }
         }
         
         if let date = item.from {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .right
-            paragraphStyle.lineSpacing = 0
+
             //paragraphSpacingBefore = -12
             let date:NSAttributedString = .init(string: "\(item.from?.formatted(date: .complete, time: .standard) ?? "") ", attributes: [
-                .font:appearence.font[.title] ?? Appearence.FontData.default(.title).font,
-                .foregroundColor:appearence.toColor(.title),
+                .font:appearence.font[.smallDescription] ?? Appearence.FontData.default(.smallDescription).font,
+                .foregroundColor:appearence.toColor(.smallDescription),
                 .paragraphStyle:paragraphStyle,
             ])
             mutable.append(date)
@@ -239,7 +269,7 @@ extension GeneratorPDFViewModel {
         if !item.titleDesctiption.isEmpty {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .left
-            paragraphStyle.paragraphSpacingBefore = -11
+//            paragraphStyle.paragraphSpacingBefore = -11
           //  paragraphStyle.paragraphSpacing = 100
             let description:NSAttributedString = .init(string: item.titleDesctiption, attributes: [
                 .foregroundColor:appearence.toColor(.smallDescription),
@@ -253,7 +283,7 @@ extension GeneratorPDFViewModel {
         if !item.text.isEmpty {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .left
-            paragraphStyle.paragraphSpacingBefore = -11
+//            paragraphStyle.paragraphSpacingBefore = -11
             let font = (appearence.font[.text] ?? Appearence.FontData.default(.text)).font
             mutable.append(.init(string: item.text + "\n", attributes: [
                 .paragraphStyle: key == .workingHistory ? paragraphStyle : NSMutableParagraphStyle(),

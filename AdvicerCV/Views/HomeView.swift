@@ -37,6 +37,7 @@ struct HomeView: View {
             }
         })
         .environmentObject(db)
+        .background(.black)
         .sheet(isPresented: $viewModel.isDocumentSelecting) {
             DocumentPicker(onDocumentPicked: {
                 self.loadDocument($0)
@@ -56,11 +57,11 @@ struct HomeView: View {
             case .generator:
                 GeneratorPDFView()
                     .frame(maxHeight: viewModel.selectedTab == .generator ? .infinity : 0)
-                    .animation(.bouncy, value: viewModel.selectedTab)
+                    .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
             case .home:homeView
                     .frame(maxHeight: viewModel.selectedTab == .home ? .infinity : 0)
-                    .animation(.bouncy, value: viewModel.selectedTab)
+                    .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
             case .advices:
                 AdviceListView(selectedDocument: $viewModel.selectedDocument, regenerateAdvicePressed: {
@@ -72,12 +73,12 @@ struct HomeView: View {
                     }
                 })
                     .frame(maxHeight: viewModel.selectedTab == .advices ? .infinity : 0)
-                    .animation(.bouncy, value: viewModel.selectedTab)
+                    .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
             case .settings:
                 Text("Settings")
                     .frame(maxHeight: viewModel.selectedTab == .settings ? .infinity : 0)
-                    .animation(.bouncy, value: viewModel.selectedTab)
+                    .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
             }
         }
@@ -112,31 +113,34 @@ struct HomeView: View {
     
     var tabBarButtons: some View {
         HStack {
-            HStack {
+            HStack(spacing:-12) {
                 ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
-                    Button(tab.title + (tab == .advices ? " (\(db.db.coduments.count))" : "")) {
+                    Button(action: {
                         withAnimation {
                             viewModel.selectedTab = tab
                         }
-                    }
+                    }, label: {
+                        Text(tab.title + (tab == .advices ? " (\(db.db.coduments.count))" : ""))
+                            .lineLimit(1)
+                    })
 
 
     //                .zIndex(viewModel.selectedTab == tab ? 10 : 1)
     //                    .padding(.top, 0)
     //                    .padding(.bottom, 0)
     //                .padding(.horizontal, 20)
+                    .padding(.horizontal, 15)
                     .padding(.top, 15)
                     .padding(.bottom, 5)
-                    .padding(.horizontal, 10)
                     .background(tab.color)
                     .cornerRadius(10)
                     .animation(.easeInOut, value: viewModel.selectedTab)
                 }
             }
-            .frame(height:100)
+            .frame(height:150)
             .rotationEffect(.degrees(90))
 
-            .offset(x:-170)
+            .offset(x:-160)
             Spacer()
         }
         .frame(alignment:.leading)

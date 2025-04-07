@@ -13,17 +13,27 @@ struct AdviceView: View {
     let regeneratePressed:()->()
     @State var previewPressed:[PromtOpenAI.Advice.RetriveTitles] = []
     var body: some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing:0) {
                 PDFKitView(pdfData: document?.data)
                     .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
-                ScrollView(.vertical, content: {
+                ScrollView(.vertical, showsIndicators: false, content: {
                     rightControlView
                         .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
                 })
+                .background {
+                    ClearBackgroundView()
+                }
                 
             }
+            .background(.brown)
+            .background {
+                ClearBackgroundView()
+            }
             .frame(maxHeight: .infinity)
+        }
+        .background {
+            ClearBackgroundView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

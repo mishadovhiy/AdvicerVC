@@ -51,9 +51,9 @@ struct AdviceListView: View {
             .frame(width: db.deviceSize.width)
             
         }
-        .frame(maxHeight: .infinity)
         .navigationViewStyle(StackNavigationViewStyle())
         .background(ClearBackgroundView())
+        .frame(maxHeight: .infinity)
         
     }
     
