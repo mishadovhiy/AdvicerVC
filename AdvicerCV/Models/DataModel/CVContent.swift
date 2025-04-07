@@ -10,6 +10,7 @@ import SwiftUI
 extension GeneratorPDFViewModel {
     struct CVContent:Codable {
         typealias Key = PromtOpenAI.Advice.RetriveTitles
+        var order:[String:Int] = [:]
         var workExperience:[ContentItem] {
             get {
                 data[Key.workingHistory.rawValue] ?? []
@@ -147,6 +148,7 @@ extension GeneratorPDFViewModel {
             
             static func `default`(_ type:ContentType) -> FontData {
                 switch type {
+                case .cvTitle: .init(size: 28, weight: 700)
                 case .separetor, .background:
                         .init()
                 case .title:
@@ -193,6 +195,7 @@ extension GeneratorPDFViewModel {
         case separetor, background
         case title, description, section, smallDescription //(displeys at right)
         case text
+        case cvTitle
         
         var defaultColor:UIColor {
             switch self {
@@ -204,7 +207,7 @@ extension GeneratorPDFViewModel {
                     .pdfText
             case .description:
                     .pdfText
-            case .section:
+            case .section, .cvTitle:
                     .sectionTitle
             case .smallDescription:
                     .pdfText

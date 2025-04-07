@@ -43,3 +43,12 @@ extension UIColor {
         return "#000000"
     }
 }
+
+extension UIView {
+    var toImage:UIImage? {
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+        return renderer.image { (context) in
+            layer.render(in: context.cgContext)
+        }
+    }
+}

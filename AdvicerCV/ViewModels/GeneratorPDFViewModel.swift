@@ -86,7 +86,7 @@ struct GeneratorPDFViewModel {
     }
     
     mutating func exportPressed() {
-        let data = model.generatePDF(from: .init(string: "some data"))
+        let data = model.generatePDF(from: attrubute)
         exportingURL = model.savePDFDataToTempFile(data: data, fileName: "cv.pdf")
     }
     
@@ -107,14 +107,28 @@ extension GeneratorPDFViewModel {
     var attrubute:NSAttributedString {
         let mutable:NSMutableAttributedString = .init()
         CVContent.Key.allCases.forEach { key in
+            let needSpaces = !key.rawValue.lowercased().contains("title")
+            if needSpaces {
+                mutable.append(spacer)
+            }
+
             if let title = key.pdfTitle {
                 mutable.append(self.title(title))
             }
             let value = self.cvContent.dict[key] ?? []
-            mutable.append(spacer2)
+            if needSpaces {
+                mutable.append(separetor)
+                mutable.append(spacer2)
+                mutable.append(spacer2)
+            }
+
 
             value.forEach { item in
                 mutable.append(workExperience(item, key: key))
+                if key != .workingHistory && value.last?.id != item.id {
+                    mutable.append(spacer2)
+
+                }
             }
             mutable.append(spacer)
         }
@@ -137,17 +151,32 @@ extension GeneratorPDFViewModel {
 //        let spacerAttachment = NSTextAttachment()
 //        spacerAttachment.bounds = CGRect(x: 0, y: 0, width: 0, height: appearence.spaceBeforeSection)
 //        return NSAttributedString(attachment: spacerAttachment)
-        .init("\n\n")
-    }
-    
-    private var spacer2:NSAttributedString {
-//        let spacerAttachment = NSTextAttachment()
-//        spacerAttachment.bounds = CGRect(x: 0, y: 0, width: 0, height: appearence.spaceBeforeText)
-//        return NSAttributedString(attachment: spacerAttachment)
         .init(string: "\n", attributes: [
             .font:UIFont.systemFont(ofSize: 5)
         ])
-
+//        .init()
+    }
+    
+    private var separetor:NSAttributedString {
+//        let spacerAttachment = NSTextAttachment()
+//        spacerAttachment.bounds = CGRect(x: 0, y: 0, width: 0, height: appearence.spaceBeforeText)
+//        return NSAttributedString(attachment: spacerAttachment)
+        let view = UIView()
+        view.backgroundColor = appearence.toColor(.separetor)
+        view.frame = .init(origin: .zero, size: .init(width: PDFGeneratorModel.pdfWidth, height: 1))
+        let attachment = NSTextAttachment()
+        attachment.image = view.toImage
+        return .init(attachment: attachment)
+//        return .init(string: "\n", attributes: [
+//            .font:UIFont.systemFont(ofSize: 5),
+//        ])
+//        .init()
+    }
+    
+    private var spacer2:NSAttributedString {
+        return .init(string: "\n", attributes: [
+            .font:UIFont.systemFont(ofSize: 5),
+        ])
     }
     
     func workExperience(_ item:CVContent.ContentItem, key:CVContent.Key) -> NSAttributedString {
@@ -156,39 +185,57 @@ extension GeneratorPDFViewModel {
         if companyName.isEmpty {
             companyName = key.pdfPreviewTitlePlaceholder
         }
-        let title:NSAttributedString = .init(string: companyName, attributes: [
-            .foregroundColor:appearence.toColor(.title),
-            .font:appearence.font[.title] ?? Appearence.FontData.default(.title).font,
-            .link: URL(string: "action://\(key.rawValue)\(item.id.uuidString)")!,
+        if !companyName.isEmpty  {
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .center
+            let isCVTitle = key.rawValue.lowercased().contains("title")
+            let keyType: ContentType = isCVTitle ? (key == .jobTitle ? .cvTitle : .smallDescription) : .title
+            let title:NSAttributedString = .init(string: companyName + (key.pdfTextInline ? " " : "\n"), attributes: [
+                .foregroundColor:appearence.toColor(keyType),
+                .font:appearence.font[keyType] ?? Appearence.FontData.default(keyType).font,
+                .link: URL(string: "action://\(key.rawValue)\(item.id.uuidString)")!,
+                .paragraphStyle: isCVTitle ? paragraphStyle : NSMutableParagraphStyle(),
 
-        ])
-        mutable.append(title)
+            ])
+            mutable.append(title)
+        }
         
-        mutable.append(.init(string: "\n"))
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .right
-        paragraphStyle.paragraphSpacingBefore = -12
-        let date:NSAttributedString = .init(string: "\(item.from?.formatted(date: .complete, time: .standard) ?? "") ", attributes: [
-            .font:appearence.font[.title] ?? Appearence.FontData.default(.title).font,
-            .foregroundColor:appearence.toColor(.title),
-            .paragraphStyle:paragraphStyle,
-        ])
-        mutable.append(date)
-        mutable.append(.init(string: "\n"))
+        if let date = item.from {
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .right
+            paragraphStyle.paragraphSpacingBefore = -12
+            let date:NSAttributedString = .init(string: "\(item.from?.formatted(date: .complete, time: .standard) ?? "") ", attributes: [
+                .font:appearence.font[.title] ?? Appearence.FontData.default(.title).font,
+                .foregroundColor:appearence.toColor(.title),
+                .paragraphStyle:paragraphStyle,
+            ])
+            mutable.append(date)
+            mutable.append(.init(string: "\n"))
+        }
         if !item.titleDesctiption.isEmpty {
-            let description:NSAttributedString = .init(string: " " + item.titleDesctiption, attributes: [
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .left
+            paragraphStyle.paragraphSpacingBefore = -11
+            
+            let description:NSAttributedString = .init(string: item.titleDesctiption, attributes: [
                 .foregroundColor:appearence.toColor(.smallDescription),
+                .paragraphStyle: key == .workingHistory ? paragraphStyle : NSMutableParagraphStyle(),
                 .font:appearence.font[.smallDescription] ?? Appearence.FontData.default(.smallDescription).font,
 
             ])
             mutable.append(description)
             mutable.append(.init(string: "\n"))
         }
-        mutable.append(.init(string: item.text + "\n", attributes: [
-            .foregroundColor:appearence.toColor(.text),
-            .font:appearence.font[.text] ?? Appearence.FontData.default(.text).font,
-
-        ]))
+        if !item.text.isEmpty {
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .left
+            paragraphStyle.paragraphSpacingBefore = -11
+            mutable.append(.init(string: item.text + "\n", attributes: [
+                .paragraphStyle: key == .workingHistory ? paragraphStyle : NSMutableParagraphStyle(),
+                .foregroundColor: appearence.toColor(.text),
+                .font:appearence.font[.text] ?? Appearence.FontData.default(.text).font,
+            ]))
+        }
         return mutable
     }
 }

@@ -57,8 +57,8 @@ extension GeneratorPDFViewModel.CVContent {
     static var mock:GeneratorPDFViewModel.CVContent {
         .init(workExperience: .mock,
               skills: [
-            .init(title: "iOS SDK:", titleDesctiption: """
-        - Core iOS Development: UIKit (4), SwiftUI (2), Concurrency (async/await, GCD), CoreData,
+            .init(title: "iOS SDK: - Core iOS Development:", titleDesctiption: """
+        UIKit (4), SwiftUI (2), Concurrency (async/await, GCD), CoreData,
         Combine, RxSwift, Local Authentication (FaceID/TouchID), Remote Notifications, Cocoa Touch, StoreKit
         (in-app purchases), App Group, Cocoa (0.5), AppKit
         - Graphics, Animation, Video: AVFoundation (1.5), CoreGraphics, CoreAnimation, PDFKit,

@@ -137,6 +137,13 @@ extension PromtOpenAI {
                     return nil
                 }
             }
+            
+            var pdfTextInline:Bool {
+                switch self {
+                case .skills, .portfolio, .contacts:true
+                default:false
+                }
+            }
         }
         
         enum Keys:String, CaseIterable, ResponseKeys {
