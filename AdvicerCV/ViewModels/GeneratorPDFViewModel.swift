@@ -255,7 +255,7 @@ extension GeneratorPDFViewModel {
             }
         }
         
-        if let date = item.from {
+        if let date = item.from, key.needDates {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .right
 

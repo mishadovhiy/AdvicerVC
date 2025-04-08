@@ -42,7 +42,6 @@ struct GeneratorPDFView: View {
         let ignoreText = [key == .jobTitle, key == .cvDescriptionTitle]
         let ignoreBold = [key == .jobTitle, key == .cvDescriptionTitle]
         let ignoreTitle = [key == .summary]
-        let needDate = [key == .workingHistory, key == .education]
         return VStack {
             //date
             if !ignoreTitle.contains(true) {
@@ -82,7 +81,7 @@ struct GeneratorPDFView: View {
                         .disabled(true)
                     }
             }
-            if needDate.contains(true) {
+            if key?.needDates ?? false {
                 DatePicker("Date From", selection: $viewModel.editingDateFrom, displayedComponents: [.date])
                     .foregroundColor(.white)
 

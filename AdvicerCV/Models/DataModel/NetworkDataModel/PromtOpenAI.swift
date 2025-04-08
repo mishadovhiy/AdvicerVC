@@ -46,7 +46,7 @@ generate advice for iOS Developer CV, \(values), my top skills:SwiftUI,UIKit, op
 extension PromtOpenAI {
     struct Advice:Codable {
         
-        private var dict:[String:String] = [:]
+        var dict:[String:String] = [:]
         
         init(_ dict:[String:String]) {
             self.dict = dict
@@ -83,7 +83,7 @@ extension PromtOpenAI {
             
             var needDates:Bool {
                 switch self {
-                case .workingHistory, .education, .portfolio:true
+                case .workingHistory, .education:true
                 default:false
                 }
             }
@@ -180,6 +180,10 @@ extension PromtOpenAI {
             
             var identifier: String {
                 self.rawValue
+            }
+            
+            var title:String {
+                rawValue.addSpaceBeforeCapitalizedLetters.capitalized
             }
         }
     }

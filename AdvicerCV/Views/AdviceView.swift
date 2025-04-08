@@ -9,14 +9,15 @@ import SwiftUI
 
 struct AdviceView: View {
     @EnvironmentObject var db: AppData
-    @Binding var document:Document?
-    let regeneratePressed:()->()
     @State var previewPressed:[PromtOpenAI.Advice.RetriveTitles] = []
     @ObservedObject var viewModel:AdviceViewModel = .init()
+    init(document: Document? = nil) {
+        viewModel.document = document
+    }
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing:0) {
-                PDFKitView(pdfData: document?.data)
+                PDFKitView(pdfData: viewModel.document?.data)
                     .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
                 ScrollView(.vertical, showsIndicators: false, content: {
                     rightControlView
@@ -39,8 +40,8 @@ struct AdviceView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    var rightControlView: some View {
-        let cvContent = document?.request?.advice?.allValues ?? [:]
+    var retrivedContent: some View {
+        let cvContent = viewModel.document?.request?.advice?.allValues ?? [:]
         return VStack {
             Text("Retrived content")
             ForEach(cvContent.keys.sorted(by: {$0.rawValue >= $1.rawValue}).filter({$0.openAIUsed}).compactMap({$0.rawValue}), id:\.self) { item in
@@ -70,6 +71,45 @@ struct AdviceView: View {
                         .lineLimit(previewPressed.contains(.init(rawValue: item) ?? .contacts) ? nil : 1)
                 }
             }
+        }
+        .padding(10)
+        .background(.red)
+        .padding(5)
+    }
+    
+    var request: some View {
+        VStack {
+            if let content = viewModel.document?.response {
+                ForEach(PromtOpenAI.Advice.Keys.allCases, id:\.rawValue) { key in
+                    VStack {
+                        Text(key.title)
+                        Text(content.value(for: key))
+                    }
+                }
+            }
+        }
+    }
+    
+    var rightControlView: some View {
+        VStack {
+            TextField("Job title", text: .init(get: {
+                viewModel.document?.request?.advice?.allValues[.jobTitle] ?? ""
+            }, set: {
+                var advice = viewModel.document?.request?.advice ?? .init([:])
+                advice.dict.updateValue($0, forKey: PromtOpenAI.Advice.RetriveTitles.jobTitle.rawValue)
+                viewModel.document?.request = .advice(advice)
+            }))
+            request
+            retrivedContent
+            Button("generate") {
+                viewModel.generatePressed(completion: {
+                    if let document = viewModel.document {
+                        self.db.db.coduments.update(document)
+
+                    }
+                })
+            }
+            .disabled(viewModel.isLoading)
         }
     }
 }

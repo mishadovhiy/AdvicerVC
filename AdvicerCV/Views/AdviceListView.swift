@@ -35,7 +35,7 @@ struct AdviceListView: View {
                     }
                     Spacer()
                     VStack {
-                        NavigationLink("", destination: AdviceView(document: $selectedDocument, regeneratePressed: regenerateAdvicePressed), isActive: .init(get: {
+                        NavigationLink("", destination: AdviceView(document: selectedDocument), isActive: .init(get: {
                             selectedDocument != nil
                         }, set: { newValue in
                             if !newValue {

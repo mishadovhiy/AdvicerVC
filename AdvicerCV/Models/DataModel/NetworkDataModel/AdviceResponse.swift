@@ -21,5 +21,6 @@ struct AdviceResponse:Codable {
         PromtOpenAI.Advice.Keys.allCases.forEach { key in
             dict.updateValue(response.extractSubstring(key: key.rawValue) ?? "", forKey: key.rawValue)
         }
+        print(dict, " ygtefrdws")
     }
 }

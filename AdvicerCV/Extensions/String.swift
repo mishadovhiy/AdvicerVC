@@ -8,6 +8,33 @@
 import Foundation
 
 extension String {
+    var dates:(Date?, Date?)? {
+        let regexPattern = "(\\b[A-Za-z]{3})\\s(\\d{4})\\s–\\s([A-Za-z]{3})\\s(\\d{4})\\b"
+
+        let regex = try! NSRegularExpression(pattern: regexPattern, options: [])
+
+        let range = NSRange(location: 0, length: self.utf16.count)
+        if let match = regex.firstMatch(in: self, options: [], range: range) {
+            let startMonthString = (self as NSString).substring(with: match.range(at: 1))
+            let startYearString = (self as NSString).substring(with: match.range(at: 2))
+            let endMonthString = (self as NSString).substring(with: match.range(at: 3))
+            let endYearString = (self as NSString).substring(with: match.range(at: 4))
+            
+            let startDateString = "\(startMonthString) \(startYearString)"
+            let endDateString = "\(endMonthString) \(endYearString)"
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMM yyyy"
+            
+            let startDate = dateFormatter.date(from: startDateString)
+            let endDate = dateFormatter.date(from: endDateString)
+            return (startDate, endDate)
+        } else {
+            print("No date range found in the string.")
+            return nil
+        }
+    }
+    
     var addSpaceBeforeCapitalizedLetters: String {
         let regex = try? NSRegularExpression(pattern: "(?<=\\w)(?=[A-Z])", options: [])
         let result = regex?.stringByReplacingMatches(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count), withTemplate: " $0")
