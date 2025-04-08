@@ -160,10 +160,11 @@ extension PromtOpenAI {
             case generalAdvice
             case skillContentCompletness
             case atsGrade
+            
             var valueDescription: String {
                 switch self {
                 case .atsGrade:
-                    "Grde how CV is ATS friendly"
+                    "Grade how CV is ATS friendly"
                 case .skillContentCompletness:
                     "Grade how clear i described skills section"
                 case .generalAdvice:

@@ -13,43 +13,45 @@ struct AdviceListView: View {
     let regenerateAdvicePressed:()->()
     var body: some View {
         NavigationView {
-            VStack {
-                ForEach(db.db.coduments, id:\.url?.absoluteString) { item in
-                    VStack {
-                        Text(item.url?.lastPathComponent ?? "-")
-                        PDFKitView(pdfData: item.data)
-                            .disabled(true)
-                    }
-                    .frame(maxWidth:.infinity)
-                    .frame(height:120)
-//                    .aspectRatio(1, contentMode: .fit)
-                    .background(Color.secondary)
-                    .cornerRadius(10)
-                    .clipped()
-                    .onTapGesture {
-                        withAnimation {
-                            selectedDocument = item
-                        }
-                    }
-                }
-                Spacer()
+            ScrollView(.vertical, content: {
                 VStack {
-                    NavigationLink("", destination: AdviceView(document: $selectedDocument, regeneratePressed: regenerateAdvicePressed), isActive: .init(get: {
-                        selectedDocument != nil
-                    }, set: { newValue in
-                        if !newValue {
-                            selectedDocument = nil
+                    ForEach(db.db.coduments, id:\.url?.absoluteString) { item in
+                        VStack {
+                            Text(item.url?.lastPathComponent ?? "-")
+                            PDFKitView(pdfData: item.data)
+                                .disabled(true)
                         }
-                    }))
-                    
+                        .frame(maxWidth:.infinity)
+                        .frame(height:120)
+    //                    .aspectRatio(1, contentMode: .fit)
+                        .background(Color.secondary)
+                        .cornerRadius(10)
+                        .clipped()
+                        .onTapGesture {
+                            withAnimation {
+                                selectedDocument = item
+                            }
+                        }
+                    }
+                    Spacer()
+                    VStack {
+                        NavigationLink("", destination: AdviceView(document: $selectedDocument, regeneratePressed: regenerateAdvicePressed), isActive: .init(get: {
+                            selectedDocument != nil
+                        }, set: { newValue in
+                            if !newValue {
+                                selectedDocument = nil
+                            }
+                        }))
+                        
+                    }
+                    .hidden()
                 }
-                .hidden()
-            }
-            .background {
-                ClearBackgroundView()
-            }
-            .frame(width: db.deviceSize.width)
-            
+                .background {
+                    ClearBackgroundView()
+                }
+                .frame(width: db.deviceSize.width)
+            })
+            .background(ClearBackgroundView())
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .background(ClearBackgroundView())

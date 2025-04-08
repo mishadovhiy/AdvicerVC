@@ -12,6 +12,7 @@ struct AdviceView: View {
     @Binding var document:Document?
     let regeneratePressed:()->()
     @State var previewPressed:[PromtOpenAI.Advice.RetriveTitles] = []
+    @ObservedObject var viewModel:AdviceViewModel = .init()
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing:0) {

@@ -15,6 +15,8 @@ struct GeneratorPDFViewModel {
     var linkSelected:String?
     var colorSelectingFor:ContentType?
     var fontSelectingFor:ContentType?
+    var selectingDateFrom:Bool = false
+    var selectingDateTo: Bool = false
     mutating func linkSelected(_ link:String) {
         linkSelected = link
         if let key = GeneratorPDFViewModel.CVContent.Key.allCases.first(where: {
@@ -367,6 +369,24 @@ extension GeneratorPDFViewModel {
         }
         set {
             editingValue?.boldTexts = newValue
+        }
+    }
+    
+    var editingDateFrom:Date {
+        get {
+            editingValue?.from ?? .init()
+        }
+        set {
+            editingValue?.from = newValue
+        }
+    }
+    
+    var editingDateTo:Date {
+        get {
+            editingValue?.to ?? .init()
+        }
+        set {
+            editingValue?.to = newValue
         }
     }
     

@@ -36,19 +36,86 @@ struct GeneratorPDFView: View {
     }
 
     var workExperienceEditor: some View {
-        VStack {
+        let key = viewModel.editingPropertyKey
+        let ignoreDescription = [key == .jobTitle, key == .cvDescriptionTitle]
+        let ignoreSpace = [key == .jobTitle, key == .cvDescriptionTitle]
+        let ignoreText = [key == .jobTitle, key == .cvDescriptionTitle]
+        let ignoreBold = [key == .jobTitle, key == .cvDescriptionTitle]
+        let ignoreTitle = [key == .summary]
+        let needDate = [key == .workingHistory, key == .education]
+        return VStack {
             //date
-            TextField("title:", text: $viewModel.editingPropertyTitle)
-            TextField("description:", text: $viewModel.editingPropertyTitleDescription)
-            Toggle("Need left space", isOn: $viewModel.editingNeedLeftSpace)
-            TextField("Text", text: $viewModel.editingPropertyText)
-            TextField("Bold text", text: $viewModel.editingboldTexts)
+            if !ignoreTitle.contains(true) {
+                TextField("title:", text: $viewModel.editingPropertyTitle)
+                    .foregroundColor(.white)
+            }
+            if !ignoreDescription.contains(true) {
+                TextField("description:", text: $viewModel.editingPropertyTitleDescription)
+                    .foregroundColor(.white)
 
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.orange)
-                .frame(height: 1000)
+            }
+            if !ignoreSpace.contains(true) {
+                Toggle("Need left space", isOn: $viewModel.editingNeedLeftSpace)
+                    .foregroundColor(.white)
+
+            }
+            if !ignoreText.contains(true) {
+                TextEditor(text: $viewModel.editingPropertyText)
+                    .padding(0)
+                    .foregroundColor(.white)
+                    .background(.red)
+                    .frame(maxWidth:.infinity)
+                    .frame(height:120)
+                    .overlay {
+                        VStack {
+                            HStack {
+                                Text("Start typing")
+                                    .foregroundColor(.white)
+                                    .opacity(0.15)
+                                Spacer()
+                            }
+                                
+                            Spacer()
+                        }
+                        .padding(10)
+                        .opacity(viewModel.editingPropertyText.isEmpty ? 1 : 0)
+                        .disabled(true)
+                    }
+            }
+            if needDate.contains(true) {
+                DatePicker("Date From", selection: $viewModel.editingDateFrom, displayedComponents: [.date])
+                    .foregroundColor(.white)
+
+                    .datePickerStyle(.compact)
+                DatePicker("Date To", selection: $viewModel.editingDateTo, displayedComponents: [.date])
+                    .datePickerStyle(.compact)
+                    .foregroundColor(.white)
+            }
+            if !ignoreBold.contains(true) {
+                TextField("Bold text", text: $viewModel.editingboldTexts)
+                    .foregroundColor(.white)
+            }
             
         }
+        .toolbar {
+#if os(watchOS)
+#else
+            ToolbarItemGroup(placement: .keyboard) {
+                
+                Button {
+                    endEditingKeyboard()
+                } label: {
+                    Text("Close")
+                }
+                Spacer()
+            }
+#endif
+        }
+        .padding(10)
+        .background(.black)
+        .cornerRadius(6)
+
+        .padding(.horizontal, 10)
         .navigationTitle(viewModel.editingPropertyKey?.titles.first ?? "?")
         .navigationBarItems(trailing: HStack {
             Button("delete") {
@@ -64,9 +131,8 @@ struct GeneratorPDFView: View {
                     self.workExperienceEditor
                 }
             }
-            .opacity(0.2)
             
-        }
+        }.background(.red)
 
 
     }
