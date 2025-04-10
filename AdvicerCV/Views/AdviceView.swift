@@ -18,7 +18,15 @@ struct AdviceView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing:0) {
                 PDFKitView(pdfData: viewModel.document?.data)
-                    .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
+                .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
+                .padding(.top, !hasNotDetectedData ? 0 : 50)
+                .overlay {
+                    VStack {
+                        self.retrivedContent.frame(height:!hasNotDetectedData ? 0 : 50)
+                            .clipped()
+                        Spacer()
+                    }
+                }
                 ScrollView(.vertical, showsIndicators: false, content: {
                     rightControlView
                         .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
@@ -40,38 +48,54 @@ struct AdviceView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
+    var hasNotDetectedData:Bool {
+        let cvContent = viewModel.document?.request?.advice?.allValues ?? [:]
+        return cvContent.contains { (key: PromtOpenAI.Advice.RetriveTitles, value: String) in
+            return key.openAIUsed && value.isEmpty
+        }
+    }
+    
     var retrivedContent: some View {
         let cvContent = viewModel.document?.request?.advice?.allValues ?? [:]
-        return VStack {
-            Text("Retrived content")
-            ForEach(cvContent.keys.sorted(by: {$0.rawValue >= $1.rawValue}).filter({$0.openAIUsed}).compactMap({$0.rawValue}), id:\.self) { item in
-                VStack {
-                    Button {
-                        let key = PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts
-                        if previewPressed.contains(key) {
-                            withAnimation {
-                                previewPressed.removeAll(where: {
-                                    $0.rawValue == key.rawValue
-                                })
+        return ScrollView(.horizontal, content: {
+            HStack {
+                ForEach(cvContent.keys.sorted(by: {$0.rawValue >= $1.rawValue}).filter({$0.openAIUsed}).compactMap({$0.rawValue}), id:\.self) { item in
+                    if (cvContent[.init(rawValue: item) ?? .contacts] ?? "").isEmpty {
+                        VStack {
+                            HStack {
+                                Text((PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts).rawValue.addSpaceBeforeCapitalizedLetters.capitalized)
+                                Spacer()
+                                Text((cvContent[.init(rawValue: item) ?? .contacts] ?? "").isEmpty ? "not detected" : "detected")
                             }
-                        } else {
-                            withAnimation {
-                                previewPressed.append(key)
-                            }
-                        }
-                    } label: {
-                        HStack {
-                            Text((PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts).rawValue.addSpaceBeforeCapitalizedLetters.capitalized)
-                            Spacer()
-                            Text((cvContent[.init(rawValue: item) ?? .contacts] ?? "").isEmpty ? "not detected" : "detected")
+        //                    Button {
+        //                        let key = PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts
+        //                        if previewPressed.contains(key) {
+        //                            withAnimation {
+        //                                previewPressed.removeAll(where: {
+        //                                    $0.rawValue == key.rawValue
+        //                                })
+        //                            }
+        //                        } else {
+        //                            withAnimation {
+        //                                previewPressed.append(key)
+        //                            }
+        //                        }
+        //                    } label: {
+        //                        HStack {
+        //                            Text((PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts).rawValue.addSpaceBeforeCapitalizedLetters.capitalized)
+        //                            Spacer()
+        //                            Text((cvContent[.init(rawValue: item) ?? .contacts] ?? "").isEmpty ? "not detected" : "detected")
+        //                        }
+        //                    }
+        //
+        //                    Text(cvContent[.init(rawValue: item) ?? .contacts] ?? "")
+        //                        .lineLimit(previewPressed.contains(.init(rawValue: item) ?? .contacts) ? nil : 1)
                         }
                     }
-
-                    Text(cvContent[.init(rawValue: item) ?? .contacts] ?? "")
-                        .lineLimit(previewPressed.contains(.init(rawValue: item) ?? .contacts) ? nil : 1)
+                    
                 }
             }
-        }
+        })
         .padding(10)
         .background(.red)
         .padding(5)
@@ -100,7 +124,6 @@ struct AdviceView: View {
                 viewModel.document?.request = .advice(advice)
             }))
             request
-            retrivedContent
             Button("generate") {
                 viewModel.generatePressed(completion: {
                     if let document = viewModel.document {
