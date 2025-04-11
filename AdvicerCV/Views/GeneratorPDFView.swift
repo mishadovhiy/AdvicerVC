@@ -17,7 +17,7 @@ struct GeneratorPDFView: View {
         [generalColorsPresenting, generalFontsPresenting].contains(true)
     }
     var body: some View {
-        VStack {
+        VStack(spacing:-10) {
             ScrollView(.horizontal, showsIndicators: false) {
                 AttributedTextView(attributedString: self.viewModel.attrubute, didPressLink: { link, at in
                     viewModel.linkSelected(link)
@@ -28,6 +28,7 @@ struct GeneratorPDFView: View {
                 .background(.white)
             }
             generalEditor
+
         }
         .sheet(isPresented: $viewModel.isExportPresenting) {
             ActivityViewController(activityItems: [viewModel.exportingURL ?? .init(string: "https://mishadovhiy.com")!])
@@ -113,7 +114,7 @@ struct GeneratorPDFView: View {
 #endif
         }
         .padding(10)
-        .background(.black)
+        .background(.black.opacity(0.2))
         .cornerRadius(6)
 
         .padding(.horizontal, 10)
@@ -133,64 +134,93 @@ struct GeneratorPDFView: View {
                 }
             }
             
-        }.background(.red)
+        }
+        .background {
+            ClearBackgroundView()
+        }
 
+    }
+    
+    var fontButton: some View {
+        NavigationLink(destination: ScrollView(.horizontal, content: {
+            HStack {
+                Text("color")
+                Text("color")
+                Text("color")
+                Text("color")
+                Text("color")
+                Text("color")
+                Text("color")
+                Text("color")
+            }
+            .padding(.horizontal, 15)
+        })
+            .background {
+                ClearBackgroundView()
+            }, isActive: $generalFontsPresenting) {
+                Image(.font)
+                    .resizable()
+                    .foregroundColor(.white)
+                    .tint(.white)
+                    .scaledToFit()
+                    .frame(width:30)
+                    .aspectRatio(1, contentMode: .fit)
+        }
+            .tint(.white)
+    }
+    
+    var colorButton: some View {
+        NavigationLink(destination:
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach(GeneratorPDFViewModel.ContentType.allCases, id:\.self) { type in
+                        NavigationLink(type.title, destination: ColorPicker(type.title, selection: $viewModel.selectingColorType).background(.red), isActive: .init(get: {
+                            viewModel.colorSelectingFor == type
+                        }, set: { newValue in
+                            withAnimation {
+                                viewModel.colorSelectingFor = newValue ? type : nil
+                            }
+                        }))
+                    }
+                }
+                .padding(.horizontal, 15)
 
+            }
+            .background {
+                ClearBackgroundView()
+            }
+        , isActive: $generalColorsPresenting) {
+            Image(.color)
+                .resizable()
+                .foregroundColor(.white)
+                .tint(.white)
+                .scaledToFit()
+                .frame(width:30)
+                .aspectRatio(1, contentMode: .fit)
+        }
     }
     
     var generalEditor: some View {
         NavigationView {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    NavigationLink(destination:
-
-                        ScrollView(.horizontal) {
-                            HStack {
-                                ForEach(GeneratorPDFViewModel.ContentType.allCases, id:\.self) { type in
-                                    NavigationLink(type.title, destination: ColorPicker(type.title, selection: $viewModel.selectingColorType).background(.red), isActive: .init(get: {
-                                        viewModel.colorSelectingFor == type
-                                    }, set: { newValue in
-                                        viewModel.colorSelectingFor = newValue ? type : nil
-                                    }))
-                                }
-                            }
-                        }
-                        .background(.red)
-                    , isActive: $generalColorsPresenting) {
-                        Text("Colors")
-                    }
-                    NavigationLink(destination: HStack {
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                    }, isActive: $generalFontsPresenting) {
-                        Text("Fonts")
-                    }
-//                    NavigationLink(destination: HStack {
-//                        Text("color")
-//                        Text("color")
-//                        Text("color")
-//                        Text("color")
-//                        Text("color")
-//                        Text("color")
-//                        Text("color")
-//                        Text("color")
-//                    }, isActive: $generalSpacesPresenting) {
-//                        Text("Spaces")
-//                    }
-
-                    
+                HStack(spacing:20) {
+                    colorButton
+                    Divider()
+                    fontButton
+                    Divider()
                     Button("export") {
                         viewModel.exportPressed()
                     }
-                    
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 20)
+                    .background(.white)
+                    .cornerRadius(6)
                     NavigationLink("", destination: valueEditorView, isActive: $viewModel.isPresentingValueEditor)
                         .hidden()
+                }
+                .padding(.horizontal, 20)
+                .background {
+                    ClearBackgroundView()
                 }
             }
             .background {
@@ -201,8 +231,12 @@ struct GeneratorPDFView: View {
         .background {
             ClearBackgroundView()
         }
-        .frame(maxHeight: viewModel.largeEditorHeight ? .infinity : (editorNavigationPushed ? 70 : 45))
-
+        .frame(maxHeight: viewModel.largeEditorHeight ? .infinity : (editorNavigationPushed ? 90 : 45))
+        .background(content: {
+            Color(.red)
+                .padding(.vertical, -20)
+                .cornerRadius(12)
+        })
         .animation(.smooth, value: viewModel.isPresentingValueEditor)
 
     }
