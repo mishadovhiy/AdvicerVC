@@ -13,7 +13,9 @@ struct GeneratorPDFView: View {
     @State var generalColorsPresenting = false
     @State var generalFontsPresenting = false
     @State var generalSpacesPresenting = false
-    
+    var editorNavigationPushed:Bool {
+        [generalColorsPresenting, generalFontsPresenting].contains(true)
+    }
     var body: some View {
         VStack {
             ScrollView(.horizontal, showsIndicators: false) {
@@ -53,11 +55,11 @@ struct GeneratorPDFView: View {
                     .foregroundColor(.white)
 
             }
-            if !ignoreSpace.contains(true) {
-                Toggle("Need left space", isOn: $viewModel.editingNeedLeftSpace)
-                    .foregroundColor(.white)
-
-            }
+//            if !ignoreSpace.contains(true) {
+//                Toggle("Need left space", isOn: $viewModel.editingNeedLeftSpace)
+//                    .foregroundColor(.white)
+//
+//            }
             if !ignoreText.contains(true) {
                 TextEditor(text: $viewModel.editingPropertyText)
                     .padding(0)
@@ -169,18 +171,18 @@ struct GeneratorPDFView: View {
                     }, isActive: $generalFontsPresenting) {
                         Text("Fonts")
                     }
-                    NavigationLink(destination: HStack {
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                        Text("color")
-                    }, isActive: $generalSpacesPresenting) {
-                        Text("Spaces")
-                    }
+//                    NavigationLink(destination: HStack {
+//                        Text("color")
+//                        Text("color")
+//                        Text("color")
+//                        Text("color")
+//                        Text("color")
+//                        Text("color")
+//                        Text("color")
+//                        Text("color")
+//                    }, isActive: $generalSpacesPresenting) {
+//                        Text("Spaces")
+//                    }
 
                     
                     Button("export") {
@@ -199,7 +201,8 @@ struct GeneratorPDFView: View {
         .background {
             ClearBackgroundView()
         }
-        .frame(maxHeight: viewModel.largeEditorHeight ? .infinity : (generalColorsPresenting ? 60 : 45))
+        .frame(maxHeight: viewModel.largeEditorHeight ? .infinity : (editorNavigationPushed ? 70 : 45))
+
         .animation(.smooth, value: viewModel.isPresentingValueEditor)
 
     }

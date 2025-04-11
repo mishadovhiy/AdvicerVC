@@ -10,6 +10,7 @@ import Foundation
 class AppData:ObservableObject {
     private let dbkey = "db4"
     @Published var deviceSize:CGSize = .zero
+    static let adviceLimit:Int = 4
     @Published var db:DataBase = .init() {
         didSet {
             if dataLoaded {
@@ -54,7 +55,7 @@ class AppData:ObservableObject {
 }
 
 struct DataBase: Codable {
-    var coduments:[Document] = []
+    var documents:[Document] = []
     
 }
 

@@ -47,7 +47,7 @@ struct HomeView: View {
     
     func loadDocument(_ url:URL) {
         viewModel.processDocument(url) {
-            self.db.db.coduments.update(self.viewModel.selectedDocument!)
+            self.db.db.documents.update(self.viewModel.selectedDocument!)
         }
     }
     
@@ -75,11 +75,11 @@ struct HomeView: View {
                     .frame(maxHeight: viewModel.selectedTab == .advices ? .infinity : 0)
                     .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
-            case .settings:
-                Text("Settings")
-                    .frame(maxHeight: viewModel.selectedTab == .settings ? .infinity : 0)
-                    .animation(.smooth, value: viewModel.selectedTab)
-                    .clipped()
+//            case .settings:
+//                Text("Settings")
+//                    .frame(maxHeight: viewModel.selectedTab == .settings ? .infinity : 0)
+//                    .animation(.smooth, value: viewModel.selectedTab)
+//                    .clipped()
             }
         }
 
@@ -95,32 +95,37 @@ struct HomeView: View {
     }
     
     var uploadButton: some View {
-        Button(action: {
-            viewModel.isDocumentSelecting = true
-        }) {
-            HStack {
-                Image(systemName: "arrow.up.doc")
-                Text("Upload CV")
+        VStack(content: {
+            Button(action: {
+                viewModel.isDocumentSelecting = true
+            }) {
+                HStack {
+                    Image(systemName: "arrow.up.doc")
+                    Text("Upload CV")
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+                .frame(maxHeight: 50)
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            .frame(maxHeight: 50)
-        }
+            Text(AppData.adviceLimit <= db.db.documents.count ? "Limit reached" : "")
+                
+        })
+        .disabled(AppData.adviceLimit <= db.db.documents.count)
     }
     
     var tabBarButtons: some View {
         HStack {
-            HStack(spacing:-12) {
+            HStack(spacing:-15) {
                 ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
                     Button(action: {
                         withAnimation {
                             viewModel.selectedTab = tab
                         }
                     }, label: {
-                        Text(tab.title + (tab == .advices ? " (\(db.db.coduments.count))" : ""))
+                        Text(tab.title)
                             .lineLimit(1)
                     })
 
@@ -129,18 +134,19 @@ struct HomeView: View {
     //                    .padding(.top, 0)
     //                    .padding(.bottom, 0)
     //                .padding(.horizontal, 20)
-                    .padding(.horizontal, 15)
+                    .padding(.horizontal, 20)
                     .padding(.top, 15)
                     .padding(.bottom, 5)
                     .background(tab.color)
                     .cornerRadius(10)
                     .animation(.easeInOut, value: viewModel.selectedTab)
+                    .disabled(!((tab != .advices) || (tab == .advices && !db.db.documents.isEmpty)))
                 }
             }
             .frame(height:150)
             .rotationEffect(.degrees(90))
 
-            .offset(x:-160)
+            .offset(x:-115, y:db.deviceSize.height / -4)
             Spacer()
         }
         .frame(alignment:.leading)

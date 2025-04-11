@@ -75,7 +75,7 @@ extension HomeViewModel {
         case home
         case advices
         case generator
-        case settings
+//        case settings
         var title:String {
             rawValue.addSpaceBeforeCapitalizedLetters.uppercased()}
         
@@ -85,8 +85,8 @@ extension HomeViewModel {
                     .orange
             case .advices:
                     .brown
-            case .settings:
-                    .green
+//            case .settings:
+//                    .green
             case .generator:.red
             }
         }

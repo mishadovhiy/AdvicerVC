@@ -15,7 +15,7 @@ struct AdviceListView: View {
         NavigationView {
             ScrollView(.vertical, content: {
                 VStack {
-                    ForEach(db.db.coduments, id:\.url?.absoluteString) { item in
+                    ForEach(db.db.documents, id:\.url?.absoluteString) { item in
                         VStack {
                             Text(item.url?.lastPathComponent ?? "-")
                             PDFKitView(pdfData: item.data)

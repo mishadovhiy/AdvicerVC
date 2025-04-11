@@ -25,7 +25,7 @@ enum PromtOpenAI:Codable {
                 "\(key.rawValue.addSpaceBeforeCapitalizedLetters):\(value)"
             }.joined(separator: ",")
             return """
-generate advice for iOS Developer CV, \(values), my top skills:SwiftUI,UIKit, optionaly with WatchKit but i like it, desireble job duties:iOS application development,in a cross plutform team. Structure advice response in keys: \(properties)
+generate advice for iOS Developer CV, \(values), my top skills:SwiftUI,UIKit, optionaly with WatchKit but i like it, desireble job duties:iOS application development,in a cross plutform team. Structure advice response in keys: \(properties). All Grades should be from 1 to 5
 """
             //generate request
             //choose cv button
@@ -160,9 +160,13 @@ extension PromtOpenAI {
             case generalAdvice
             case skillContentCompletness
             case atsGrade
+            case employmentDurationGrade
+            case cvImprovment
             
             var valueDescription: String {
                 switch self {
+                case .employmentDurationGrade:
+                    "Grade employment duration"
                 case .atsGrade:
                     "Grade how CV is ATS friendly"
                 case .skillContentCompletness:
@@ -174,7 +178,9 @@ extension PromtOpenAI {
                 case .skillsGrade:
                     "grade how skills are relevant for the position and years of experience"
                 case .skillImprovmentSuggestion:
-                    "suggest what skills I need to add"
+                    "suggest what skills I need to add if any"
+                case .cvImprovment:
+                    "suggest what can i improve in my CV"
                 }
             }
             

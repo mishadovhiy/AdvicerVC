@@ -401,4 +401,22 @@ extension GeneratorPDFViewModel {
             }
         }
     }
+    
+    var selectingFontSize:CGFloat {
+        get {
+            appearence.font[fontSelectingFor ?? .background]?.size ?? Appearence.FontData.default(fontSelectingFor ?? .background).size
+        }
+        set {
+            appearence.font[fontSelectingFor ?? .background]?.size = newValue
+        }
+    }
+    
+    var selectingFontWeight:UIFont.Weight {
+        get {
+            appearence.font[fontSelectingFor ?? .background]?.fontWeight ?? Appearence.FontData.default(fontSelectingFor ?? .background).fontWeight
+        }
+        set {
+            appearence.font[fontSelectingFor ?? .background]?.fontWeight = newValue
+        }
+    }
 }

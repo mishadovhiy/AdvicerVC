@@ -127,7 +127,7 @@ struct AdviceView: View {
             Button("generate") {
                 viewModel.generatePressed(completion: {
                     if let document = viewModel.document {
-                        self.db.db.coduments.update(document)
+                        self.db.db.documents.update(document)
 
                     }
                 })
