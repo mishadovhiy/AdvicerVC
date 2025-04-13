@@ -34,11 +34,11 @@ class HomeViewModel: ObservableObject {
     func processDocument(_ url: URL, completion:@escaping()->()) {
         self.loading = .document
         let data = PDFDocument.pdfToData(from: url)!
-        let test = PDFDocument.extractTextAfterTitle(from: data, titles: PromtOpenAI.Advice.RetriveTitles.allCases.compactMap({$0.titles}).flatMap({$0}))
+        let test = PDFDocument.extractTextAfterTitle(from: data, titles: NetworkRequest.Advice.RetriveTitles.allCases.compactMap({$0.titles}).flatMap({$0}))
         var adviceResult:[String:String] = [:]
         print("fsda ", test, " rtgerfds")
 
-        PromtOpenAI.Advice.RetriveTitles.allCases.forEach { key in
+        NetworkRequest.Advice.RetriveTitles.allCases.forEach { key in
             key.titles.forEach { title in
                 if let value = test[title], !value.isEmpty {
                     adviceResult.updateValue(test[title] ?? "", forKey: key.rawValue)
@@ -47,7 +47,7 @@ class HomeViewModel: ObservableObject {
             }
         }
         print(adviceResult, " rtgdfsda ")
-        let advice = PromtOpenAI.Advice.init(adviceResult)
+        let advice = NetworkRequest.Advice.init(adviceResult)
         print(advice.allValues, " rgtefrds")
         var newDocument:Document = .init(data: data, url: url, request: .advice(advice))
         print("promtsfd ", newDocument.request?.promt, " efrweda ")

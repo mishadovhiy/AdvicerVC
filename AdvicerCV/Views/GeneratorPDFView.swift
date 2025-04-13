@@ -144,14 +144,9 @@ struct GeneratorPDFView: View {
     var fontButton: some View {
         NavigationLink(destination: ScrollView(.horizontal, content: {
             HStack {
-                Text("color")
-                Text("color")
-                Text("color")
-                Text("color")
-                Text("color")
-                Text("color")
-                Text("color")
-                Text("color")
+                ForEach(GeneratorPDFViewModel.ContentType.allCases, id:\.self) { type in
+                    //
+                }
             }
             .padding(.horizontal, 15)
         })

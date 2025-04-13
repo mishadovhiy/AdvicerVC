@@ -8,14 +8,21 @@
 import Foundation
 
 struct NetworkModel {
-    func advice(_ input:PromtOpenAI.Advice, completion:@escaping(AdviceResponse?)->()) {
-        guard let request = Request.openAIRequest(.advice(input)) else {
+    func advice(_ input:NetworkRequest.Advice, completion:@escaping(NetworkResponse.AdviceResponse?)->()) {
+        Request(.advice(input)).perform() { data in
+//            let dict = try? JSONSerialization.jsonObject(with: data ?? .init(), options: []) as? [String: Any]
+            completion(.init(response: .init(data: data ?? .init(), encoding: .utf8) ?? ""))
+        }
+    }
+    
+    func support(_ input:NetworkRequest.SupportRequest, completion:@escaping(NetworkResponse.SupportResponse?)->()) {
+        guard let request = Request.init(.support(input)).request else {
             completion(nil)
             return
         }
-        PerformRequest.request(request) { data in
+        Request.init(.support(input)).perform(data: "44fdcv8jf3") { data in
 //            let dict = try? JSONSerialization.jsonObject(with: data ?? .init(), options: []) as? [String: Any]
-            completion(.init(response: .init(data: data ?? .init(), encoding: .utf8) ?? ""))
+            completion(.init(data: data))
         }
     }
 }

@@ -7,18 +7,20 @@
 
 import Foundation
 
-enum PromtOpenAI:Codable {
+enum NetworkRequest:Codable {
+    case support(SupportRequest)
     case advice(Advice)
     var advice:Advice? {
         switch self {
         case .advice(let advice):
             return advice
+        default:return nil
         }
     }
     var promt:String {
         switch self {
         case .advice(let advice):
-            let properties = PromtOpenAI.Advice.Keys.allCases.compactMap { key in
+            let properties = NetworkRequest.Advice.Keys.allCases.compactMap { key in
                 "<\(key.identifier)>(\(key.valueDescription))</\(key.identifier)>"
             }.joined()
             let values = advice.allValues.map { (key: Advice.RetriveTitles, value: String) in
@@ -33,17 +35,25 @@ generate advice for iOS Developer CV, \(values), my top skills:SwiftUI,UIKit, op
             //top skills
             //desireble job or job duties
             //
+        default:return ""
         }
     }
     var isValid:Bool {
         switch self {
         case .advice(let advice):
             ![advice.allValues].contains(where: {$0?.isEmpty ?? true})
+        default:true
         }
     }
 }
 
-extension PromtOpenAI {
+extension NetworkRequest {
+    struct SupportRequest:Codable {
+        var text:String
+        var header:String
+        var title:String
+    }
+    
     struct Advice:Codable {
         
         var dict:[String:String] = [:]

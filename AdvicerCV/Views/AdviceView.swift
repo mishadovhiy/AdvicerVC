@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AdviceView: View {
     @EnvironmentObject var db: AppData
-    @State var previewPressed:[PromtOpenAI.Advice.RetriveTitles] = []
+    @State var previewPressed:[NetworkRequest.Advice.RetriveTitles] = []
     @ObservedObject var viewModel:AdviceViewModel = .init()
     init(document: Document? = nil) {
         viewModel.document = document
@@ -50,7 +50,7 @@ struct AdviceView: View {
     
     var hasNotDetectedData:Bool {
         let cvContent = viewModel.document?.request?.advice?.allValues ?? [:]
-        return cvContent.contains { (key: PromtOpenAI.Advice.RetriveTitles, value: String) in
+        return cvContent.contains { (key: NetworkRequest.Advice.RetriveTitles, value: String) in
             return key.openAIUsed && value.isEmpty
         }
     }
@@ -63,7 +63,7 @@ struct AdviceView: View {
                     if (cvContent[.init(rawValue: item) ?? .contacts] ?? "").isEmpty {
                         VStack {
                             HStack {
-                                Text((PromtOpenAI.Advice.RetriveTitles.init(rawValue: item) ?? .contacts).rawValue.addSpaceBeforeCapitalizedLetters.capitalized)
+                                Text((NetworkRequest.Advice.RetriveTitles.init(rawValue: item) ?? .contacts).rawValue.addSpaceBeforeCapitalizedLetters.capitalized)
                                 Spacer()
                                 Text((cvContent[.init(rawValue: item) ?? .contacts] ?? "").isEmpty ? "not detected" : "detected")
                             }
@@ -104,7 +104,7 @@ struct AdviceView: View {
     var request: some View {
         VStack {
             if let content = viewModel.document?.response {
-                ForEach(PromtOpenAI.Advice.Keys.allCases, id:\.rawValue) { key in
+                ForEach(NetworkRequest.Advice.Keys.allCases, id:\.rawValue) { key in
                     VStack {
                         Text(key.title)
                         Text(content.value(for: key))
@@ -120,7 +120,7 @@ struct AdviceView: View {
                 viewModel.document?.request?.advice?.allValues[.jobTitle] ?? ""
             }, set: {
                 var advice = viewModel.document?.request?.advice ?? .init([:])
-                advice.dict.updateValue($0, forKey: PromtOpenAI.Advice.RetriveTitles.jobTitle.rawValue)
+                advice.dict.updateValue($0, forKey: NetworkRequest.Advice.RetriveTitles.jobTitle.rawValue)
                 viewModel.document?.request = .advice(advice)
             }))
             request

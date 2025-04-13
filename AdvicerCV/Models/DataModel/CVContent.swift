@@ -9,7 +9,7 @@ import SwiftUI
 
 extension GeneratorPDFViewModel {
     struct CVContent:Codable {
-        typealias Key = PromtOpenAI.Advice.RetriveTitles
+        typealias Key = NetworkRequest.Advice.RetriveTitles
         var order:[String:Int] = [:]
         var workExperience:[ContentItem] {
             get {
@@ -113,8 +113,8 @@ extension GeneratorPDFViewModel {
             }
         }
         
-        init(_ data:[PromtOpenAI.Advice.RetriveTitles:[ContentItem]] = [:]) {
-            data.forEach { (key: PromtOpenAI.Advice.RetriveTitles, value: [ContentItem]) in
+        init(_ data:[NetworkRequest.Advice.RetriveTitles:[ContentItem]] = [:]) {
+            data.forEach { (key: NetworkRequest.Advice.RetriveTitles, value: [ContentItem]) in
                 self.data.updateValue(value, forKey: key.rawValue)
             }
         }

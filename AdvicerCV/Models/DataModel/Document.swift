@@ -11,10 +11,10 @@ struct Document: Codable {
     //pdfDocumentData
     var data:Data?
     var url:URL?
-    var request:PromtOpenAI? = nil
-    var response:AdviceResponse? = nil
+    var request:NetworkRequest? = nil
+    var response:NetworkResponse.AdviceResponse? = nil
     
-    var responseHistory:[AdviceResponse] = []
+    var responseHistory:[NetworkResponse.AdviceResponse] = []
 }
 
 extension [Document] {
