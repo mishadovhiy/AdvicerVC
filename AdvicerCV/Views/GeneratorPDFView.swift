@@ -141,11 +141,37 @@ struct GeneratorPDFView: View {
 
     }
     
+    func selectingFont(_ type:GeneratorPDFViewModel.ContentType) -> some View {
+        Picker("Weight", selection: $viewModel.selectingFontWeight) {
+            ForEach(UIFont.Weight.allCases, id:\.string) { font in
+                Text(font.string)
+                    .id(UIFont.Weight.allCases.index(where: { el in
+                        el == font
+                    }) ?? 0)
+            }
+        }
+        .pickerStyle(SegmentedPickerStyle())
+
+    }
+    
     var fontButton: some View {
         NavigationLink(destination: ScrollView(.horizontal, content: {
             HStack {
                 ForEach(GeneratorPDFViewModel.ContentType.allCases, id:\.self) { type in
-                    //
+                    
+                    
+                    NavigationLink(type.title, destination: VStack {
+                        Text("size")
+                        Slider(value: $viewModel.selectingFontSize)
+                        Divider()
+                        selectingFont(type)
+                    }.background(.red), isActive: .init(get: {
+                        viewModel.fontSelectingFor == type
+                    }, set: { newValue in
+                        withAnimation {
+                            viewModel.fontSelectingFor = newValue ? type : nil
+                        }
+                    }))
                 }
             }
             .padding(.horizontal, 15)

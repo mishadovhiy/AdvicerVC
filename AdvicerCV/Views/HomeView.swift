@@ -146,7 +146,7 @@ struct HomeView: View {
             .frame(height:150)
             .rotationEffect(.degrees(90))
 
-            .offset(x:-115, y:db.deviceSize.height / -4)
+            .offset(x:-130, y:db.deviceSize.height / -4)
             Spacer()
         }
         .frame(alignment:.leading)

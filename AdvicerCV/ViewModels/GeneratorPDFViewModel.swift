@@ -58,7 +58,7 @@ struct GeneratorPDFViewModel {
     }
     
     var largeEditorHeight:Bool {
-        isPresentingValueEditor || colorSelectingFor != nil
+        [isPresentingValueEditor, colorSelectingFor != nil, fontSelectingFor != nil].contains(true)
     }
 
     
@@ -418,5 +418,15 @@ extension GeneratorPDFViewModel {
         set {
             appearence.font[fontSelectingFor ?? .background]?.fontWeight = newValue
         }
+    }
+}
+
+extension UIFont.Weight {
+    static var allCases: [UIFont.Weight] {
+        [.light, .regular, .medium, .semibold, .bold, .black]
+    }
+    
+    var string:String {
+        return ""
     }
 }
