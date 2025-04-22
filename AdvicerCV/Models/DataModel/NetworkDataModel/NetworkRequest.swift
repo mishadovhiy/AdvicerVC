@@ -23,7 +23,16 @@ enum NetworkRequest:Codable {
             let properties = NetworkRequest.Advice.Keys.allCases.compactMap { key in
                 "<\(key.identifier)>(\(key.valueDescription))</\(key.identifier)>"
             }.joined()
-            let values = advice.allValues.map { (key: Advice.RetriveTitles, value: String) in
+            
+            let values = advice.allValues.filter({ dict in
+                dict.key.openAIUsed
+            })
+            if values.contains(where: { (key: Advice.RetriveTitles, value: String) in
+                key == .contacts
+            }) {
+                fatalError()
+            }
+                let res = values.map { (key: Advice.RetriveTitles, value: String) in
                 "\(key.rawValue.addSpaceBeforeCapitalizedLetters):\(value)"
             }.joined(separator: ",")
             return """
@@ -71,13 +80,13 @@ extension NetworkRequest {
             RetriveTitles.allCases.forEach { key in
                 values.updateValue(text(for: key), forKey: key)
             }
-            values.forEach { (key: RetriveTitles, value: String) in
-                values.forEach { (key1: RetriveTitles, value1: String) in
-                    if key != key1 {
-                        values[key] = values[key]?.replacingOccurrences(of: values[key1] ?? "", with: "")
-                    }
-                }
-            }
+//            values.forEach { (key: RetriveTitles, value: String) in
+//                values.forEach { (key1: RetriveTitles, value1: String) in
+//                    if key != key1 {
+//                        values[key] = values[key]?.replacingOccurrences(of: values[key1] ?? "", with: "")
+//                    }
+//                }
+//            }
             return values
         }
         //discribes titles to retrive from cv
@@ -128,7 +137,7 @@ extension NetworkRequest {
             var alternative:[String] {
                 switch self {
                 case .workingHistory:["workHistory", "workExperience", "workingExperience"]
-                case .contacts:["contactInformation"]
+                case .contacts:["contactInformation", "CONTACT INFORMATION", "CONTACTINFORMATION"]
                 default:
                     []
                 }

@@ -55,7 +55,7 @@ extension NetworkModel {
         }
         
         func perform(data:String = "", completion:@escaping(_ data: Data?)->()) {
-            if request?.httpMethod == "POST" {
+            if request?.httpMethod != "POST" {
                 self.uploadRequest(data: data, completion: completion)
             } else {
                 self.performRequest(completion: completion)

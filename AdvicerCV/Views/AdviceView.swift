@@ -7,13 +7,23 @@
 
 import SwiftUI
 
+
 struct AdviceView: View {
     @EnvironmentObject var db: AppData
     @State var previewPressed:[NetworkRequest.Advice.RetriveTitles] = []
     @ObservedObject var viewModel:AdviceViewModel = .init()
+
     init(document: Document? = nil) {
         viewModel.document = document
     }
+    
+    @State var jobTitleText = "" {
+        didSet {
+            print("getfrsda ", jobTitleText)
+        }
+    }
+    
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing:0) {
@@ -44,6 +54,10 @@ struct AdviceView: View {
         }
         .background {
             ClearBackgroundView()
+        }
+        .onAppear {
+            jobTitleText = viewModel.document?.request?.advice?.text(for: .jobTitle) ?? "??????"
+            print("settingjobtrte")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -113,21 +127,24 @@ struct AdviceView: View {
             }
         }
     }
-    
+
     var rightControlView: some View {
         VStack {
-            TextField("Job title", text: .init(get: {
-                viewModel.document?.request?.advice?.allValues[.jobTitle] ?? ""
-            }, set: {
-                var advice = viewModel.document?.request?.advice ?? .init([:])
-                advice.dict.updateValue($0, forKey: NetworkRequest.Advice.RetriveTitles.jobTitle.rawValue)
-                viewModel.document?.request = .advice(advice)
-            }))
+            TextField("Job title", text: $jobTitleText) { editing in
+                if !editing {
+                    viewModel.doneEditingJobTitle(&db.db, newValue: jobTitleText)
+                }
+            }
             request
-            Button("generate") {
+            Button("Generate") {
                 viewModel.generatePressed(completion: {
                     if let document = viewModel.document {
                         self.db.db.documents.update(document)
+                        print(document.response?.value(for: .atsGrade), " fdgfdsg ")
+                        viewModel.document = db.db.documents.first(where: {
+                            self.viewModel.document?.id == $0.id
+                        })
+                        print(viewModel.document?.response?.value(for: .atsGrade), " gfhddfgd ")
 
                     }
                 })
