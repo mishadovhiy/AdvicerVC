@@ -13,8 +13,8 @@ struct HomeView: View {
     
     var body: some View {
         GeometryReader(content: { proxy in
-            VStack() {
-                Spacer().frame(height:30)
+            HStack() {
+                Spacer().frame(width:viewModel.tabBarButtonsHeight)
                 VStack(spacing:0) {
                     contenView
                 }
@@ -23,14 +23,14 @@ struct HomeView: View {
                 .background(viewModel.selectedTab.color)
                 .cornerRadius(20)
             }
+//            .overlay(content: {
+//                VStack(content:  {
+//                    tabBarButtons(false)
+//                    Spacer()
+//                })
+//            })
             .overlay(content: {
-                VStack(content:  {
-                    tabBarButtons(false)
-                    Spacer()
-                })
-            })
-            .background(content: {
-                VStack(content:  {
+                HStack(content:  {
                     tabBarButtons(true)
                     Spacer()
                 })
@@ -58,19 +58,8 @@ struct HomeView: View {
     }
     
     var contenView: some View {
-        ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
+        ForEach(HomeViewModel.PresentingTab.allCases.reversed(), id:\.rawValue) { tab in
             switch tab {
-            case .generator:
-                GeneratorPDFView()
-                    .frame(maxHeight: viewModel.selectedTab == .generator ? .infinity : 0)
-                    .animation(.smooth, value: viewModel.selectedTab)
-                    .clipped()
-                    .disabled(viewModel.selectedTab != .generator)
-            case .home:homeView
-                    .frame(maxHeight: viewModel.selectedTab == .home ? .infinity : 0)
-                    .animation(.smooth, value: viewModel.selectedTab)
-                    .clipped()
-                    .disabled(viewModel.selectedTab != .home)
 
             case .advices:
                 AdviceListView(selectedDocument: $viewModel.selectedDocument, regenerateAdvicePressed: {
@@ -81,11 +70,27 @@ struct HomeView: View {
 
                     }
                 })
-                    .frame(maxHeight: viewModel.selectedTab == .advices ? .infinity : 0)
+                    .frame(maxHeight: viewModel.selectedTab == .advices || viewModel.selectedTab == .home ? .infinity : 0)
                     .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
                     .disabled(viewModel.selectedTab != .advices)
-
+            case .generator:
+                GeneratorPDFView()
+                    .frame(maxHeight: viewModel.selectedTab == .generator || viewModel.selectedTab == .home ? .infinity : 0)
+                    .animation(.smooth, value: viewModel.selectedTab)
+                    .clipped()
+                    .disabled(viewModel.selectedTab != .generator)
+            case .home:homeView
+                    .frame(maxHeight: viewModel.selectedTab == .home ? .infinity : 0)
+                    .animation(.smooth, value: viewModel.selectedTab)
+                    .clipped()
+                    .disabled(viewModel.selectedTab != .home)
+                
+            case .settings:SettingsView()
+                    .frame(maxHeight: viewModel.selectedTab == .settings ? .infinity : 0)
+                    .animation(.smooth, value: viewModel.selectedTab)
+                    .clipped()
+                    .disabled(viewModel.selectedTab != .settings)
 //            case .settings:
 //                Text("Settings")
 //                    .frame(maxHeight: viewModel.selectedTab == .settings ? .infinity : 0)
@@ -129,15 +134,22 @@ struct HomeView: View {
     
     func tabBarButtons(_ needBackground:Bool) -> some View {
         HStack {
-            HStack(spacing:-15) {
-                ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
+            VStack(spacing:-15) {
+                ForEach(HomeViewModel.PresentingTab.allCases.filter({$0.isLeading}), id:\.rawValue) { tab in
                     Button(action: {
                         withAnimation {
                             viewModel.selectedTab = tab
                         }
                     }, label: {
-                        Text(tab.title)
-                            .lineLimit(1)
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(.clear)
+                            .overlay {
+                                Text(tab.title)
+                                    .frame(width:100)
+                                    .lineLimit(1)
+                                    .rotationEffect(.degrees(90))
+                            }
+                        
                     })
 
 
@@ -145,23 +157,31 @@ struct HomeView: View {
     //                    .padding(.top, 0)
     //                    .padding(.bottom, 0)
     //                .padding(.horizontal, 20)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-                    .padding(.bottom, 12)
-                    .background(needBackground ? tab.color : .clear)
+//                    .padding(.horizontal, 20)
+//                    .padding(.top, 8)
+//                    .padding(.bottom, 12)
                     .cornerRadius(10)
                     .animation(.easeInOut, value: viewModel.selectedTab)
-                    .disabled(needBackground ? true : (!((tab != .advices) || (tab == .advices && !db.db.documents.isEmpty))))
+                    .disabled((tab == .advices && !db.db.documents.isEmpty))
+                    .frame(maxWidth:.infinity)
+                    .frame( height:100)
+                    .background(tab.color)
+
+                }
+                
+                Spacer()
+                Button("Settings") {
+                    viewModel.selectedTab = .settings
                 }
             }
 //            .frame(height:150)
 //            .rotationEffect(.degrees(90))
 
 //            .offset(x:-130, y:db.deviceSize.height / -4)
-            Spacer()
         }
         .frame(alignment:.leading)
-        .padding(.leading, 25)
+        .padding(.top, 25)
+        .frame(width:viewModel.tabBarButtonsHeight)
     }
 }
 

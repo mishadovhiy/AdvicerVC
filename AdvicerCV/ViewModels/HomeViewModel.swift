@@ -11,6 +11,7 @@ import UniformTypeIdentifiers
 import PDFKit
 
 class HomeViewModel: ObservableObject {
+    let tabBarButtonsHeight:CGFloat = 30
     @Published var selectedTab: PresentingTab = .home
     @Published var selectedDocument:Document? {
         willSet {
@@ -75,9 +76,17 @@ extension HomeViewModel {
         case home
         case advices
         case generator
+        case settings
 //        case settings
         var title:String {
             rawValue.addSpaceBeforeCapitalizedLetters.uppercased()}
+        
+        var isLeading:Bool {
+            switch self {
+            case .settings:false
+            default:true
+            }
+        }
         
         var color:Color {
             switch self {
@@ -88,6 +97,7 @@ extension HomeViewModel {
 //            case .settings:
 //                    .green
             case .generator:.white
+            case .settings:.white
             }
         }
     }
