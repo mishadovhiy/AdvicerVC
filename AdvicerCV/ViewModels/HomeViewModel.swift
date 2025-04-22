@@ -87,7 +87,7 @@ extension HomeViewModel {
                     .brown
 //            case .settings:
 //                    .green
-            case .generator:.red
+            case .generator:.white
             }
         }
     }

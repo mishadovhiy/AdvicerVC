@@ -27,16 +27,11 @@ enum NetworkRequest:Codable {
             let values = advice.allValues.filter({ dict in
                 dict.key.openAIUsed
             })
-            if values.contains(where: { (key: Advice.RetriveTitles, value: String) in
-                key == .contacts
-            }) {
-                fatalError()
-            }
                 let res = values.map { (key: Advice.RetriveTitles, value: String) in
                 "\(key.rawValue.addSpaceBeforeCapitalizedLetters):\(value)"
             }.joined(separator: ",")
             return """
-generate advice for iOS Developer CV, \(values), my top skills:SwiftUI,UIKit, optionaly with WatchKit but i like it, desireble job duties:iOS application development,in a cross plutform team. Structure advice response in keys: \(properties). All Grades should be from 1 to 5
+generate advice for iOS Developer CV, \(res), my top skills:SwiftUI,UIKit, optionaly with WatchKit but i like it, desireble job duties:iOS application development,in a cross plutform team. Structure advice response in keys: \(properties). All Grades should be from 1 to 5
 """
             //generate request
             //choose cv button

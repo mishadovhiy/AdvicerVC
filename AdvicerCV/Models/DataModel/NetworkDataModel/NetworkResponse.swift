@@ -13,6 +13,10 @@ struct NetworkResponse {
         func value(for key:NetworkRequest.Advice.Keys) -> String {
             dict[key.rawValue] ?? ""
         }
+        
+        mutating func setValue(for key:NetworkRequest.Advice.Keys, newValue:String) {
+            dict.updateValue(newValue, forKey: key.rawValue)
+        }
         var date:Date = .init()
         init(data: [String : String]) {
             self.dict = data

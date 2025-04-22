@@ -13,7 +13,9 @@ struct Document: Codable {
     var url:URL?
     var request:NetworkRequest? = nil
     var response:NetworkResponse.AdviceResponse? = nil
-    var id:UUID = .init()
+    var id:String {
+        url?.absoluteString ?? ""
+    }
     var responseHistory:[NetworkResponse.AdviceResponse] = []
 }
 
