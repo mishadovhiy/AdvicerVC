@@ -13,8 +13,8 @@ struct HomeView: View {
     
     var body: some View {
         GeometryReader(content: { proxy in
-            HStack() {
-                Spacer().frame(width:25)
+            VStack() {
+                Spacer().frame(height:30)
                 VStack(spacing:0) {
                     contenView
                 }
@@ -23,9 +23,15 @@ struct HomeView: View {
                 .background(viewModel.selectedTab.color)
                 .cornerRadius(20)
             }
+            .overlay(content: {
+                VStack(content:  {
+                    tabBarButtons(false)
+                    Spacer()
+                })
+            })
             .background(content: {
-                HStack(content:  {
-                    tabBarButtons
+                VStack(content:  {
+                    tabBarButtons(true)
                     Spacer()
                 })
             })
@@ -59,10 +65,13 @@ struct HomeView: View {
                     .frame(maxHeight: viewModel.selectedTab == .generator ? .infinity : 0)
                     .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
+                    .disabled(viewModel.selectedTab != .generator)
             case .home:homeView
                     .frame(maxHeight: viewModel.selectedTab == .home ? .infinity : 0)
                     .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
+                    .disabled(viewModel.selectedTab != .home)
+
             case .advices:
                 AdviceListView(selectedDocument: $viewModel.selectedDocument, regenerateAdvicePressed: {
                     if let url = viewModel.selectedDocument?.url {
@@ -75,6 +84,8 @@ struct HomeView: View {
                     .frame(maxHeight: viewModel.selectedTab == .advices ? .infinity : 0)
                     .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
+                    .disabled(viewModel.selectedTab != .advices)
+
 //            case .settings:
 //                Text("Settings")
 //                    .frame(maxHeight: viewModel.selectedTab == .settings ? .infinity : 0)
@@ -116,7 +127,7 @@ struct HomeView: View {
         .disabled(AppData.adviceLimit <= db.db.documents.count)
     }
     
-    var tabBarButtons: some View {
+    func tabBarButtons(_ needBackground:Bool) -> some View {
         HStack {
             HStack(spacing:-15) {
                 ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
@@ -135,21 +146,22 @@ struct HomeView: View {
     //                    .padding(.bottom, 0)
     //                .padding(.horizontal, 20)
                     .padding(.horizontal, 20)
-                    .padding(.top, 15)
-                    .padding(.bottom, 5)
-                    .background(tab.color)
+                    .padding(.top, 8)
+                    .padding(.bottom, 12)
+                    .background(needBackground ? tab.color : .clear)
                     .cornerRadius(10)
                     .animation(.easeInOut, value: viewModel.selectedTab)
-                    .disabled(!((tab != .advices) || (tab == .advices && !db.db.documents.isEmpty)))
+                    .disabled(needBackground ? true : (!((tab != .advices) || (tab == .advices && !db.db.documents.isEmpty))))
                 }
             }
-            .frame(height:150)
-            .rotationEffect(.degrees(90))
+//            .frame(height:150)
+//            .rotationEffect(.degrees(90))
 
-            .offset(x:-130, y:db.deviceSize.height / -4)
+//            .offset(x:-130, y:db.deviceSize.height / -4)
             Spacer()
         }
         .frame(alignment:.leading)
+        .padding(.leading, 25)
     }
 }
 
