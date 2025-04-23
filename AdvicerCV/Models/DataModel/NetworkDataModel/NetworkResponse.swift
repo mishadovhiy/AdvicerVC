@@ -8,6 +8,16 @@
 import Foundation
 
 struct NetworkResponse {
+    struct FetchHTMLResponse:Codable {
+        private let data:Data?
+        init(data: Data?) {
+            self.data = data
+        }
+        var response:String {
+            String(data: data ?? .init(), encoding: .utf8) ?? ""
+        }
+    }
+    
     struct AdviceResponse:Codable {
         private var dict:[String:String] = [:]
         func value(for key:NetworkRequest.Advice.Keys) -> String {

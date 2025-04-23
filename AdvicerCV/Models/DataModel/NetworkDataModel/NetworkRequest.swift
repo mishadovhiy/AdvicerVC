@@ -10,6 +10,8 @@ import Foundation
 enum NetworkRequest:Codable {
     case support(SupportRequest)
     case advice(Advice)
+    case fetchHTML(FetchHTMLRequest)
+
     var advice:Advice? {
         switch self {
         case .advice(let advice):
@@ -19,6 +21,8 @@ enum NetworkRequest:Codable {
     }
     var promt:String {
         switch self {
+        case .fetchHTML:
+            return ""
         case .advice(let advice):
             let properties = NetworkRequest.Advice.Keys.allCases.compactMap { key in
                 "<\(key.identifier)>(\(key.valueDescription))</\(key.identifier)>"
@@ -53,9 +57,13 @@ generate advice for iOS Developer CV, \(res), my top skills:SwiftUI,UIKit, optio
 
 extension NetworkRequest {
     struct SupportRequest:Codable {
-        var text:String
-        var header:String
-        var title:String
+        var text:String = ""
+        var header:String = ""
+        var title:String = ""
+    }
+    
+    struct FetchHTMLRequest:Codable {
+        var url:String
     }
     
     struct Advice:Codable {

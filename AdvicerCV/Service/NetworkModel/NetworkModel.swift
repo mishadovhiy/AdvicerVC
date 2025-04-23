@@ -21,5 +21,11 @@ struct NetworkModel {
             completion(.init(data: data))
         }
     }
+    
+    func fetchHTM(_ input:NetworkRequest.FetchHTMLRequest, completion:@escaping(_ response:NetworkResponse.FetchHTMLResponse)->()) {
+        Request(.fetchHTML(input)).perform { data in
+            completion(.init(data: data))
+        }
+    }
 }
 

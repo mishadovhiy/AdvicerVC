@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		82029B832DB92DD800800347 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82029B822DB92DD800800347 /* PrivacyPolicyView.swift */; };
+		82029B852DB92DE500800347 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82029B842DB92DE500800347 /* WebView.swift */; };
+		82029B872DB92FDC00800347 /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82029B862DB92FDC00800347 /* MessageContent.swift */; };
+		82029B892DB9341D00800347 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82029B882DB9341D00800347 /* SettingsViewModel.swift */; };
 		820368BD2D9AAB6C00218754 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820368BC2D9AAB6C00218754 /* NetworkModel.swift */; };
 		820368C02D9AAB9C00218754 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820368BF2D9AAB9C00218754 /* NetworkRequest.swift */; };
 		820368C32D9AAC5700218754 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820368C22D9AAC5700218754 /* Keys.swift */; };
@@ -47,6 +51,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		82029B822DB92DD800800347 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
+		82029B842DB92DE500800347 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		82029B862DB92FDC00800347 /* MessageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContent.swift; sourceTree = "<group>"; };
+		82029B882DB9341D00800347 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		820368BC2D9AAB6C00218754 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		820368BF2D9AAB9C00218754 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		820368C22D9AAC5700218754 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
@@ -136,6 +144,7 @@
 			children = (
 				820679D62DB8058600B8DEF6 /* SettingsView.swift */,
 				820679D92DB82EFE00B8DEF6 /* AboutView.swift */,
+				82029B822DB92DD800800347 /* PrivacyPolicyView.swift */,
 				820679E02DB8372000B8DEF6 /* SupportView.swift */,
 			);
 			path = SettingsView;
@@ -145,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				820679DB2DB834EE00B8DEF6 /* ShareSheet.swift */,
+				82029B842DB92DE500800347 /* WebView.swift */,
 				8289D8D32D9C6037001B6C40 /* ClearBackgroundView.swift */,
 				8289D8E62D9DCFEA001B6C40 /* AttributedTextView.swift */,
 				8289D8E82D9DD0A0001B6C40 /* ActivityViewController.swift */,
@@ -177,6 +187,7 @@
 				8289D8C22D9C46A5001B6C40 /* Document.swift */,
 				82E100FE2DA084B8008AFEB4 /* CVContent.swift */,
 				82E100FC2DA08492008AFEB4 /* CVContent_mock.swift */,
+				82029B862DB92FDC00800347 /* MessageContent.swift */,
 				820368C12D9AABFC00218754 /* NetworkDataModel */,
 			);
 			path = DataModel;
@@ -237,6 +248,7 @@
 				82A310E22D7BDD3700E2737F /* HomeViewModel.swift */,
 				8289D8E42D9DCF8A001B6C40 /* GeneratorPDFViewModel.swift */,
 				8289D8B92D9B666A001B6C40 /* AdviceViewModel.swift */,
+				82029B882DB9341D00800347 /* SettingsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -327,12 +339,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82029B852DB92DE500800347 /* WebView.swift in Sources */,
 				820679DA2DB82EFE00B8DEF6 /* AboutView.swift in Sources */,
 				82E100FF2DA084B8008AFEB4 /* CVContent.swift in Sources */,
 				8289D8A42D9B40D1001B6C40 /* AppData.swift in Sources */,
+				82029B832DB92DD800800347 /* PrivacyPolicyView.swift in Sources */,
 				821FEDB62DA4DD930002D969 /* View.swift in Sources */,
 				8289D8BA2D9B666A001B6C40 /* AdviceViewModel.swift in Sources */,
 				820679E12DB8372000B8DEF6 /* SupportView.swift in Sources */,
+				82029B892DB9341D00800347 /* SettingsViewModel.swift in Sources */,
 				8289D8DB2D9CA1D3001B6C40 /* Advice.swift in Sources */,
 				8289D8BF2D9B70C8001B6C40 /* DocumentPicker.swift in Sources */,
 				8289D8E12D9D6DD2001B6C40 /* PDFGeneratorModel.swift in Sources */,
@@ -348,6 +363,7 @@
 				820368C82D9AB25900218754 /* Request.swift in Sources */,
 				8289D8B42D9B44FD001B6C40 /* Decodable+Encodable.swift in Sources */,
 				820368C52D9AACAC00218754 /* String.swift in Sources */,
+				82029B872DB92FDC00800347 /* MessageContent.swift in Sources */,
 				820679DF2DB8353500B8DEF6 /* StorekitModel.swift in Sources */,
 				82A310E72D7BDD3700E2737F /* HomeViewModel.swift in Sources */,
 				8289D8BC2D9B7056001B6C40 /* PDFKitView.swift in Sources */,

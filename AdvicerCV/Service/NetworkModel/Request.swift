@@ -17,6 +17,12 @@ extension NetworkModel {
                 return
             }
             switch input {
+            case .fetchHTML(let url):
+                if let url:URL = .init(string: url.url) {
+                    request = .init(url: url)
+                    request?.httpMethod = "GET"
+                }
+                
             case .advice(_):
                 request = URLRequest(url: .init(string: Keys.openAIChatURL.rawValue)!)
                 
