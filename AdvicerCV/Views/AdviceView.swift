@@ -41,7 +41,7 @@ struct AdviceView: View {
                 }
                 
             }
-            .background(.brown)
+            .background(HomeViewModel.PresentingTab.advices.color)
             .background {
                 ClearBackgroundView()
             }

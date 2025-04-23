@@ -15,6 +15,13 @@ struct AdviceListView: View {
         NavigationView {
             ScrollView(.vertical, content: {
                 VStack {
+                    if db.db.documents.isEmpty {
+                        Spacer().frame(height: 80)
+                        VStack {
+                            Text("CV advice list is empty")
+                            Text("Upload your first document")
+                        }
+                    }
                     ForEach(db.db.documents, id:\.url?.absoluteString) { item in
                         VStack {
                             Text(item.url?.lastPathComponent ?? "-")
@@ -55,6 +62,7 @@ struct AdviceListView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .background(ClearBackgroundView())
+        .background(HomeViewModel.PresentingTab.advices.color)
         .frame(maxHeight: .infinity)
         
     }

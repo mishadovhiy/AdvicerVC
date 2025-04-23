@@ -11,6 +11,7 @@ import UniformTypeIdentifiers
 import PDFKit
 
 class HomeViewModel: ObservableObject {
+    let appCornerRadius:CGFloat = 20
     let tabBarButtonsHeight:CGFloat = 30
     @Published var selectedTab: PresentingTab = .home
     @Published var selectedDocument:Document? {
@@ -73,9 +74,9 @@ extension HomeViewModel {
         case document
     }
     enum PresentingTab:String, CaseIterable {
-        case home
-        case advices
         case generator
+        case advices
+        case home
         case settings
 //        case settings
         var title:String {

@@ -13,6 +13,8 @@ struct GeneratorPDFView: View {
     @State var generalColorsPresenting = false
     @State var generalFontsPresenting = false
     @State var generalSpacesPresenting = false
+    @Binding var isPresenting:Bool
+    
     var editorNavigationPushed:Bool {
         [generalColorsPresenting, generalFontsPresenting].contains(true)
     }
@@ -252,7 +254,7 @@ struct GeneratorPDFView: View {
         .background {
             ClearBackgroundView()
         }
-        .frame(maxHeight: viewModel.largeEditorHeight ? .infinity : (editorNavigationPushed ? 90 : 45))
+        .frame(maxHeight: isPresenting ? (viewModel.largeEditorHeight ? .infinity : (editorNavigationPushed ? 90 : 45)) : 0)
         .background(content: {
             Color(.red)
                 .padding(.vertical, -20)
@@ -264,6 +266,3 @@ struct GeneratorPDFView: View {
 
 }
 
-#Preview {
-    GeneratorPDFView()
-}

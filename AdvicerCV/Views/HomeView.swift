@@ -15,13 +15,14 @@ struct HomeView: View {
         GeometryReader(content: { proxy in
             HStack() {
                 Spacer().frame(width:viewModel.tabBarButtonsHeight)
-                VStack(spacing:0) {
+                VStack(spacing:viewModel.selectedTab == .home ? -(viewModel.appCornerRadius * 2) : 0) {
                     contenView
                 }
                 .frame(maxHeight: .infinity)
                 .padding(.bottom, 5)
-                .background(viewModel.selectedTab.color)
-                .cornerRadius(20)
+                .background(.black)
+                .cornerRadius(viewModel.appCornerRadius)
+                .animation(.bouncy, value: viewModel.selectedTab)
             }
 //            .overlay(content: {
 //                VStack(content:  {
@@ -58,7 +59,7 @@ struct HomeView: View {
     }
     
     var contenView: some View {
-        ForEach(HomeViewModel.PresentingTab.allCases.reversed(), id:\.rawValue) { tab in
+        ForEach(HomeViewModel.PresentingTab.allCases, id:\.rawValue) { tab in
             switch tab {
 
             case .advices:
@@ -74,17 +75,46 @@ struct HomeView: View {
                     .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
                     .disabled(viewModel.selectedTab != .advices)
+                    .cornerRadius(viewModel.selectedTab == .home ? viewModel.appCornerRadius : 0)
+
+                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: viewModel.appCornerRadius)
+                            .fill(HomeViewModel.PresentingTab.advices.color.opacity(viewModel.selectedTab != .advices ? 0.1 : 0))
+                            .onTapGesture {
+                                if !db.db.documents.isEmpty {
+                                    withAnimation {
+                                        viewModel.selectedTab = .advices
+                                    }
+                                }
+                                
+                            }
+                    }
             case .generator:
-                GeneratorPDFView()
+                GeneratorPDFView(isPresenting: .constant(viewModel.selectedTab == .generator))
                     .frame(maxHeight: viewModel.selectedTab == .generator || viewModel.selectedTab == .home ? .infinity : 0)
                     .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
                     .disabled(viewModel.selectedTab != .generator)
+                    .cornerRadius(viewModel.selectedTab == .home ? viewModel.appCornerRadius : 0)
+                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: viewModel.appCornerRadius)
+                            .fill(HomeViewModel.PresentingTab.generator.color.opacity(viewModel.selectedTab != .generator ? 0.1 : 0))
+                            .onTapGesture {
+                                withAnimation {
+                                    viewModel.selectedTab = .generator
+                                }
+                            }
+                    }
             case .home:homeView
                     .frame(maxHeight: viewModel.selectedTab == .home ? .infinity : 0)
                     .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
                     .disabled(viewModel.selectedTab != .home)
+                    .cornerRadius(viewModel.selectedTab == .home ? viewModel.appCornerRadius : 0)
+                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
+
                 
             case .settings:SettingsView()
                     .frame(maxHeight: viewModel.selectedTab == .settings ? .infinity : 0)
@@ -108,6 +138,7 @@ struct HomeView: View {
             Spacer()
         }
         .frame(maxHeight: .infinity)
+        .background(HomeViewModel.PresentingTab.home.color)
     }
     
     var uploadButton: some View {
@@ -134,7 +165,7 @@ struct HomeView: View {
     
     func tabBarButtons(_ needBackground:Bool) -> some View {
         HStack {
-            VStack(spacing:-15) {
+            VStack(spacing:viewModel.selectedTab == .home ? -60 : -15) {
                 ForEach(HomeViewModel.PresentingTab.allCases.filter({$0.isLeading}), id:\.rawValue) { tab in
                     Button(action: {
                         withAnimation {
@@ -162,18 +193,22 @@ struct HomeView: View {
 //                    .padding(.bottom, 12)
                     .cornerRadius(10)
                     .animation(.easeInOut, value: viewModel.selectedTab)
-                    .disabled((tab == .advices && !db.db.documents.isEmpty))
+                    .disabled((tab == .advices && db.db.documents.isEmpty))
                     .frame(maxWidth:.infinity)
                     .frame( height:100)
                     .background(tab.color)
-
+                    Spacer()
+                        .frame(maxHeight:viewModel.selectedTab == .home ? .infinity : 0)
+                        .animation(.bouncy, value: viewModel.selectedTab)
                 }
                 
                 Spacer()
                 Button("Settings") {
                     viewModel.selectedTab = .settings
                 }
+                .background(.red)
             }
+            .animation(.bouncy, value: viewModel.selectedTab)
 //            .frame(height:150)
 //            .rotationEffect(.degrees(90))
 
