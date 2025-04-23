@@ -40,11 +40,18 @@ struct GeneratorPDFView: View {
         }
     }
 
+    func textView() -> some View {
+        if #available(iOS 16.0, *) {
+            return TextEditor(text: $viewModel.editingPropertyText)
+                .scrollContentBackground(.hidden)
+        } else {
+            return TextEditor(text: $viewModel.editingPropertyText)
+        }
+    }
+    
     var workExperienceEditor: some View {
         let key = viewModel.editingPropertyKey
-        let ignoreDescription = [key == .jobTitle, key == .cvDescriptionTitle]
         let ignoreSpace = [key == .jobTitle, key == .cvDescriptionTitle]
-        let ignoreText = [key == .jobTitle, key == .cvDescriptionTitle]
         let ignoreBold = [key == .jobTitle, key == .cvDescriptionTitle]
         let ignoreTitle = [key == .summary]
         return VStack {
@@ -53,7 +60,7 @@ struct GeneratorPDFView: View {
                 TextField("title:", text: $viewModel.editingPropertyTitle)
                     .foregroundColor(.white)
             }
-            if !ignoreDescription.contains(true) {
+            if key?.needDescription ?? false {
                 TextField("description:", text: $viewModel.editingPropertyTitleDescription)
                     .foregroundColor(.white)
 
@@ -63,13 +70,15 @@ struct GeneratorPDFView: View {
 //                    .foregroundColor(.white)
 //
 //            }
-            if !ignoreText.contains(true) {
-                TextEditor(text: $viewModel.editingPropertyText)
+            if key?.needLargeText ?? false {
+                self.textView()
                     .padding(0)
                     .foregroundColor(.white)
-                    .background(.red)
                     .frame(maxWidth:.infinity)
                     .frame(height:120)
+                    .background(content: {
+                        ClearBackgroundView()
+                    })
                     .overlay {
                         VStack {
                             HStack {
@@ -85,6 +94,7 @@ struct GeneratorPDFView: View {
                         .opacity(viewModel.editingPropertyText.isEmpty ? 1 : 0)
                         .disabled(true)
                     }
+                    
             }
             if key?.needDates ?? false {
                 DatePicker("Date From", selection: $viewModel.editingDateFrom, displayedComponents: [.date])
@@ -122,8 +132,10 @@ struct GeneratorPDFView: View {
         .padding(.horizontal, 10)
         .navigationTitle(viewModel.editingPropertyKey?.titles.first ?? "?")
         .navigationBarItems(trailing: HStack {
-            Button("delete") {
-                viewModel.deleteSelectedItemPressed()
+            if key?.canDelete ?? false {
+                Button("delete") {
+                    viewModel.deleteSelectedItemPressed()
+                }
             }
         })
     }

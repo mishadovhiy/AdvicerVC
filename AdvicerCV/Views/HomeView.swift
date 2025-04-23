@@ -13,24 +13,18 @@ struct HomeView: View {
     
     var body: some View {
         GeometryReader(content: { proxy in
-            HStack() {
+            HStack(spacing:-10) {
                 Spacer().frame(width:viewModel.tabBarButtonsHeight)
                 VStack(spacing:viewModel.selectedTab == .home ? -(viewModel.appCornerRadius * 2) : 0) {
                     contenView
                 }
                 .frame(maxHeight: .infinity)
-                .padding(.bottom, 5)
+//                .padding(.bottom, 5)
                 .background(.black)
                 .cornerRadius(viewModel.appCornerRadius)
                 .animation(.bouncy, value: viewModel.selectedTab)
             }
-//            .overlay(content: {
-//                VStack(content:  {
-//                    tabBarButtons(false)
-//                    Spacer()
-//                })
-//            })
-            .overlay(content: {
+            .background(content: {
                 HStack(content:  {
                     tabBarButtons(true)
                     Spacer()
@@ -77,19 +71,19 @@ struct HomeView: View {
                     .disabled(viewModel.selectedTab != .advices)
                     .cornerRadius(viewModel.selectedTab == .home ? viewModel.appCornerRadius : 0)
 
-                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: viewModel.appCornerRadius)
-                            .fill(HomeViewModel.PresentingTab.advices.color.opacity(viewModel.selectedTab != .advices ? 0.1 : 0))
-                            .onTapGesture {
-                                if !db.db.documents.isEmpty {
-                                    withAnimation {
-                                        viewModel.selectedTab = .advices
-                                    }
-                                }
-                                
-                            }
-                    }
+//                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
+//                    .overlay {
+//                        RoundedRectangle(cornerRadius: viewModel.appCornerRadius)
+//                            .fill(HomeViewModel.PresentingTab.advices.color.opacity(viewModel.selectedTab != .advices ? 0.1 : 0))
+//                            .onTapGesture {
+//                                if !db.db.documents.isEmpty {
+//                                    withAnimation {
+//                                        viewModel.selectedTab = .advices
+//                                    }
+//                                }
+//                                
+//                            }
+//                    }
             case .generator:
                 GeneratorPDFView(isPresenting: .constant(viewModel.selectedTab == .generator))
                     .frame(maxHeight: viewModel.selectedTab == .generator || viewModel.selectedTab == .home ? .infinity : 0)
@@ -97,16 +91,16 @@ struct HomeView: View {
                     .clipped()
                     .disabled(viewModel.selectedTab != .generator)
                     .cornerRadius(viewModel.selectedTab == .home ? viewModel.appCornerRadius : 0)
-                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: viewModel.appCornerRadius)
-                            .fill(HomeViewModel.PresentingTab.generator.color.opacity(viewModel.selectedTab != .generator ? 0.1 : 0))
-                            .onTapGesture {
-                                withAnimation {
-                                    viewModel.selectedTab = .generator
-                                }
-                            }
-                    }
+//                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
+//                    .overlay {
+//                        RoundedRectangle(cornerRadius: viewModel.appCornerRadius)
+//                            .fill(HomeViewModel.PresentingTab.generator.color.opacity(viewModel.selectedTab != .generator ? 0.1 : 0))
+//                            .onTapGesture {
+//                                withAnimation {
+//                                    viewModel.selectedTab = .generator
+//                                }
+//                            }
+//                    }
             case .home:homeView
                     .frame(maxHeight: viewModel.selectedTab == .home ? .infinity : 0)
                     .animation(.smooth, value: viewModel.selectedTab)
@@ -165,7 +159,7 @@ struct HomeView: View {
     
     func tabBarButtons(_ needBackground:Bool) -> some View {
         HStack {
-            VStack(spacing:viewModel.selectedTab == .home ? -60 : -15) {
+            VStack(spacing:viewModel.selectedTab == .home ? -80 : -15) {
                 ForEach(HomeViewModel.PresentingTab.allCases.filter({$0.isLeading}), id:\.rawValue) { tab in
                     Button(action: {
                         withAnimation {
@@ -176,6 +170,8 @@ struct HomeView: View {
                             .fill(.clear)
                             .overlay {
                                 Text(tab.title)
+                                    .padding(.top, 10)
+                                    .padding(.bottom, 2)
                                     .frame(width:100)
                                     .lineLimit(1)
                                     .rotationEffect(.degrees(90))
@@ -191,12 +187,13 @@ struct HomeView: View {
 //                    .padding(.horizontal, 20)
 //                    .padding(.top, 8)
 //                    .padding(.bottom, 12)
-                    .cornerRadius(10)
                     .animation(.easeInOut, value: viewModel.selectedTab)
                     .disabled((tab == .advices && db.db.documents.isEmpty))
                     .frame(maxWidth:.infinity)
-                    .frame( height:100)
+                    .frame(height:100)
                     .background(tab.color)
+                    .cornerRadius(10)
+
                     Spacer()
                         .frame(maxHeight:viewModel.selectedTab == .home ? .infinity : 0)
                         .animation(.bouncy, value: viewModel.selectedTab)

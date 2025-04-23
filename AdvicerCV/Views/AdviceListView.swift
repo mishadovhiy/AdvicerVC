@@ -61,9 +61,9 @@ struct AdviceListView: View {
             .background(ClearBackgroundView())
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .frame(maxHeight: .infinity)
         .background(ClearBackgroundView())
         .background(HomeViewModel.PresentingTab.advices.color)
-        .frame(maxHeight: .infinity)
         
     }
     

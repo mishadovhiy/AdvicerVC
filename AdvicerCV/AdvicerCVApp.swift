@@ -12,6 +12,9 @@ struct AdvicerCVApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .onAppear {
+                    UITextView.appearance().backgroundColor = .clear
+                }
 //            GeneratorPDFView()
         }
     }

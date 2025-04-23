@@ -109,6 +109,26 @@ extension NetworkRequest {
                 default:false
                 }
             }
+            var needDescription:Bool {
+                switch self {
+                case .jobTitle, .cvDescriptionTitle:false
+                default: true
+                }
+            }
+            
+            var canDelete:Bool {
+                switch self {
+                case .summary, .jobTitle, .cvDescriptionTitle:false
+                default: true
+                }
+            }
+            
+            var needLargeText:Bool {
+                switch self {
+                case .jobTitle, .cvDescriptionTitle, .skills:false
+                default: true
+                }
+            }
             
             var pdfPreviewTitlePlaceholder:String {
                 switch self {
