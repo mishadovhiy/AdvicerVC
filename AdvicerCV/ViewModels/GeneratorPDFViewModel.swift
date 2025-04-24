@@ -17,6 +17,13 @@ struct GeneratorPDFViewModel {
     var fontSelectingFor:ContentType?
     var selectingDateFrom:Bool = false
     var selectingDateTo: Bool = false
+    var generalColorsPresenting = false
+    var generalFontsPresenting = false
+    var generalSpacesPresenting = false
+    var editorNavigationPushed:Bool {
+        [generalColorsPresenting, generalFontsPresenting].contains(true)
+    }
+    
     mutating func linkSelected(_ link:String) {
         linkSelected = link
         if let key = GeneratorPDFViewModel.CVContent.Key.allCases.first(where: {
@@ -390,18 +397,6 @@ extension GeneratorPDFViewModel {
         }
     }
     
-    var selectingColorType: Color {
-        get {
-            .init(uiColor: .init(hex: appearence.color[colorSelectingFor ?? .background] ?? "") ?? .pdfText)
-        }
-        set {
-            if let type = colorSelectingFor {
-                appearence.color[type] = UIColor(cgColor: newValue.cgColor ?? UIColor.white.cgColor).toHex
-
-            }
-        }
-    }
-    
     var selectingFontSize:CGFloat {
         get {
             appearence.font[fontSelectingFor ?? .background]?.size ?? Appearence.FontData.default(fontSelectingFor ?? .background).size
@@ -427,6 +422,16 @@ extension UIFont.Weight {
     }
     
     var string:String {
-        return ""
+        switch self {
+        case .light:"light"
+        case .regular:"regular"
+        case .medium:"medium"
+        case .semibold:"semibold"
+        case .bold:"bold"
+        case .black:"black"
+
+        default:
+            ""
+        }
     }
 }

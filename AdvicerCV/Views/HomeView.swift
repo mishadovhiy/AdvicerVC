@@ -19,7 +19,7 @@ struct HomeView: View {
                     contenView
                 }
                 .frame(maxHeight: .infinity)
-//                .padding(.bottom, 5)
+//                .padding(.bottom, 50)
                 .background(.black)
                 .cornerRadius(viewModel.appCornerRadius)
                 .animation(.bouncy, value: viewModel.selectedTab)
@@ -71,36 +71,39 @@ struct HomeView: View {
                     .disabled(viewModel.selectedTab != .advices)
                     .cornerRadius(viewModel.selectedTab == .home ? viewModel.appCornerRadius : 0)
 
-//                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
-//                    .overlay {
-//                        RoundedRectangle(cornerRadius: viewModel.appCornerRadius)
-//                            .fill(HomeViewModel.PresentingTab.advices.color.opacity(viewModel.selectedTab != .advices ? 0.1 : 0))
-//                            .onTapGesture {
-//                                if !db.db.documents.isEmpty {
-//                                    withAnimation {
-//                                        viewModel.selectedTab = .advices
-//                                    }
-//                                }
-//                                
-//                            }
-//                    }
+                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: viewModel.appCornerRadius)
+                            .fill(HomeViewModel.PresentingTab.advices.color.opacity(viewModel.selectedTab != .advices ? 0.1 : 0))
+                            .onTapGesture {
+                                if !db.db.documents.isEmpty {
+                                    withAnimation {
+                                        viewModel.selectedTab = .advices
+                                    }
+                                }
+                                
+                            }
+                    }
             case .generator:
                 GeneratorPDFView(isPresenting: .constant(viewModel.selectedTab == .generator))
                     .frame(maxHeight: viewModel.selectedTab == .generator || viewModel.selectedTab == .home ? .infinity : 0)
-                    .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
                     .disabled(viewModel.selectedTab != .generator)
                     .cornerRadius(viewModel.selectedTab == .home ? viewModel.appCornerRadius : 0)
-//                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
-//                    .overlay {
-//                        RoundedRectangle(cornerRadius: viewModel.appCornerRadius)
-//                            .fill(HomeViewModel.PresentingTab.generator.color.opacity(viewModel.selectedTab != .generator ? 0.1 : 0))
-//                            .onTapGesture {
-//                                withAnimation {
-//                                    viewModel.selectedTab = .generator
-//                                }
-//                            }
-//                    }
+                    .zIndex(viewModel.selectedTab == .generator ? 999 : 0)
+                    .animation(.smooth, value: viewModel.selectedTab)
+
+
+                    .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: viewModel.appCornerRadius)
+                            .fill(HomeViewModel.PresentingTab.generator.color.opacity(viewModel.selectedTab != .generator ? 0.1 : 0))
+                            .onTapGesture {
+                                withAnimation {
+                                    viewModel.selectedTab = .generator
+                                }
+                            }
+                    }
             case .home:homeView
                     .frame(maxHeight: viewModel.selectedTab == .home ? .infinity : 0)
                     .animation(.smooth, value: viewModel.selectedTab)
@@ -115,11 +118,6 @@ struct HomeView: View {
                     .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
                     .disabled(viewModel.selectedTab != .settings)
-//            case .settings:
-//                Text("Settings")
-//                    .frame(maxHeight: viewModel.selectedTab == .settings ? .infinity : 0)
-//                    .animation(.smooth, value: viewModel.selectedTab)
-//                    .clipped()
             }
         }
 
@@ -131,8 +129,10 @@ struct HomeView: View {
             uploadButton
             Spacer()
         }
-        .frame(maxHeight: .infinity)
+        .padding(.horizontal, 10)
         .background(HomeViewModel.PresentingTab.home.color)
+        .frame(maxHeight: .infinity)
+
     }
     
     var uploadButton: some View {

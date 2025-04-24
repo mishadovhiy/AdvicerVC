@@ -23,7 +23,7 @@ struct AdviceView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing:0) {
                 PDFKitView(pdfData: document?.data)
-                .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
+                .frame(width: db.deviceSize.width - (db.deviceSize.width / 5))
                 .padding(.top, !hasNotDetectedData ? 0 : 50)
                 .overlay {
                     VStack {
@@ -34,7 +34,7 @@ struct AdviceView: View {
                 }
                 ScrollView(.vertical, showsIndicators: false, content: {
                     rightControlView
-                        .frame(width: db.deviceSize.width - (db.deviceSize.width / 10))
+                        .frame(width: db.deviceSize.width - (db.deviceSize.width / 5))
                 })
                 .background {
                     ClearBackgroundView()

@@ -17,41 +17,11 @@ struct AdviceListView: View {
                 VStack {
                     if db.db.documents.isEmpty {
                         Spacer().frame(height: 80)
-                        VStack {
-                            Text("CV advice list is empty")
-                            Text("Upload your first document")
-                        }
+                        noDataView
                     }
-                    ForEach(db.db.documents, id:\.url?.absoluteString) { item in
-                        VStack {
-                            Text(item.url?.lastPathComponent ?? "-")
-                            PDFKitView(pdfData: item.data)
-                                .disabled(true)
-                        }
-                        .frame(maxWidth:.infinity)
-                        .frame(height:120)
-    //                    .aspectRatio(1, contentMode: .fit)
-                        .background(Color.secondary)
-                        .cornerRadius(10)
-                        .clipped()
-                        .onTapGesture {
-                            withAnimation {
-                                selectedDocument = item
-                            }
-                        }
-                    }
+                    adviceList
                     Spacer()
-                    VStack {
-                        NavigationLink("", destination: AdviceView(document: $selectedDocument), isActive: .init(get: {
-                            selectedDocument != nil
-                        }, set: { newValue in
-                            if !newValue {
-                                selectedDocument = nil
-                            }
-                        }))
-                        
-                    }
-                    .hidden()
+                    navigationLinks
                 }
                 .background {
                     ClearBackgroundView()
@@ -60,11 +30,58 @@ struct AdviceListView: View {
             })
             .background(ClearBackgroundView())
         }
+        .padding(10)
+
         .navigationViewStyle(StackNavigationViewStyle())
-        .frame(maxHeight: .infinity)
         .background(ClearBackgroundView())
         .background(HomeViewModel.PresentingTab.advices.color)
-        
+        .frame(maxHeight: .infinity)
+
     }
     
+    
+    var noDataView: some View {
+        VStack {
+            Text("CV advice list is empty")
+            Text("Upload your first document")
+        }
+    }
+    
+    var navigationLinks: some View {
+        VStack {
+            NavigationLink("", destination: AdviceView(document: $selectedDocument), isActive: .init(get: {
+                selectedDocument != nil
+            }, set: { newValue in
+                if !newValue {
+                    selectedDocument = nil
+                }
+            }))
+            
+        }
+        .hidden()
+    }
+    
+    var adviceList: some View {
+        ForEach(db.db.documents, id:\.url?.absoluteString) { item in
+            VStack {
+                Text(item.url?.lastPathComponent ?? "-")
+                PDFKitView(pdfData: item.data)
+                    .disabled(true)
+                    .cornerRadius(10)
+
+            }
+            
+            .frame(maxWidth:.infinity)
+            .frame(height:120)
+//                    .aspectRatio(1, contentMode: .fit)
+            .background(Color.secondary)
+            .cornerRadius(10)
+            .clipped()
+            .onTapGesture {
+                withAnimation {
+                    selectedDocument = item
+                }
+            }
+        }
+    }
 }

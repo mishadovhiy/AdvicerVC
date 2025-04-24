@@ -21,6 +21,8 @@
 		820679DC2DB834EE00B8DEF6 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820679DB2DB834EE00B8DEF6 /* ShareSheet.swift */; };
 		820679DF2DB8353500B8DEF6 /* StorekitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820679DE2DB8353500B8DEF6 /* StorekitModel.swift */; };
 		820679E12DB8372000B8DEF6 /* SupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 820679E02DB8372000B8DEF6 /* SupportView.swift */; };
+		8217C7A02DB9699700531F89 /* BottomGeneratorPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8217C79F2DB9699700531F89 /* BottomGeneratorPanelView.swift */; };
+		8217C7A22DB9B23E00531F89 /* PanelValueEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8217C7A12DB9B23E00531F89 /* PanelValueEditorView.swift */; };
 		821FEDB62DA4DD930002D969 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821FEDB52DA4DD930002D969 /* View.swift */; };
 		8289D8A42D9B40D1001B6C40 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8289D8A32D9B40D1001B6C40 /* AppData.swift */; };
 		8289D8B42D9B44FD001B6C40 /* Decodable+Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8289D8B32D9B44FD001B6C40 /* Decodable+Encodable.swift */; };
@@ -65,6 +67,8 @@
 		820679DB2DB834EE00B8DEF6 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		820679DE2DB8353500B8DEF6 /* StorekitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorekitModel.swift; sourceTree = "<group>"; };
 		820679E02DB8372000B8DEF6 /* SupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportView.swift; sourceTree = "<group>"; };
+		8217C79F2DB9699700531F89 /* BottomGeneratorPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomGeneratorPanelView.swift; sourceTree = "<group>"; };
+		8217C7A12DB9B23E00531F89 /* PanelValueEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelValueEditorView.swift; sourceTree = "<group>"; };
 		821FEDB52DA4DD930002D969 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		8289D8A32D9B40D1001B6C40 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		8289D8B32D9B44FD001B6C40 /* Decodable+Encodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+Encodable.swift"; sourceTree = "<group>"; };
@@ -163,6 +167,16 @@
 			path = BaseView;
 			sourceTree = "<group>";
 		};
+		8217C79E2DB9697F00531F89 /* GeneratorPDFView */ = {
+			isa = PBXGroup;
+			children = (
+				8289D8DE2D9D692B001B6C40 /* GeneratorPDFView.swift */,
+				8217C79F2DB9699700531F89 /* BottomGeneratorPanelView.swift */,
+				8217C7A12DB9B23E00531F89 /* PanelValueEditorView.swift */,
+			);
+			path = GeneratorPDFView;
+			sourceTree = "<group>";
+		};
 		8289D8A22D9B40B5001B6C40 /* NetworkModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,7 +272,7 @@
 			children = (
 				82A310E42D7BDD3700E2737F /* HomeView.swift */,
 				8289D8B52D9B61BE001B6C40 /* AdviceListView.swift */,
-				8289D8DE2D9D692B001B6C40 /* GeneratorPDFView.swift */,
+				8217C79E2DB9697F00531F89 /* GeneratorPDFView */,
 				8289D8B72D9B6627001B6C40 /* AdviceView.swift */,
 				820679D82DB80EF900B8DEF6 /* SettingsView */,
 				8289D8BD2D9B70A8001B6C40 /* ComponentView */,
@@ -339,12 +353,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8217C7A02DB9699700531F89 /* BottomGeneratorPanelView.swift in Sources */,
 				82029B852DB92DE500800347 /* WebView.swift in Sources */,
 				820679DA2DB82EFE00B8DEF6 /* AboutView.swift in Sources */,
 				82E100FF2DA084B8008AFEB4 /* CVContent.swift in Sources */,
 				8289D8A42D9B40D1001B6C40 /* AppData.swift in Sources */,
 				82029B832DB92DD800800347 /* PrivacyPolicyView.swift in Sources */,
 				821FEDB62DA4DD930002D969 /* View.swift in Sources */,
+				8217C7A22DB9B23E00531F89 /* PanelValueEditorView.swift in Sources */,
 				8289D8BA2D9B666A001B6C40 /* AdviceViewModel.swift in Sources */,
 				820679E12DB8372000B8DEF6 /* SupportView.swift in Sources */,
 				82029B892DB9341D00800347 /* SettingsViewModel.swift in Sources */,
