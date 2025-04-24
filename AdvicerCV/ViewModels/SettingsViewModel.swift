@@ -31,9 +31,10 @@ struct SettingsViewModel {
         <head>
         </head>
         <style>
-        html, body{background: #3A3A3A;}
+        html, body{background: #886DC7;}
         h2{ font-size: 18px; color: white; }h1{font-size: 32px; color: white;}
         p{font-size: 12px; color: white;}
+        h1, h2, p{margin-left:10px;margin-right:10px;}
         </style>
         <body>
         """ + (response.extractSubstring(key: "!--Privacy--", key2: "!--/Privacy--") ?? "") + """
@@ -44,11 +45,9 @@ struct SettingsViewModel {
     
     var privacyPolicyContent:String = ""
     func fetchPrivacyPolicy(completion:@escaping(_ html:String)->()) {
-        DispatchQueue(label: "api", qos: .userInitiated).async {
-            NetworkModel().fetchHTM(.init(url: Keys.privacyPolicy.rawValue)) { response in
-                print(response.response, " gtefrwdsaz ")
-                completion(unparcePrivacyPolicy(response.response))
-            }
+        NetworkModel().fetchHTM(.init(url: Keys.privacyPolicy.rawValue)) { response in
+            print(response.response, " gtefrwdsaz ")
+            completion(unparcePrivacyPolicy(response.response))
         }
     }
     

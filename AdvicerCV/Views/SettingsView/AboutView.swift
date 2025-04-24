@@ -12,6 +12,11 @@ struct AboutView: View {
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment:.leading, spacing:10) {
+                Text("About app")
+                    .font(.system(size: 24, weight:.semibold))
+                    .foregroundColor(Color(.white))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 20)
                 ForEach(viewModel.aboutData, id:\.id) { data in
                     VStack(alignment:.leading, spacing: 5) {
                         if !data.title.isEmpty && data.id != viewModel.aboutData.first?.id {

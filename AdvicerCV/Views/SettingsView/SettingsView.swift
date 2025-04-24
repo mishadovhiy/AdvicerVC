@@ -15,11 +15,6 @@ struct SettingsView: View {
         NavigationView {
             VStack(alignment:.leading, spacing: 0) {
                 VStack {
-                    Text("About app")
-                        .font(.system(size: 24, weight:.semibold))
-                        .foregroundColor(Color(.white))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 20)
                     AboutView(viewModel: $viewModel)
                 }
                 .padding(.horizontal, 10)
