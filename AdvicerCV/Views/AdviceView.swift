@@ -23,8 +23,16 @@ struct AdviceView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing:0) {
                 PDFKitView(pdfData: document?.data)
+                    .padding(.leading, -10)
+                    .padding(.trailing, -10)
+                    .padding(.top, -10)
+                    .padding(.bottom, -10)
+                    .cornerRadius(20)
                 .frame(width: db.deviceSize.width - (db.deviceSize.width / 5))
-                .padding(.top, !hasNotDetectedData ? 0 : 50)
+                .padding(.top, !hasNotDetectedData ? 20 : 60)
+                .padding(.leading, 20)
+                .padding(.bottom, 20)
+
                 .overlay {
                     VStack {
                         self.retrivedContent.frame(height:!hasNotDetectedData ? 0 : 50)
@@ -32,28 +40,45 @@ struct AdviceView: View {
                         Spacer()
                     }
                 }
-                ScrollView(.vertical, showsIndicators: false, content: {
-                    rightControlView
-                        .frame(width: db.deviceSize.width - (db.deviceSize.width / 5))
-                })
-                .background {
-                    ClearBackgroundView()
-                }
+                rightContent
                 
             }
             .background(HomeViewModel.PresentingTab.advices.color)
+//            .background(.white)
             .background {
                 ClearBackgroundView()
             }
             .frame(maxHeight: .infinity)
+            .overlay {
+                VStack {
+                    HStack {
+                        Button("back") {
+                            self.document = nil
+                        }
+                        .tint(.darkBlue)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(.primaryText)
+                        .cornerRadius(4)
+                        .shadow(radius: 5)
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                .padding(15)
+            }
+
         }
+        .navigationBarHidden(true)
         .confirmationDialog("Are you sure you want to delete a document?", isPresented: $deleteDocumentConfirmationPresenting, actions: {
             Button("Yes") {
                 deleteDocumentConfirmationPresenting = false
                 db.db.documents.removeAll { doc in
                     doc.id == self.document?.id
                 }
-                document = nil
+                withAnimation {
+                    document = nil
+                }
             }
             Button("Cancel") {
                 deleteDocumentConfirmationPresenting = false
@@ -68,6 +93,97 @@ struct AdviceView: View {
             jobTitleText = document?.request?.advice?.text(for: .jobTitle) ?? "??????"
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    var requestInputView: some View {
+        VStack {
+            Spacer().frame(height: 50)
+            HStack {
+                TextField("Job title", text: $jobTitleText) { editing in
+                    if !editing {
+                        doneEditingJobTitle(&db.db, newValue: jobTitleText)
+                    }
+                }
+                .foregroundColor(.primaryText)
+                Button("Delete") {
+                    self.deleteDocumentConfirmationPresenting = true
+                }
+                .tint(.red)
+                .padding(5)
+                .background(.red.opacity(0.15))
+                .cornerRadius(4)
+            }
+            Spacer().frame(height:30)
+        }
+        .padding(.leading, 20)
+        .padding(.trailing, 10)
+        .background {
+            HomeViewModel.PresentingTab.advices.color
+                .cornerRadius(30)
+                .padding(.top, -60)
+        }
+    }
+    
+    var generateButton: some View {
+        HStack {
+            Spacer()
+            Button("Generate") {
+                generatePressed(completion: {
+                    if let document = document {
+                        self.db.db.documents.update(document)
+                        print(document.response?.value(for: .atsGrade), " fdgfdsg ")
+                        self.document = db.db.documents.first(where: {
+                            self.document?.id == $0.id
+                        })
+                        print(document.response?.value(for: .atsGrade), " gfhddfgd ")
+
+                    }
+                })
+            }
+            .tint(.white)
+            .font(.system(size: 18, weight:.semibold))
+            .padding(.vertical, 6)
+            .padding(.horizontal, 20)
+            .background(.purple)
+            .cornerRadius(6)
+            .disabled(isLoading)
+        }
+        .padding(.bottom, 10)
+        .padding(.trailing, 10)
+
+    }
+    
+    var rightContent: some View {
+        VStack {
+            requestInputView
+            ScrollView(.vertical, showsIndicators: false, content: {
+                rightControlView
+                    .frame(width: db.deviceSize.width - (db.deviceSize.width / 5))
+                    .frame(minHeight: 300)
+                    .padding(10)
+                    .background {
+                        lightBackgroundView
+                    }
+                    .clipped()
+            })
+            .background {
+                lightBackgroundView
+            }
+            .padding(.leading, 20)
+            generateButton
+        }
+        .background(
+            Color.white.padding(.leading,100)
+                .padding(.trailing, -500)
+        )
+    }
+    
+    
+    var lightBackgroundView: some View {
+        Color.white
+            .cornerRadius(35)
+            .padding(.trailing,-35)
+            .padding(.bottom, -135)
     }
     
     var hasNotDetectedData:Bool {
@@ -94,13 +210,13 @@ struct AdviceView: View {
                     
                 }
             }
+
         })
         .padding(10)
-        .background(.red)
         .padding(5)
     }
     
-    var request: some View {
+    var response: some View {
         VStack {
             if let content = document?.response {
                 ForEach(NetworkRequest.Advice.Keys.allCases, id:\.rawValue) { key in
@@ -109,33 +225,21 @@ struct AdviceView: View {
                         Text(content.value(for: key))
                     }
                 }
+            } else {
+                Spacer().frame(height: 150)
+                    Text("Generate CV Advice")
+                Text("Generation based on:")
+                ForEach(NetworkRequest.Advice.RetriveTitles.allCases.filter({$0.openAIUsed}), id:\.rawValue) { key in
+                    Text(key.titles.first ?? "-")
+                }
             }
         }
-        .id(documentReloadID)
     }
 
     var rightControlView: some View {
         VStack {
-            TextField("Job title", text: $jobTitleText) { editing in
-                if !editing {
-                    doneEditingJobTitle(&db.db, newValue: jobTitleText)
-                }
-            }
-            request
-            Button("Generate") {
-                generatePressed(completion: {
-                    if let document = document {
-                        self.db.db.documents.update(document)
-                        print(document.response?.value(for: .atsGrade), " fdgfdsg ")
-                        self.document = db.db.documents.first(where: {
-                            self.document?.id == $0.id
-                        })
-                        print(document.response?.value(for: .atsGrade), " gfhddfgd ")
-
-                    }
-                })
-            }
-            .disabled(isLoading)
+            response
+            Spacer()
         }
     }
 }

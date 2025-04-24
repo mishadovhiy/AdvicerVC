@@ -20,6 +20,7 @@ struct AdviceListView: View {
                         noDataView
                     }
                     adviceList
+                        .padding(20)
                     Spacer()
                     navigationLinks
                 }
@@ -30,7 +31,6 @@ struct AdviceListView: View {
             })
             .background(ClearBackgroundView())
         }
-        .padding(10)
 
         .navigationViewStyle(StackNavigationViewStyle())
         .background(ClearBackgroundView())
