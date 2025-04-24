@@ -55,10 +55,29 @@ struct BottomGeneratorPanelView: View {
     
     func fontTypeLink(_ type:GeneratorPDFViewModel.ContentType) -> some View {
         NavigationLink(type.title, destination: VStack {
-            Text("size")
-            Slider(value: $viewModel.selectingFontSize)
+            HStack(spacing:15) {
+                Button("-1") {
+                    viewModel.selectingFontSize -= 1
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(.black.opacity(0.1))
+                .cornerRadius(4)
+                HStack {
+                    Text("Font size")
+
+                    Text("\(Int(viewModel.selectingFontSize))")
+                }
+                Button("+1") {
+                    viewModel.selectingFontSize += 1
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(.black.opacity(0.1))
+                .cornerRadius(4)
+            }
             Divider()
-            selectingFont(type)
+            fontWeight(type)
         }.background {
             ClearBackgroundView()
         }, isActive: .init(get: {
@@ -77,11 +96,17 @@ struct BottomGeneratorPanelView: View {
                     fontTypeLink(type)
                 }
             }
-            .padding(.horizontal, 15)
+            .padding(15)
         })
             .background {
                 ClearBackgroundView()
-            }, isActive: $viewModel.generalFontsPresenting) {
+            }, isActive: .init(get: {
+                viewModel.generalFontsPresenting
+            }, set: { newValue in
+                withAnimation {
+                    viewModel.generalFontsPresenting = newValue
+                }
+            })) {
                 Image(.font)
                     .resizable()
                     .foregroundColor(.white)
@@ -115,7 +140,13 @@ struct BottomGeneratorPanelView: View {
             .frame(maxHeight: .infinity)
             .background {
                 ClearBackgroundView()
-            }, isActive: $viewModel.generalColorsPresenting) {
+            }, isActive: .init(get: {
+                viewModel.generalColorsPresenting
+            }, set: { newValue in
+                withAnimation {
+                    viewModel.generalColorsPresenting = newValue
+                }
+            })) {
             Image(.color)
                 .resizable()
                 .foregroundColor(.white)
@@ -126,16 +157,23 @@ struct BottomGeneratorPanelView: View {
         }
     }
     
-    func selectingFont(_ type:GeneratorPDFViewModel.ContentType) -> some View {
-        Picker("Weight", selection: $viewModel.selectingFontWeight) {
-            ForEach(UIFont.Weight.allCases, id:\.string) { font in
-                Text(font.string)
-                    .id(UIFont.Weight.allCases.firstIndex(where: {
-                        $0 == font
-                    }) ?? 0)
+    func fontWeight(_ type:GeneratorPDFViewModel.ContentType) -> some View {
+        ScrollView(.horizontal) {
+            HStack {
+                ForEach(UIFont.Weight.allCases, id:\.rawValue) { font in
+                    Text(font.string)
+                        .font(.system(size: 12, weight:.semibold))
+                        .foregroundColor(font == viewModel.selectingFontWeight ? .black : .white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 3)
+                        .background(font == viewModel.selectingFontWeight ? .white : .gray)
+                        .cornerRadius(4)
+                    
+                }
             }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 10)
         }
-        .pickerStyle(SegmentedPickerStyle())
         
     }
     

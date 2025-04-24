@@ -183,7 +183,7 @@ extension GeneratorPDFViewModel {
         paragraphStyle.alignment = .center
         attachemnt.append(.init(string: "\(text)\n".uppercased(), attributes: [
             .link: URL(string: "action://\(text.replacingOccurrences(of: " ", with: ""))")!,
-                .font:appearence.font[.section] ?? Appearence.FontData.default(.section).font,
+                .font:(appearence.font[.section] ?? Appearence.FontData.default(.section)).font,
             .foregroundColor:appearence.toColor(.section),
            // .paragraphStyle:paragraphStyle
         ]))
@@ -243,9 +243,10 @@ extension GeneratorPDFViewModel {
             paragraphStyle.alignment = .center
             let isCVTitle = key.rawValue.lowercased().contains("title")
             let keyType: ContentType = isCVTitle ? (key == .jobTitle ? .cvTitle : .smallDescription) : .title
+            let font = (appearence.font[keyType] ?? Appearence.FontData.default(keyType)).font
             let title:NSAttributedString = .init(string: companyName + (key.pdfTextInline ? " " : "    "), attributes: [
                 .foregroundColor:appearence.toColor(keyType),
-                .font:appearence.font[keyType] ?? Appearence.FontData.default(keyType).font,
+                .font:font,
 //                .link: URL(string: "action://\(key.rawValue)\(item.id.uuidString)")!,
                 .paragraphStyle: isCVTitle ? paragraphStyle : NSMutableParagraphStyle(),
 
@@ -265,10 +266,10 @@ extension GeneratorPDFViewModel {
         if let date = item.from, key.needDates {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.alignment = .right
-
+let font = (appearence.font[.smallDescription] ?? Appearence.FontData.default(.smallDescription)).font
             //paragraphSpacingBefore = -12
             let date:NSAttributedString = .init(string: "\(item.from?.formatted(date: .complete, time: .standard) ?? "") ", attributes: [
-                .font:appearence.font[.smallDescription] ?? Appearence.FontData.default(.smallDescription).font,
+                .font:font,
                 .foregroundColor:appearence.toColor(.smallDescription),
                 .paragraphStyle:paragraphStyle,
             ])
@@ -280,10 +281,12 @@ extension GeneratorPDFViewModel {
             paragraphStyle.alignment = .left
 //            paragraphStyle.paragraphSpacingBefore = -11
           //  paragraphStyle.paragraphSpacing = 100
+            let font = (appearence.font[.smallDescription] ?? Appearence.FontData.default(.smallDescription)).font
+            print(font, " rtegrfwdes ")
             let description:NSAttributedString = .init(string: item.titleDesctiption, attributes: [
                 .foregroundColor:appearence.toColor(.smallDescription),
                 .paragraphStyle: key == .workingHistory ? paragraphStyle : NSMutableParagraphStyle(),
-                .font:appearence.font[.smallDescription] ?? Appearence.FontData.default(.smallDescription).font,
+                .font:font,
 
             ])
             mutable.append(description)
@@ -294,6 +297,7 @@ extension GeneratorPDFViewModel {
             paragraphStyle.alignment = .left
 //            paragraphStyle.paragraphSpacingBefore = -11
             let font = (appearence.font[.text] ?? Appearence.FontData.default(.text)).font
+            print(font, " rgterfsdx ")
             mutable.append(.init(string: item.text + "\n", attributes: [
                 .paragraphStyle: key == .workingHistory ? paragraphStyle : NSMutableParagraphStyle(),
                 .foregroundColor: appearence.toColor(.text),
@@ -402,7 +406,9 @@ extension GeneratorPDFViewModel {
             appearence.font[fontSelectingFor ?? .background]?.size ?? Appearence.FontData.default(fontSelectingFor ?? .background).size
         }
         set {
-            appearence.font[fontSelectingFor ?? .background]?.size = newValue
+            var font = appearence.font[fontSelectingFor ?? .background] ?? Appearence.FontData.default(fontSelectingFor ?? .background)
+            font.size = newValue
+            appearence.font.updateValue(font, forKey: fontSelectingFor!)
         }
     }
     
