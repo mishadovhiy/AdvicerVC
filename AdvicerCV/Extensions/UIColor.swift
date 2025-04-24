@@ -48,7 +48,7 @@ extension UIColor {
         var alpha: CGFloat = 0.0
         
         if getWhite(&white, alpha: &alpha) {
-            return white > 0.5
+            return white > 1
         }
         
         var red: CGFloat = 0.0

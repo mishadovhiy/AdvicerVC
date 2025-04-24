@@ -18,6 +18,7 @@ struct HomeView: View {
                 VStack(spacing:viewModel.selectedTab == .home ? -(viewModel.appCornerRadius * 2) : 0) {
                     contenView
                 }
+                .padding(.trailing, viewModel.selectedTab == .home ? (viewModel.appCornerRadius * -1) : 0)
                 .frame(maxHeight: .infinity)
 //                .padding(.bottom, 50)
                 .background(.black)
@@ -129,7 +130,7 @@ struct HomeView: View {
             uploadButton
             Spacer()
         }
-        .padding(.horizontal, 10)
+        .padding(.horizontal, 25)
         .background(HomeViewModel.PresentingTab.home.color)
         .frame(maxHeight: .infinity)
 
@@ -143,23 +144,27 @@ struct HomeView: View {
                 HStack {
                     Image(systemName: "arrow.up.doc")
                     Text("Upload CV")
+                        .font(.system(size: 20, weight:.semibold))
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.blue)
+                .background(Color(.Special.red))
                 .foregroundColor(.white)
                 .cornerRadius(10)
                 .frame(maxHeight: 50)
+                .shadow(color: .Special.red.opacity(0.3), radius: 7, x:-2, y:-5)
             }
             Text(AppData.adviceLimit <= db.db.documents.count ? "Limit reached" : "")
                 
         })
+        .padding(.trailing, viewModel.selectedTab == .home ? viewModel.appCornerRadius : 0)
         .disabled(AppData.adviceLimit <= db.db.documents.count)
+        .animation(.bouncy, value: viewModel.selectedTab)
     }
     
     func tabBarButtons(_ needBackground:Bool) -> some View {
         HStack {
-            VStack(spacing:viewModel.selectedTab == .home ? -80 : -15) {
+            VStack(spacing:viewModel.selectedTab == .home ? (viewModel.appCornerRadius * -4) : -15) {
                 ForEach(HomeViewModel.PresentingTab.allCases.filter({$0.isLeading}), id:\.rawValue) { tab in
                     Button(action: {
                         withAnimation {
@@ -175,10 +180,11 @@ struct HomeView: View {
                                     .frame(width:100)
                                     .lineLimit(1)
                                     .rotationEffect(.degrees(90))
+                                    .shadow(radius: viewModel.selectedTab == tab ? 4 : 0)
                             }
                         
                     })
-
+                    .tint(Color(uiColor: UIColor(cgColor: tab.color.cgColor ?? UIColor.white.cgColor).isLight ? .black : .white))
 
     //                .zIndex(viewModel.selectedTab == tab ? 10 : 1)
     //                    .padding(.top, 0)

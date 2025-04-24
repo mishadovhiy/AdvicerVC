@@ -65,16 +65,19 @@ struct AdviceListView: View {
         ForEach(db.db.documents, id:\.url?.absoluteString) { item in
             VStack {
                 Text(item.url?.lastPathComponent ?? "-")
+                    .foregroundColor(.lightBlue)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 10)
+                    .padding(.horizontal, 10)
                 PDFKitView(pdfData: item.data)
                     .disabled(true)
                     .cornerRadius(10)
 
             }
-            
             .frame(maxWidth:.infinity)
             .frame(height:120)
 //                    .aspectRatio(1, contentMode: .fit)
-            .background(Color.secondary)
+            .background(.darkText)
             .cornerRadius(10)
             .clipped()
             .onTapGesture {

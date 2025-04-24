@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 import PDFKit
 
 class HomeViewModel: ObservableObject {
-    let appCornerRadius:CGFloat = 20
+    let appCornerRadius:CGFloat = 40
     let tabBarButtonsHeight:CGFloat = 35
     @Published var selectedTab: PresentingTab = .home
     @Published var selectedDocument:Document? {
