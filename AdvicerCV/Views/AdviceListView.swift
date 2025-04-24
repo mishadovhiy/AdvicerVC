@@ -15,6 +15,13 @@ struct AdviceListView: View {
         NavigationView {
             ScrollView(.vertical, content: {
                 VStack {
+                    Text("Advice List")
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, 30)
+                        .padding(.bottom, -20)
+                        .padding(.leading, 25)
                     if db.db.documents.isEmpty {
                         Spacer().frame(height: 80)
                         noDataView

@@ -15,6 +15,7 @@ struct BottomGeneratorPanelView: View {
         NavigationView {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing:20) {
+                    Spacer().frame(width: 10)
                     colorButton
                         .tint(.white)
                     Divider()
@@ -45,7 +46,7 @@ struct BottomGeneratorPanelView: View {
         .background {
             ClearBackgroundView()
         }
-        .frame(maxHeight: isPresenting ? (viewModel.largeEditorHeight ? 160 : (viewModel.editorNavigationPushed ? (viewModel.generalColorsPresenting ? 170 : 130) : 60)) : 0)
+        .frame(maxHeight: isPresenting ? (viewModel.largeEditorHeight ? 160 : (viewModel.editorNavigationPushed ? (viewModel.generalColorsPresenting ? 170 : 110) : 60)) : 0)
         .background(content: {
             Color(.purple)
                 .padding(.vertical, -20)
@@ -62,18 +63,22 @@ struct BottomGeneratorPanelView: View {
                 Button("-1") {
                     viewModel.selectingFontSize -= 1
                 }
+                .tint(.white)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
                 .background(.black.opacity(0.1))
                 .cornerRadius(4)
                 HStack {
                     Text("Font size")
-                    
+                        .foregroundColor(.white)
                     Text("\(Int(viewModel.selectingFontSize))")
+                        .foregroundColor(.white)
+                        .font(.system(size: 15, weight:.semibold))
                 }
                 Button("+1") {
                     viewModel.selectingFontSize += 1
                 }
+                .tint(.white)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
                 .background(.black.opacity(0.1))
@@ -81,9 +86,11 @@ struct BottomGeneratorPanelView: View {
             }
             Divider()
             fontWeight(type)
-        }.background {
+        }
+        .background {
             ClearBackgroundView()
         }
+        .navigationTitle(type.title)
     }
     
     func fontTypeLink(_ type:GeneratorPDFViewModel.ContentType) -> some View {
@@ -105,13 +112,14 @@ struct BottomGeneratorPanelView: View {
     }
     
     var fontButton: some View {
-        NavigationLink(destination: ScrollView(.horizontal, content: {
+        NavigationLink(destination: ScrollView(.horizontal, showsIndicators: false, content: {
             HStack {
                 ForEach(GeneratorPDFViewModel.ContentType.allCases, id:\.self) { type in
                     fontTypeLink(type)
                 }
             }
-            .padding(15)
+            .padding(.horizontal, 15)
+            .padding(.bottom, 15)
         })
             .background {
                 ClearBackgroundView()
@@ -148,7 +156,7 @@ struct BottomGeneratorPanelView: View {
         NavigationLink(destination:
                         VStack(content: {
             Spacer().frame(height: 1)
-            ScrollView(.vertical) {
+            ScrollView(.vertical, showsIndicators: false) {
                 VStack {
                     ForEach(GeneratorPDFViewModel.ContentType.allCases, id:\.self) { type in
                         colorPicker(type)
@@ -180,16 +188,24 @@ struct BottomGeneratorPanelView: View {
     }
     
     func fontWeight(_ type:GeneratorPDFViewModel.ContentType) -> some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(UIFont.Weight.allCases, id:\.rawValue) { font in
-                    Text(font.string)
-                        .font(.system(size: 12, weight:.semibold))
-                        .foregroundColor(font == viewModel.selectingFontWeight ? .black : .white)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 3)
-                        .background(font == viewModel.selectingFontWeight ? .white : .gray)
-                        .cornerRadius(4)
+                    Button {
+                        withAnimation {
+                            viewModel.selectingFontWeight = font
+                        }
+                    } label: {
+                        Text(font.string)
+                            .font(.system(size: 12, weight:.semibold))
+                            .foregroundColor(font == viewModel.selectingFontWeight ? .black : .white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 3)
+                            .background(font == viewModel.selectingFontWeight ? .white : .gray)
+                            .cornerRadius(4)
+                            .animation(.smooth, value: viewModel.selectingFontWeight)
+                    }
+
                     
                 }
             }

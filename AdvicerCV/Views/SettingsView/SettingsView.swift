@@ -13,19 +13,32 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             VStack(alignment:.leading, spacing: 20) {
-                NavigationLink("About", destination: AboutView(viewModel: $viewModel))
-                Button("Rate") {
-                    StorekitModel().requestReview()
+                VStack {
+                    Text("About app")
+                        .font(.system(size: 24, weight:.semibold))
+                        .foregroundColor(Color(.darkBlue))
+                    AboutView(viewModel: $viewModel)
                 }
-                Button("Share") {
-                    viewModel.navigationPresenting.share = true
+                    .background(.red)
+                Text("Settings")
+                    .font(.system(size: 24, weight:.semibold))
+                    .foregroundColor(Color(.darkBlue))
+                HStack {
+                    Button("Rate") {
+                        StorekitModel().requestReview()
+                    }
+                    Button("Share") {
+                        viewModel.navigationPresenting.share = true
+                    }
                 }
-                NavigationLink("Support", destination: SupportView(viewModel: $viewModel))
-                NavigationLink("Privacy Policy", destination: PrivacyPolicyView(viewModel: $viewModel))
-                Button("Clear data") {
-                    viewModel.navigationPresenting.clearData = true
+                HStack {
+                    NavigationLink("Support", destination: SupportView(viewModel: $viewModel))
+                    NavigationLink("Privacy Policy", destination: PrivacyPolicyView(viewModel: $viewModel))
+                    Button("Clear data") {
+                        viewModel.navigationPresenting.clearData = true
+                    }
+                    .tint(.red)
                 }
-                .tint(.red)
                 
                 Spacer()
             }

@@ -417,27 +417,9 @@ extension GeneratorPDFViewModel {
             appearence.font[fontSelectingFor ?? .background]?.fontWeight ?? Appearence.FontData.default(fontSelectingFor ?? .background).fontWeight
         }
         set {
-            appearence.font[fontSelectingFor ?? .background]?.fontWeight = newValue
-        }
-    }
-}
-
-extension UIFont.Weight {
-    static var allCases: [UIFont.Weight] {
-        [.light, .regular, .medium, .semibold, .bold, .black]
-    }
-    
-    var string:String {
-        switch self {
-        case .light:"light"
-        case .regular:"regular"
-        case .medium:"medium"
-        case .semibold:"semibold"
-        case .bold:"bold"
-        case .black:"black"
-
-        default:
-            ""
+            var font = appearence.font[fontSelectingFor ?? .background] ?? Appearence.FontData.default(fontSelectingFor ?? .background)
+            font.fontWeight = newValue
+            appearence.font.updateValue(font, forKey: fontSelectingFor!)
         }
     }
 }

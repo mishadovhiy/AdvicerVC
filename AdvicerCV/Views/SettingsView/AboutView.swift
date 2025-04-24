@@ -10,7 +10,7 @@ import SwiftUI
 struct AboutView: View {
     @Binding var viewModel:SettingsViewModel
     var body: some View {
-        ScrollView(.vertical) {
+        ScrollView(.vertical, showsIndicators: false) {
             VStack {
                 ForEach(viewModel.aboutData, id:\.title) { data in
                     VStack {
