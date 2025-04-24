@@ -203,7 +203,9 @@ struct HomeView: View {
                 Button("Settings") {
                     viewModel.selectedTab = .settings
                 }
-                .background(.red)
+                .background(HomeViewModel.PresentingTab.settings.color)
+                .cornerRadius(5)
+                .padding(.bottom, viewModel.appCornerRadius)
             }
             .animation(.bouncy, value: viewModel.selectedTab)
 //            .frame(height:150)

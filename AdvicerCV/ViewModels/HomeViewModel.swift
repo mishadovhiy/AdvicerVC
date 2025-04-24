@@ -92,13 +92,13 @@ extension HomeViewModel {
         var color:Color {
             switch self {
             case .home:
-                    .orange
+                    .darkBlue
             case .advices:
-                    .brown
+                Color(.purple)
 //            case .settings:
 //                    .green
             case .generator:.white
-            case .settings:.white
+            case .settings:Color(.lightBlue)
             }
         }
     }

@@ -32,6 +32,11 @@ struct SettingsView: View {
             .padding(.vertical, 10)
             .padding(.horizontal, 5)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .background {
+                ClearBackgroundView()
+            }
+            .background(HomeViewModel.PresentingTab.settings.color)
+
         }
         .sheet(isPresented: $viewModel.navigationPresenting.share) {
             ShareSheet(items: [Keys.shareAppURL])
@@ -45,6 +50,7 @@ struct SettingsView: View {
                 viewModel.navigationPresenting.clearData = false
             }
         }
+        .background(HomeViewModel.PresentingTab.settings.color)
     }
 }
 

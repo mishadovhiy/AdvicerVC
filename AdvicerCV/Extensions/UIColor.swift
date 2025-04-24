@@ -42,6 +42,26 @@ extension UIColor {
         
         return "#000000"
     }
+    
+    var isLight: Bool {
+        var white: CGFloat = 0.0
+        var alpha: CGFloat = 0.0
+        
+        if getWhite(&white, alpha: &alpha) {
+            return white > 0.5
+        }
+        
+        var red: CGFloat = 0.0
+        var green: CGFloat = 0.0
+        var blue: CGFloat = 0.0
+        
+        if getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
+            let luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
+            return luminance > 0.5
+        }
+        
+        return false
+    }
 }
 
 extension UIView {
@@ -65,7 +85,7 @@ extension UIImage {
 #else
         return self
 #endif
-
+        
     }
 }
- 
+

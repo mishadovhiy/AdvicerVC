@@ -13,12 +13,13 @@ struct GeneratorPDFView: View {
     @Binding var isPresenting:Bool
     
     var body: some View {
-        VStack(spacing:-10) {
+        VStack(spacing:-20) {
             ScrollView(.horizontal) {
                 AttributedTextView(attributedString: self.viewModel.attrubute, didPressLink: { link, at in
                     viewModel.linkSelected(link)
                 })
                 .padding(.horizontal, 10)
+                .padding(.bottom, 20)
                 .frame(width: PDFGeneratorModel.pdfWidth)
                 .frame(maxHeight: .infinity)
                 .background(.white)

@@ -43,12 +43,13 @@ struct BottomGeneratorPanelView: View {
         .background {
             ClearBackgroundView()
         }
-        .frame(maxHeight: isPresenting ? (viewModel.largeEditorHeight ? 160 : (viewModel.editorNavigationPushed ? 120 : 45)) : 0)
+        .frame(maxHeight: isPresenting ? (viewModel.largeEditorHeight ? 160 : (viewModel.editorNavigationPushed ? 120 : 60)) : 0)
         .background(content: {
-            Color(.red)
+            Color(.darkBlue)
                 .padding(.vertical, -20)
-                .cornerRadius(12)
+                .cornerRadius(20)
         })
+        .shadow(radius: 20)
         .animation(.smooth, value: viewModel.isPresentingValueEditor)
     }
     

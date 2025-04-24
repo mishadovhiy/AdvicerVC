@@ -177,6 +177,14 @@
 			path = GeneratorPDFView;
 			sourceTree = "<group>";
 		};
+		8217C7A32DBA40D700531F89 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				82029B862DB92FDC00800347 /* MessageContent.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		8289D8A22D9B40B5001B6C40 /* NetworkModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -201,7 +209,7 @@
 				8289D8C22D9C46A5001B6C40 /* Document.swift */,
 				82E100FE2DA084B8008AFEB4 /* CVContent.swift */,
 				82E100FC2DA08492008AFEB4 /* CVContent_mock.swift */,
-				82029B862DB92FDC00800347 /* MessageContent.swift */,
+				8217C7A32DBA40D700531F89 /* Base */,
 				820368C12D9AABFC00218754 /* NetworkDataModel */,
 			);
 			path = DataModel;
