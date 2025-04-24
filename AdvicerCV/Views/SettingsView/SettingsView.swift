@@ -10,40 +10,24 @@ import SwiftUI
 struct SettingsView: View {
     @State var viewModel:SettingsViewModel = .init()
     @EnvironmentObject var db:AppData
+        
     var body: some View {
         NavigationView {
-            VStack(alignment:.leading, spacing: 20) {
+            VStack(alignment:.leading, spacing: 0) {
                 VStack {
                     Text("About app")
                         .font(.system(size: 24, weight:.semibold))
-                        .foregroundColor(Color(.darkBlue))
+                        .foregroundColor(Color(.white))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 10)
+                        .padding(.top, 20)
                     AboutView(viewModel: $viewModel)
                 }
-                    .background(.red)
-                Text("Settings")
-                    .font(.system(size: 24, weight:.semibold))
-                    .foregroundColor(Color(.darkBlue))
-                HStack {
-                    Button("Rate") {
-                        StorekitModel().requestReview()
-                    }
-                    Button("Share") {
-                        viewModel.navigationPresenting.share = true
-                    }
-                }
-                HStack {
-                    NavigationLink("Support", destination: SupportView(viewModel: $viewModel))
-                    NavigationLink("Privacy Policy", destination: PrivacyPolicyView(viewModel: $viewModel))
-                    Button("Clear data") {
-                        viewModel.navigationPresenting.clearData = true
-                    }
-                    .tint(.red)
-                }
-                
-                Spacer()
+                .background(Color(.Special.lightPurpure))
+                    .cornerRadius(35)
+                settings
+
             }
-            .padding(.vertical, 10)
-            .padding(.horizontal, 5)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background {
                 ClearBackgroundView()
@@ -65,6 +49,53 @@ struct SettingsView: View {
         }
         .background(HomeViewModel.PresentingTab.settings.color)
     }
+    
+    var settings: some View {
+        VStack(alignment:.leading) {
+            HStack {
+                Button("Rate") {
+                    StorekitModel().requestReview()
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(Color(.Special.purpure))
+                .cornerRadius(4)
+                Button("Share") {
+                    viewModel.navigationPresenting.share = true
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(Color(.Special.purpure))
+                .cornerRadius(4)
+            }
+            HStack {
+                NavigationLink("Support", destination: SupportView(viewModel: $viewModel))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(Color(.Special.purpure))
+                    .cornerRadius(4)
+                NavigationLink("Privacy Policy", destination: PrivacyPolicyView(viewModel: $viewModel))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(Color(.Special.purpure))
+                    .cornerRadius(4)
+                Button("Clear data") {
+                    viewModel.navigationPresenting.clearData = true
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(Color(.Special.red).opacity(0.15))
+                .cornerRadius(4)
+                .tint(Color(.Special.red))
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .tint(.white)
+        .padding(.leading, 15)
+        .padding(.bottom, 15)
+        .padding(.top, 10)
+    }
+
 }
 
 #Preview {
