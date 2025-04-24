@@ -34,36 +34,44 @@ struct PanelValueEditorView: View {
         .navigationTitle(viewModel.editingPropertyKey?.titles.first ?? "?")
     }
     
+    func textField(_ title:String, text: Binding<String>) -> some View {
+        TextField("title:", text: $viewModel.editingPropertyTitle)
+            .foregroundColor(.white)
+    }
+    
     var valueEditor: some View {
         let key = viewModel.editingPropertyKey
         let ignoreBold = [key == .jobTitle, key == .cvDescriptionTitle]
         let ignoreTitle = [key == .summary]
         return VStack {
             if !ignoreTitle.contains(true) {
-                TextField("title:", text: $viewModel.editingPropertyTitle)
-                    .foregroundColor(.white)
+                textField("title:", text: $viewModel.editingPropertyTitle)
             }
+            Divider()
             if key?.needDescription ?? false {
-                TextField("description:", text: $viewModel.editingPropertyTitleDescription)
-                    .foregroundColor(.white)
-                
+                textField("description:", text: $viewModel.editingPropertyTitleDescription)
             }
+            Divider()
+
             if key?.needLargeText ?? false {
                 self.textEditor
                 
             }
+            Divider()
+
             if key?.needDates ?? false {
                 DatePicker("Date From", selection: $viewModel.editingDateFrom, displayedComponents: [.date])
                     .foregroundColor(.white)
-                
+                    .tint(.white)
                     .datePickerStyle(.compact)
                 DatePicker("Date To", selection: $viewModel.editingDateTo, displayedComponents: [.date])
                     .datePickerStyle(.compact)
+                    .tint(.white)
                     .foregroundColor(.white)
             }
+            Divider()
             if !ignoreBold.contains(true) {
-                TextField("Bold text", text: $viewModel.editingboldTexts)
-                    .foregroundColor(.white)
+                textField("Bold text", text: $viewModel.editingboldTexts)
             }
             
         }
@@ -73,7 +81,7 @@ struct PanelValueEditorView: View {
         .padding(.horizontal, 10)
         .navigationBarItems(trailing: HStack {
             if key?.canDelete ?? false {
-                Button("delete") {
+                Button("Delete") {
                     viewModel.deleteSelectedItemPressed()
                 }
             }

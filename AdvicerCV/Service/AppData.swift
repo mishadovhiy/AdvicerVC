@@ -13,6 +13,7 @@ class AppData:ObservableObject {
     static let adviceLimit:Int = 4
     @Published var db:DataBase = .init() {
         didSet {
+            print("updatingdb")
             if dataLoaded {
                 if Thread.isMainThread {
                     DispatchQueue(label: "db", qos: .userInitiated).async {
@@ -56,6 +57,12 @@ class AppData:ObservableObject {
 
 struct DataBase: Codable {
     var documents:[Document] = []
-    
+    var generatorContent:CVGenerator = .init()
+    var cvContent:GeneratorPDFViewModel.CVContent = .mock
+    struct CVGenerator:Codable {
+        var content:GeneratorPDFViewModel.CVContent = .mock
+        var apperance:GeneratorPDFViewModel.Appearence = .init()
+        
+    }
 }
 

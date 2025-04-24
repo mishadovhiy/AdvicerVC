@@ -111,7 +111,7 @@ extension NetworkRequest {
             }
             var needDescription:Bool {
                 switch self {
-                case .jobTitle, .cvDescriptionTitle:false
+                case .jobTitle, .cvDescriptionTitle, .skills:false
                 default: true
                 }
             }
@@ -125,7 +125,7 @@ extension NetworkRequest {
             
             var needLargeText:Bool {
                 switch self {
-                case .jobTitle, .cvDescriptionTitle, .skills:false
+                case .jobTitle, .cvDescriptionTitle:false
                 default: true
                 }
             }

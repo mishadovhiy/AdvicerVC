@@ -10,6 +10,7 @@ import UIKit
 
 struct GeneratorPDFView: View {
     @State var viewModel = GeneratorPDFViewModel()
+    @EnvironmentObject var db:AppData
     @Binding var isPresenting:Bool
     
     var body: some View {
@@ -30,7 +31,11 @@ struct GeneratorPDFView: View {
             ActivityViewController(activityItems: [viewModel.exportingURL ?? .init(string: "https://mishadovhiy.com")!])
         }
         .onAppear {
-            viewModel.cvContent = .mock
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+                viewModel.cvContent = db.db.generatorContent.content
+                viewModel.appearence = db.db.generatorContent.apperance
+            })
+
         }
     }
 

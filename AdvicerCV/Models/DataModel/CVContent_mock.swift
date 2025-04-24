@@ -57,7 +57,7 @@ extension GeneratorPDFViewModel.CVContent {
     static var mock:GeneratorPDFViewModel.CVContent {
         .init(workExperience: .mock,
               skills: [
-            .init(title: "iOS SDK: - Core iOS Development:", titleDesctiption: """
+            .init(title: "iOS SDK: - Core iOS Development:", text: """
         UIKit (4), SwiftUI (2), Concurrency (async/await, GCD), CoreData,
         Combine, RxSwift, Local Authentication (FaceID/TouchID), Remote Notifications, Cocoa Touch, StoreKit
         (in-app purchases), App Group, Cocoa (0.5), AppKit
@@ -67,24 +67,24 @@ extension GeneratorPDFViewModel.CVContent {
         - Apple Watch, Widgets and Specialized Technologies: WatchKit, WidgetKit, App Intents,
         WatchConnectivity, HealthKit, CoreMotion
         """),
-            .init(title: "Data Storage:", titleDesctiption: "FileManager, CoreData, CloudKit, UserDefaults, FirebaseFirestore, Keychain"),
-            .init(title: "Interface", titleDesctiption: "SwiftUI, Storyboards, XIB, Code driven UI with UIKit, AutoLayout, IBInspectable, Texture"),
-            .init(title: "Networking and Integrations:", titleDesctiption: """
+            .init(title: "Data Storage:", text: "FileManager, CoreData, CloudKit, UserDefaults, FirebaseFirestore, Keychain"),
+            .init(title: "Interface", text: "SwiftUI, Storyboards, XIB, Code driven UI with UIKit, AutoLayout, IBInspectable, Texture"),
+            .init(title: "Networking and Integrations:", text: """
                 RESTful API, WebRTC, Soap, MySQL, JSON, XML, Protocol Buffers,
                 Codable, deeplinks
                 """),
-            .init(title: "Back-End development:", titleDesctiption: "Node.js, PHP, MySQL"),
-            .init(title: "Architectural patterns:", titleDesctiption: "MVVM+C, VIPER, MVP, Clean Swift, OOP principles, DRY, SOLID, MVC"),
-            .init(title: "Distribution, Testing", titleDesctiption: """
+            .init(title: "Back-End development:", text: "Node.js, PHP, MySQL"),
+            .init(title: "Architectural patterns:", text: "MVVM+C, VIPER, MVP, Clean Swift, OOP principles, DRY, SOLID, MVC"),
+            .init(title: "Distribution, Testing", text: """
                 App Store, Enterprise (.ipa), TestFlight, XCTest, Unit Tests, Provisioning profile,
                 Code signing, Jenkins
                 """),
-            .init(title: "Version Control:", titleDesctiption: "git, gitlab, bitbucket"),
-            .init(title: "3rd party libraries integration:", titleDesctiption: """
+            .init(title: "Version Control:", text: "git, gitlab, bitbucket"),
+            .init(title: "3rd party libraries integration:", text: """
                 CocoaPods, Swift Packages: integration & creation, gcloud Services API,
                 OpenAI, Firebase, GoogleMobileAds, FacebookSDK, Lottie, Alamofire, SnapKit, AppsFlyer, mixpanel
                 """),
-            .init(title: "Tools:", titleDesctiption: """
+            .init(title: "Tools:", text: """
                 Xcode Instruments, Debug view hierarchy, Git, Terminal, Sketch/Figma, Sourcetree, FileZilla,
                 SublimeText, Mamp, Trello, Jira, Android Studio, SoapU, Postman, Reality Converter
                 """)

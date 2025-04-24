@@ -282,7 +282,6 @@ let font = (appearence.font[.smallDescription] ?? Appearence.FontData.default(.s
 //            paragraphStyle.paragraphSpacingBefore = -11
           //  paragraphStyle.paragraphSpacing = 100
             let font = (appearence.font[.smallDescription] ?? Appearence.FontData.default(.smallDescription)).font
-            print(font, " rtegrfwdes ")
             let description:NSAttributedString = .init(string: item.titleDesctiption, attributes: [
                 .foregroundColor:appearence.toColor(.smallDescription),
                 .paragraphStyle: key == .workingHistory ? paragraphStyle : NSMutableParagraphStyle(),
@@ -297,7 +296,6 @@ let font = (appearence.font[.smallDescription] ?? Appearence.FontData.default(.s
             paragraphStyle.alignment = .left
 //            paragraphStyle.paragraphSpacingBefore = -11
             let font = (appearence.font[.text] ?? Appearence.FontData.default(.text)).font
-            print(font, " rgterfsdx ")
             mutable.append(.init(string: item.text + "\n", attributes: [
                 .paragraphStyle: key == .workingHistory ? paragraphStyle : NSMutableParagraphStyle(),
                 .foregroundColor: appearence.toColor(.text),

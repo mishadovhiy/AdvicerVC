@@ -10,6 +10,7 @@ import SwiftUI
 struct BottomGeneratorPanelView: View {
     @Binding var viewModel:GeneratorPDFViewModel
     @Binding var isPresenting:Bool
+    @EnvironmentObject var db:AppData
     
     var body: some View {
         NavigationView {
@@ -22,14 +23,26 @@ struct BottomGeneratorPanelView: View {
                     fontButton
                         .tint(.white)
                     Divider()
-                    Button("export") {
+                    Button("Export") {
                         viewModel.exportPressed()
                     }
+                    .tint(.darkBlue)
                     .padding(.vertical, 5)
                     .padding(.horizontal, 20)
                     .background(.white)
                     .cornerRadius(6)
-                    NavigationLink("", destination: PanelValueEditorView(viewModel: $viewModel), isActive: $viewModel.isPresentingValueEditor)
+                    NavigationLink("", destination: PanelValueEditorView(viewModel: $viewModel), isActive: .init(get: {
+                        viewModel.isPresentingValueEditor
+                    }, set: { newValue in
+                        withAnimation {
+                            viewModel.isPresentingValueEditor = newValue
+                        }
+                        if !newValue {
+                            updateDB()
+
+                        }
+
+                    }))
                         .hidden()
                 }
                 .padding(.horizontal, 20)
@@ -100,6 +113,9 @@ struct BottomGeneratorPanelView: View {
             withAnimation {
                 viewModel.fontSelectingFor = newValue ? type : nil
             }
+            if !newValue {
+                updateDB()
+            }
         })) {
             Text(type.title)
                 .font(.system(size: 13, weight: .medium))
@@ -129,6 +145,9 @@ struct BottomGeneratorPanelView: View {
                 withAnimation {
                     viewModel.generalFontsPresenting = newValue
                 }
+                if !newValue {
+                    updateDB()
+                }
             })) {
                 Image(.font)
                     .resizable()
@@ -150,6 +169,11 @@ struct BottomGeneratorPanelView: View {
         }))
         .tint(.white)
         .foregroundColor(.white)
+    }
+    
+    func updateDB() {
+        db.db.generatorContent.apperance = viewModel.appearence
+        db.db.generatorContent.content = viewModel.cvContent
     }
     
     var colorButton: some View {
