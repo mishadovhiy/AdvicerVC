@@ -68,6 +68,7 @@ struct HomeView: View {
                 })
                     .frame(maxHeight: viewModel.selectedTab == .advices || viewModel.selectedTab == .home ? .infinity : 0)
                     .padding(.top, viewModel.selectedTab == .home ? -60 : 0)
+                    .padding(.leading, viewModel.selectedTab == .home ? -40 : 0)
                     .animation(.smooth, value: viewModel.selectedTab)
                     .clipped()
                     .disabled(viewModel.selectedTab != .advices)

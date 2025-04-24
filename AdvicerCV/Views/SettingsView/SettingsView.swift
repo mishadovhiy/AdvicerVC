@@ -19,10 +19,10 @@ struct SettingsView: View {
                         .font(.system(size: 24, weight:.semibold))
                         .foregroundColor(Color(.white))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 10)
                         .padding(.top, 20)
                     AboutView(viewModel: $viewModel)
                 }
+                .padding(.horizontal, 10)
                 .background(Color(.Special.lightPurpure))
                     .cornerRadius(35)
                 settings

@@ -46,7 +46,7 @@ struct BottomGeneratorPanelView: View {
         .background {
             ClearBackgroundView()
         }
-        .frame(maxHeight: isPresenting ? (viewModel.largeEditorHeight ? 160 : (viewModel.editorNavigationPushed ? (viewModel.generalColorsPresenting ? 170 : 110) : 60)) : 0)
+        .frame(maxHeight: isPresenting ? (viewModel.largeEditorHeight ? .infinity : (viewModel.editorNavigationPushed ? (viewModel.generalColorsPresenting ? 170 : 110) : 60)) : 0)
         .background(content: {
             Color(.purple)
                 .padding(.vertical, -20)

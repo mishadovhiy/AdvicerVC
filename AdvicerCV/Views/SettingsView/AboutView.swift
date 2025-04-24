@@ -11,25 +11,45 @@ struct AboutView: View {
     @Binding var viewModel:SettingsViewModel
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            VStack {
-                ForEach(viewModel.aboutData, id:\.title) { data in
-                    VStack {
-                        Text(data.title)
-                        Text(data.description)
-                            .padding(.leading, data.title.isEmpty ? 15 : 0)
+            VStack(alignment:.leading, spacing:10) {
+                ForEach(viewModel.aboutData, id:\.id) { data in
+                    VStack(alignment:.leading, spacing: 5) {
+                        if !data.title.isEmpty && data.id != viewModel.aboutData.first?.id {
+                            Divider()
+                                .padding(.vertical, 10)
+                        }
+                        if !data.title.isEmpty {
+                            Text(data.title)
+                                .font(.system(size: 16, weight: .medium))
+                                .padding(.leading, data.hasBullets ? 15 : 0)
+                                .foregroundColor(.white)
+                        }
+                        
+
+                        if !data.description.isEmpty {
+                            Text(data.description)
+                                .font(.system(size: 13))
+
+                                .padding(.leading, data.hasBullets ? 15 : 0)
+                                .foregroundColor(.white)
+                        }
+                        
+
                     }
-                    if !data.title.isEmpty {
-                        Divider()
-                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.bottom, 20)
         }
     }
     
     struct ContentItem {
         let title:String
         var description:String = ""
+        var id:UUID = .init()
+        var hasBullets = false
     }
 }
 
