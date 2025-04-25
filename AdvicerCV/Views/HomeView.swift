@@ -73,6 +73,7 @@ struct HomeView: View {
                     .clipped()
                     .disabled(viewModel.selectedTab != .advices)
                     .cornerRadius(viewModel.selectedTab == .home ? viewModel.appCornerRadius : 0)
+                    .zIndex(viewModel.selectedTab == .advices ? 999 : 0)
 
                     .shadow(radius: viewModel.selectedTab == .home ? 10 : 0)
                     .overlay {

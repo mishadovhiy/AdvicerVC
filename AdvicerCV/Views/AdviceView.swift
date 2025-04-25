@@ -52,7 +52,7 @@ struct AdviceView: View {
             .overlay {
                 VStack {
                     HStack {
-                        Button("back") {
+                        Button("Back") {
                             self.document = nil
                         }
                         .tint(.darkBlue)
@@ -70,6 +70,7 @@ struct AdviceView: View {
 
         }
         .navigationBarHidden(true)
+        
         .confirmationDialog("Are you sure you want to delete a document?", isPresented: $deleteDocumentConfirmationPresenting, actions: {
             Button("Yes") {
                 deleteDocumentConfirmationPresenting = false
@@ -84,6 +85,8 @@ struct AdviceView: View {
                 deleteDocumentConfirmationPresenting = false
 
             }
+        }, message: {
+            Text("Are you sure you want to delete a document?")
         })
         .background {
             ClearBackgroundView()
@@ -99,10 +102,11 @@ struct AdviceView: View {
         VStack {
             Spacer().frame(height: 50)
             HStack {
-                TextField("Job title", text: $jobTitleText) { editing in
-                    if !editing {
-                        doneEditingJobTitle(&db.db, newValue: jobTitleText)
-                    }
+                TextField("Job title",
+                          text: $jobTitleText,
+                          prompt: Text("Job title").foregroundColor(.white.opacity(0.3)))
+                .onSubmit {
+                    doneEditingJobTitle(&db.db, newValue: jobTitleText)
                 }
                 .foregroundColor(.primaryText)
                 Button("Delete") {
@@ -141,15 +145,15 @@ struct AdviceView: View {
                 })
             }
             .tint(.white)
-            .font(.system(size: 18, weight:.semibold))
+            .font(.system(size: 15, weight:.semibold))
             .padding(.vertical, 6)
             .padding(.horizontal, 20)
-            .background(.purple)
+            .background(HomeViewModel.PresentingTab.advices.color)
             .cornerRadius(6)
             .disabled(isLoading)
         }
         .padding(.bottom, 10)
-        .padding(.trailing, 10)
+        .padding(.trailing, 20)
 
     }
     
@@ -169,6 +173,14 @@ struct AdviceView: View {
             .background {
                 lightBackgroundView
             }
+            .cornerRadius(30)
+            .background(content: {
+                VStack {
+                    Spacer().frame(maxHeight: .infinity)
+                    Color.white
+                        .padding(.bottom, -400)
+                }
+            })
             .padding(.leading, 20)
             generateButton
         }
@@ -216,6 +228,8 @@ struct AdviceView: View {
         .padding(5)
     }
     
+    
+    
     var response: some View {
         VStack {
             if let content = document?.response {
@@ -226,12 +240,7 @@ struct AdviceView: View {
                     }
                 }
             } else {
-                Spacer().frame(height: 150)
-                    Text("Generate CV Advice")
-                Text("Generation based on:")
-                ForEach(NetworkRequest.Advice.RetriveTitles.allCases.filter({$0.openAIUsed}), id:\.rawValue) { key in
-                    Text(key.titles.first ?? "-")
-                }
+                noResponse
             }
         }
     }
@@ -240,6 +249,44 @@ struct AdviceView: View {
         VStack {
             response
             Spacer()
+        }
+    }
+    
+    var noResponse: some View {
+        VStack {
+            Spacer().frame(height: 80)
+            Image(.noAIResponse)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 190)
+            Spacer().frame(height: 50)
+            VStack {
+                Text("Start generating CV Advice")
+                    .frame(maxWidth: .infinity)
+                    .multilineTextAlignment(.center)
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(.darkBlue)
+                Spacer().frame(height: 10)
+                VStack(alignment:.leading) {
+                    Text("AI Generation based on:")
+                        .font(.system(size: 13, weight:.semibold))
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.darkText)
+                    VStack(alignment:.leading) {
+                        ForEach(NetworkRequest.Advice.RetriveTitles.allCases.filter({$0.openAIUsed}), id:\.rawValue) { key in
+                            Text("- " + (key.titles.first ?? "-"))
+                                .font(.system(size: 13))
+                                .frame(alignment: .leading)
+                                .multilineTextAlignment(.leading)
+                                .foregroundColor(.darkText)
+                            Spacer().frame(height: 2)
+
+                        }
+                    }
+                }
+            }
+            .frame(maxWidth:300)
+            .padding(.horizontal, 5)
         }
     }
 }
