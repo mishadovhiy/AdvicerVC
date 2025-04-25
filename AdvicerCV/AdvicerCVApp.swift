@@ -18,12 +18,17 @@ struct AdvicerCVApp: App {
                      appearance.configureWithOpaqueBackground()
                      
 //                     appearance.backgroundColor = .blue
-                     appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+                     appearance.titleTextAttributes = [.foregroundColor: UIColor.white,
+                                                       .strokeColor:UIColor.white
+
+                     ]
                     appearance.backButtonAppearance.normal.backgroundImage = nil
-                     appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-                    appearance.backButtonAppearance.normal.backgroundImage = appearance.backButtonAppearance.normal.backgroundImage?.withTintColor(.red)
+                     appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white,
+                                                            .strokeColor:UIColor.white
+
+                     ]
                      appearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white,
-                                                                                   
+                                                                                   .strokeColor:UIColor.white
                      ]
                     appearance.backgroundColor = .clear
                 

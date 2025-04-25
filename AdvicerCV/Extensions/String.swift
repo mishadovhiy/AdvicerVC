@@ -102,4 +102,12 @@ extension String {
             return [:]
         }
     }
+    
+    var number:Int? {
+        if let match = self.range(of: "\\d+", options: .regularExpression) {
+            let numberString = String(self[match]).trimmingCharacters(in: .whitespacesAndNewlines)
+            return Int(numberString)
+        }
+        return Int(self)
+    }
 }

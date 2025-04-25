@@ -130,7 +130,7 @@ struct BottomGeneratorPanelView: View {
     var fontButton: some View {
         NavigationLink(destination: ScrollView(.horizontal, showsIndicators: false, content: {
             HStack {
-                ForEach(GeneratorPDFViewModel.ContentType.allCases, id:\.self) { type in
+                ForEach(GeneratorPDFViewModel.ContentType.allCases.filter({$0.canSetFont}), id:\.self) { type in
                     fontTypeLink(type)
                 }
             }

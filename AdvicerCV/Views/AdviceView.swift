@@ -131,7 +131,7 @@ struct AdviceView: View {
     var generateButton: some View {
         HStack {
             Spacer()
-            Button("Generate") {
+            Button(((document?.response != nil) ? "Re-" : "") + "Generate") {
                 generatePressed(completion: {
                     if let document = document {
                         self.db.db.documents.update(document)
@@ -150,7 +150,7 @@ struct AdviceView: View {
             .padding(.horizontal, 20)
             .background(HomeViewModel.PresentingTab.advices.color)
             .cornerRadius(6)
-            .disabled(isLoading)
+            .disabled(isLoading || jobTitleText.isEmpty)
         }
         .padding(.bottom, 10)
         .padding(.trailing, 20)
@@ -182,12 +182,17 @@ struct AdviceView: View {
                 }
             })
             .padding(.leading, 20)
-            generateButton
         }
         .background(
             Color.white.padding(.leading,100)
                 .padding(.trailing, -500)
         )
+        .overlay {
+            VStack {
+                Spacer()
+                generateButton
+            }
+        }
     }
     
     
@@ -231,18 +236,42 @@ struct AdviceView: View {
     
     
     var response: some View {
-        VStack {
+        VStack(alignment:.leading, spacing:15) {
+            Spacer().frame(height: 20)
             if let content = document?.response {
                 ForEach(NetworkRequest.Advice.Keys.allCases, id:\.rawValue) { key in
-                    VStack {
+                    VStack(alignment:.leading) {
                         Text(key.title)
-                        Text(content.value(for: key))
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(.darkBlue)
+                        if key.rawValue.uppercased().contains("grade".uppercased()),
+                           let int = content.value(for: key).number
+                        {
+                            HStack {
+                                ForEach(0..<5, id:\.self) { i in
+                                    Image(.star)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width:10, height:10)
+                                        .foregroundColor(i < int ? .yellow : .gray)
+                                }
+                            }
+                        } else {
+                            Text(content.value(for: key))
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.darkText)
+                        }
+                        
+                        Divider()
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             } else {
                 noResponse
             }
+            Spacer().frame(height: 30)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     var rightControlView: some View {

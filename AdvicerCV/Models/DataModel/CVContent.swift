@@ -198,6 +198,13 @@ extension GeneratorPDFViewModel {
         case text
         case cvTitle
         
+        var canSetFont:Bool {
+            switch self {
+            case .separetor, .background:false
+            default:true
+            }
+        }
+        
         var title:String {
             rawValue.addSpaceBeforeCapitalizedLetters.capitalized
         }

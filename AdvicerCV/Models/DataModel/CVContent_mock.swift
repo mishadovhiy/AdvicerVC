@@ -8,7 +8,8 @@
 import Foundation
 
 extension [GeneratorPDFViewModel.CVContent.ContentItem] {
-    static var mockPortfolio: Self {
+
+    static var mockPortfolio2: Self {
         [
 .init(title: "Meal Calendar AI ", titleDesctiption: "apps.apple.com/ua/app/id6736599453", text: """
   OpenAI and Food Advisor APIs for getting calories and nutrition information about the ingredients, from
@@ -22,7 +23,7 @@ extension [GeneratorPDFViewModel.CVContent.ContentItem] {
   """)
 ]
     }
-    static var mock: [GeneratorPDFViewModel.CVContent.ContentItem] {[
+    static var mock2: [GeneratorPDFViewModel.CVContent.ContentItem] {[
         .init(from:Calendar.current.date(byAdding: .year, value: -2, to: .init())!, to:Calendar.current.date(byAdding: .year, value: -1, to: .init())!, title: "Engenious – Remote (contract) - iOS Developer ", titleDesctiption: "apps.apple.com/ua/app/gochamp/id6448703105", text: """
             Bugfixing, refactoring, supporting daily sport planner app with video tutorials. Cross-platform team as Solo
             iOS Developer
@@ -50,12 +51,50 @@ extension [GeneratorPDFViewModel.CVContent.ContentItem] {
             UIKit, Objective-C, SwiftUI, RESTful API, Soap, CoreBluetooth, CloudKit, Keychain, StoreKit, MVC
             """)
     ]}
+    
+    static var workExperiens:Self {
+        [
+            .init(from: Calendar.current.date(byAdding: .year, value: -4, to: .init())!, to: Calendar.current.date(byAdding: .year, value: -2, to: .init())!, title: "Company name, city (full-time) - job title ", text: """
+                - achivments
+                description
+                """)
+        ]
+    }
+    
+    static var skills: Self {
+        [
+            .init(title:"name", text:"description")
+        ]
+    }
+    
+    static var jobTitle: Self {
+        [
+            .init()
+        ]
+    }
+    
+    static var summary: Self {
+        [
+            .init(text:"CV General summary")
+        ]
+    }
+    
+    static var titleDescription: Self {
+        [
+            .init(title: "CV subtitle, such as, city, primary contacts")
+        ]
+    }
+    
 }
 
 
 extension GeneratorPDFViewModel.CVContent {
+    
     static var mock:GeneratorPDFViewModel.CVContent {
-        .init(workExperience: .mock,
+        .init(workExperience: .workExperiens, skills: .skills, summary: .summary, jobTitle: .jobTitle, titleDescription: .titleDescription, contacts: [], education: [], portfolio: [])
+    }
+    static var mock2:GeneratorPDFViewModel.CVContent {
+        .init(workExperience: .mock2,
               skills: [
             .init(title: "iOS SDK: - Core iOS Development:", text: """
         UIKit (4), SwiftUI (2), Concurrency (async/await, GCD), CoreData,
@@ -111,6 +150,6 @@ building REST API with NodeJS, PHP and MySQL database.
               education: [
     .init(from: .init(), to: .init(), title: "Kyiv University of Tourism, Economics and Law, Kyiv, Ukraine ", text: "Bachelor's degree - Management")
 ],
-              portfolio: .mockPortfolio)
+              portfolio: .mockPortfolio2)
     }
 }

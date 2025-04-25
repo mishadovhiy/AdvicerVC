@@ -221,9 +221,21 @@ struct HomeView: View {
                 }
                 
                 Spacer()
-                Button("Settings") {
+                Button {
                     viewModel.selectedTab = .settings
+                } label: {
+                    Image(.setting)
+                        .resizable()
+                        .scaledToFit()
+
+                        .frame(width: 15, height: 15)
+                        .padding(.vertical, 10)
+                        .padding(.leading, 5)
+                        .padding(.trailing, 10)
+                        .tint(.darkBlue)
+                        .foregroundColor(.darkBlue)
                 }
+                .tint(.darkBlue)
                 .background(HomeViewModel.PresentingTab.settings.color)
                 .cornerRadius(5)
                 .padding(.bottom, viewModel.appCornerRadius)

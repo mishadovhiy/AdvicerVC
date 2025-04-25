@@ -35,7 +35,7 @@ enum NetworkRequest:Codable {
                 "\(key.rawValue.addSpaceBeforeCapitalizedLetters):\(value)"
             }.joined(separator: ",")
             return """
-generate advice for iOS Developer CV, \(res), my top skills:SwiftUI,UIKit, optionaly with WatchKit but i like it, desireble job duties:iOS application development,in a cross plutform team. Structure advice response in keys: \(properties). All Grades should be from 1 to 5
+generate advice for \(advice.allValues[.jobTitle] ?? "unknown job title") CV, content: \(res). Structure advice response in keys: \(properties). All Grades should be from 1 to 5
 """
             //generate request
             //choose cv button
@@ -199,30 +199,50 @@ extension NetworkRequest {
             case cvCompletnessGrade
             case skillsGrade
             case skillImprovmentSuggestion
-            case generalAdvice
-            case skillContentCompletness
+            case skillContentCompletnessGrade
+            case skillGroupingMistakes
+            case skillGropingSuggestions
+            case advancedSkillImproveSuggestions
             case atsGrade
             case employmentDurationGrade
+            case employmentDescriptionSuggestions
+            case contentDescriptionsMistakes
+            case advancedContentImprovingSuggestions
             case cvImprovment
+            case generalAdvice
             
+
+            /// value description for OpenAI request
             var valueDescription: String {
                 switch self {
+                case .skillGropingSuggestions:
+                    "Describe if i can regroup skills"
+                case .skillGroupingMistakes:
+                    "Describe if there any mistake grouping my skills"
+                case .contentDescriptionsMistakes:
+                    "Describe if there any mistakes in my content, such as logical, grammar"
+                case .advancedContentImprovingSuggestions:
+                    "Advanced content fillness improving"
+                case .advancedSkillImproveSuggestions:
+                    "Suggestions for advanced improving my skills"
                 case .employmentDurationGrade:
                     "Grade employment duration"
+                case .employmentDescriptionSuggestions:
+                    "Suggest what can i improve in working history section description"
                 case .atsGrade:
                     "Grade how CV is ATS friendly"
-                case .skillContentCompletness:
+                case .skillContentCompletnessGrade:
                     "Grade how clear i described skills section"
                 case .generalAdvice:
                     "General advice"
                 case .cvCompletnessGrade:
-                    "grade cv content completness"
+                    "Grade cv content completness"
                 case .skillsGrade:
-                    "grade how skills are relevant for the position and years of experience"
+                    "Grade how skills are relevant for the position and years of experience"
                 case .skillImprovmentSuggestion:
-                    "suggest what skills I need to add if any"
+                    "Suggest what skills I need to add if any"
                 case .cvImprovment:
-                    "suggest what can i improve in my CV"
+                    "Suggest what can i improve in my CV"
                 }
             }
             
