@@ -17,8 +17,8 @@ struct BottomGeneratorPanelView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing:20) {
                     Spacer().frame(width: 10)
-                    contentBackButton
-                    Divider()
+//                    contentBackButton
+//                    Divider()
                     colorButton
                         .tint(.white)
                     Divider()

@@ -34,6 +34,7 @@ struct GeneratorPDFView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
                 viewModel.cvContent = db.db.generatorContent.content
                 viewModel.appearence = db.db.generatorContent.apperance
+                self.viewModel.cvContentBackButtonHolder = self.viewModel.cvContent
             })
 
         }
