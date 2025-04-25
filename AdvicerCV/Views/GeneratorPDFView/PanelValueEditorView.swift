@@ -35,8 +35,9 @@ struct PanelValueEditorView: View {
     }
     
     func textField(_ title:String, text: Binding<String>) -> some View {
-        TextField("title:", text: $viewModel.editingPropertyTitle)
+        TextField(title, text: $viewModel.editingPropertyTitle, prompt: Text("Enter" + title).foregroundColor(.white.opacity(0.15)))
             .foregroundColor(.white)
+            
     }
     
     var valueEditor: some View {
@@ -45,11 +46,11 @@ struct PanelValueEditorView: View {
         let ignoreTitle = [key == .summary]
         return VStack {
             if !ignoreTitle.contains(true) {
-                textField("title:", text: $viewModel.editingPropertyTitle)
+                textField("title", text: $viewModel.editingPropertyTitle)
             }
             Divider()
             if key?.needDescription ?? false {
-                textField("description:", text: $viewModel.editingPropertyTitleDescription)
+                textField("description", text: $viewModel.editingPropertyTitleDescription)
             }
             Divider()
 
@@ -99,13 +100,14 @@ struct PanelValueEditorView: View {
     
     var textEditor: some View {
         self.textView
-            .padding(0)
             .foregroundColor(.white)
             .frame(maxWidth:.infinity)
             .frame(height:120)
             .background(content: {
                 ClearBackgroundView()
             })
+            .padding(.horizontal, -5)
+
             .overlay {
                 VStack {
                     HStack {
@@ -117,10 +119,12 @@ struct PanelValueEditorView: View {
                     
                     Spacer()
                 }
-                .padding(10)
+                .padding(.vertical, 10)
+                
                 .opacity(viewModel.editingPropertyText.isEmpty ? 1 : 0)
                 .disabled(true)
             }
+
     }
 }
 

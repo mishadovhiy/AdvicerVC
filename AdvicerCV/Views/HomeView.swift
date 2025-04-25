@@ -140,6 +140,16 @@ struct HomeView: View {
     
     var uploadButton: some View {
         VStack(content: {
+            VStack() {
+                Text("Upload Document")
+                    .foregroundColor(.white)
+                    .font(.system(size: 18, weight: .semibold))
+                Text("To generate advice with AI")
+                    .foregroundColor(.white.opacity(0.4))
+                    .font(.system(size: 12, weight: .medium))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.bottom, 20)
             Button(action: {
                 viewModel.isDocumentSelecting = true
             }) {
@@ -157,8 +167,10 @@ struct HomeView: View {
                 .shadow(color: .Special.red.opacity(0.3), radius: 7, x:-2, y:-5)
             }
             Text(AppData.adviceLimit <= db.db.documents.count ? "Limit reached" : "")
+            
                 
         })
+        .padding(.top, -100)
         .padding(.trailing, viewModel.selectedTab == .home ? viewModel.appCornerRadius : 0)
         .disabled(AppData.adviceLimit <= db.db.documents.count)
         .animation(.bouncy, value: viewModel.selectedTab)

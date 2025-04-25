@@ -48,10 +48,25 @@ struct AdviceListView: View {
     
     
     var noDataView: some View {
-        VStack {
-            Text("CV advice list is empty")
-            Text("Upload your first document")
+        HStack(spacing:-20) {
+            Image(.noDocuments)
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: 150)
+            VStack(alignment:.leading) {
+                Text("CV advice list is empty")
+                    .foregroundColor(.white)
+                    .font(.system(size: 18, weight: .semibold))
+                    .multilineTextAlignment(.leading)
+
+                Text("Upload your first document")
+                    .foregroundColor(.white.opacity(0.3))
+                    .multilineTextAlignment(.leading)
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .padding(.leading, 20)
     }
     
     var navigationLinks: some View {
