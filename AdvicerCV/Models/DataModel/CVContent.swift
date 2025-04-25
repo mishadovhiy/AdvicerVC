@@ -76,6 +76,16 @@ extension GeneratorPDFViewModel {
             }
         }
         
+        init(advice:NetworkRequest.Advice) {
+            advice.allValues.forEach { (key: NetworkRequest.Advice.RetriveTitles, value: String) in
+                if !key.needLargeText {
+                    self.data.updateValue([.init(title:value)], forKey: key.rawValue)
+                } else {
+                    self.data.updateValue([.init(text:value)], forKey: key.rawValue)
+                }
+            }
+        }
+        
         init(workExperience:[ContentItem] = [],
              skills:[ContentItem] = [],
              summary:[ContentItem] = [],

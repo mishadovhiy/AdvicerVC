@@ -11,20 +11,26 @@ struct BottomGeneratorPanelView: View {
     @Binding var viewModel:GeneratorPDFViewModel
     @Binding var isPresenting:Bool
     @EnvironmentObject var db:AppData
-    
+
     var body: some View {
         NavigationView {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing:20) {
                     Spacer().frame(width: 10)
+                    contentBackButton
+                    Divider()
                     colorButton
                         .tint(.white)
                     Divider()
                     fontButton
                         .tint(.white)
                     Divider()
+                    cvChooseButton
+                    Divider()
+
                     Button("Export") {
-                        viewModel.exportPressed()
+                        viewModel.chooseCVContentPresenting = true
+
                     }
                     .tint(.darkBlue)
                     .padding(.vertical, 5)
@@ -59,7 +65,7 @@ struct BottomGeneratorPanelView: View {
         .background {
             ClearBackgroundView()
         }
-        .frame(maxHeight: isPresenting ? (viewModel.largeEditorHeight ? .infinity : (viewModel.editorNavigationPushed ? (viewModel.generalColorsPresenting ? 170 : 110) : 60)) : 0)
+        .frame(maxHeight: isPresenting ? viewModel.panelHeight : 0)
         .background(content: {
             Color(.purple)
                 .padding(.vertical, -20)
@@ -174,7 +180,75 @@ struct BottomGeneratorPanelView: View {
     func updateDB() {
         db.db.generatorContent.apperance = viewModel.appearence
         db.db.generatorContent.content = viewModel.cvContent
+        viewModel.cvContentBackButtonHolder = viewModel.cvContent
     }
+    
+    var cvChooseDestination: some View {
+        ScrollView(.vertical, content: {
+            VStack(content: {
+                Text("Your current content will be replaced with the selected CV\nYou would need to manually divide text into the separeted sections")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(.white.opacity(0.4))
+                    .frame(maxWidth: .infinity)
+                ForEach(db.db.documents, id:\.id) { document in
+                    Button {
+                        if let advice = document.request?.advice {
+                            viewModel.cvChoosed(advice)
+                        }
+                    } label: {
+                        Text(document.request?.advice?.text(for: .jobTitle) ?? "")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(.darkBlue)
+                            .padding(.horizontal, 25)
+                            .padding(.vertical, 7)
+                            .background(.lightBlue)
+                            .cornerRadius(4)
+                    }
+
+                }
+            })
+        }).background {
+            ClearBackgroundView()
+        }.navigationTitle("Choose CV content")
+    }
+    
+    var cvChooseButton: some View {
+        NavigationLink(destination:  cvChooseDestination,
+                       isActive: .init(get: {
+            viewModel.chooseCVContentPresenting
+        }, set: { newValue in
+            withAnimation {
+                viewModel.chooseCVContentPresenting = newValue
+            }
+            updateDB()
+        })) {
+            Text("Choose content")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(.darkBlue)
+                .padding(.horizontal, 25)
+                .padding(.vertical, 7)
+                .background(.lightBlue)
+                .cornerRadius(4)
+        }
+
+    }
+    
+    var contentBackButton:some View {
+        Button {
+            withAnimation {
+                viewModel.cvContentBackPressed()
+            }
+        } label: {
+            Image(.back)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 20)
+                .foregroundColor(.white)
+        }
+        .tint(.white)
+        .disabled(viewModel.cvContentBackButtonHolder == nil)
+    }
+
     
     var colorButton: some View {
         NavigationLink(destination:

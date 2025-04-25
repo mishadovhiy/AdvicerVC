@@ -20,8 +20,22 @@ struct GeneratorPDFViewModel {
     var generalColorsPresenting = false
     var generalFontsPresenting = false
     var generalSpacesPresenting = false
+    var chooseCVContentPresenting:Bool = false
+    var cvContentBackButtonHolder:CVContent?
+    mutating func cvContentBackPressed() {
+        let value = cvContentBackButtonHolder
+        cvContentBackButtonHolder = nil
+        if let value {
+            cvContent = value
+
+        }
+    }
     var editorNavigationPushed:Bool {
-        [generalColorsPresenting, generalFontsPresenting].contains(true)
+        [generalColorsPresenting, generalFontsPresenting, chooseCVContentPresenting].contains(true)
+    }
+    
+    var panelHeight:CGFloat {
+        largeEditorHeight ? .infinity : (editorNavigationPushed ? (generalColorsPresenting || chooseCVContentPresenting ? 170 : 110) : 60)
     }
     
     mutating func linkSelected(_ link:String) {
@@ -118,6 +132,9 @@ struct GeneratorPDFViewModel {
         }
     }
     
+    mutating func cvChoosed(_ cv:NetworkRequest.Advice) {
+        self.cvContent = .init(advice: cv)
+    }
     
     var exportPDFPressed = false
     mutating func exportPressed() {
