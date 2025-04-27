@@ -35,7 +35,7 @@ struct PanelValueEditorView: View {
     }
     
     func textField(_ title:String, text: Binding<String>) -> some View {
-        TextField(title, text: $viewModel.editingPropertyTitle, prompt: Text("Enter" + title).foregroundColor(.white.opacity(0.15)))
+        TextField(title, text: text, prompt: Text("Enter" + title).foregroundColor(.white.opacity(0.15)))
             .foregroundColor(.white)
             
     }

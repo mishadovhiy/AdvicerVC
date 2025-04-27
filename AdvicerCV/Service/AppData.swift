@@ -8,7 +8,7 @@
 import Foundation
 
 class AppData:ObservableObject {
-    private let dbkey = "db7"
+    private let dbkey = "db8"
     @Published var deviceSize:CGSize = .zero
     static let adviceLimit:Int = 4
     @Published var db:DataBase = .init() {
