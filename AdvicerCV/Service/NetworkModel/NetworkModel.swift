@@ -27,5 +27,20 @@ struct NetworkModel {
             completion(.init(data: data))
         }
     }
+    
+    static var openAIToken:String = ""
+    func loadAppSettings(completion:@escaping()->()) {
+        let sesson = URLSession.shared.dataTask(with: .init(string: "https:/mishadovhiy.com/apps/other-apps-db/moviesDB/randomMovie.json")!) { data, response, error in
+            let dict = try? JSONSerialization.jsonObject(with: data ?? .init(), options: []) as? [String: Any]
+            print(dict, " tgerfsdgfd")
+            if let token = dict?["openAIToken"] as? String {
+                NetworkModel.openAIToken = token
+            } else {
+                print("errorloadingtoken")
+            }
+            completion()
+        }
+        sesson.resume()
+    }
 }
 

@@ -41,7 +41,7 @@ extension NetworkModel {
                     request = nil
                     return
                 }
-                let token = Keys.openAIToken.rawValue
+                let token = NetworkModel.openAIToken
                 
                 request?.httpMethod = "POST"
                 request?.setValue("application/json", forHTTPHeaderField: "Content-Type")
