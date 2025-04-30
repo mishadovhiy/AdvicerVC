@@ -195,6 +195,7 @@ extension NetworkRequest {
             }
         }
         
+        /// Declared Keys for OpenAI request, each key rawValue and decription sent in OpenAI's prompt in the request
         enum Keys:String, CaseIterable, ResponseKeys {
             case cvCompletnessGrade
             case skillsGrade
