@@ -1,5 +1,5 @@
 <div style="displey:flex">
-  <img width="20%" src="https://mishadovhiy.com/imgs/monopoly/1.png">
+  <img width="20%" src="https://mishadovhiy.com/imgs/cvadvicer/1.png">
 <img width="20%" src="https://mishadovhiy.com/imgs/cvadvicer/2.png">
   <img width="20%" src="https://mishadovhiy.com/imgs/cvadvicer/3.png">
 </div>
