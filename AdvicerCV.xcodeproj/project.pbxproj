@@ -25,6 +25,8 @@
 		821FEDB62DA4DD930002D969 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821FEDB52DA4DD930002D969 /* View.swift */; };
 		8223D64A2DBBD770000F43A0 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8223D6492DBBD770000F43A0 /* UIImage.swift */; };
 		8223D64C2DBBD79C000F43A0 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8223D64B2DBBD79C000F43A0 /* UIView.swift */; };
+		822DCBD92DC9089A00137E5A /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 822DCBD82DC9089A00137E5A /* GoogleMobileAds */; };
+		822DCBE22DC909FE00137E5A /* AdPresenterRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 822DCBE12DC909FE00137E5A /* AdPresenterRepresentable.swift */; };
 		823A1A0C2DC0397700E5D31E /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823A1A0B2DC0397700E5D31E /* Keys.swift */; };
 		824D0A832DBA9B62004FFDDB /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 824D0A822DBA9B62004FFDDB /* UIFont.swift */; };
 		8289D8A42D9B40D1001B6C40 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8289D8A32D9B40D1001B6C40 /* AppData.swift */; };
@@ -74,6 +76,8 @@
 		821FEDB52DA4DD930002D969 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		8223D6492DBBD770000F43A0 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		8223D64B2DBBD79C000F43A0 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		822DCBDB2DC908CE00137E5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		822DCBE12DC909FE00137E5A /* AdPresenterRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPresenterRepresentable.swift; sourceTree = "<group>"; };
 		823A1A0B2DC0397700E5D31E /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		824D0A822DBA9B62004FFDDB /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		8289D8A32D9B40D1001B6C40 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
@@ -110,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				822DCBD92DC9089A00137E5A /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				8289D8BB2D9B7056001B6C40 /* PDFKitView.swift */,
+				822DCBE12DC909FE00137E5A /* AdPresenterRepresentable.swift */,
 				820679DD2DB8350500B8DEF6 /* BaseView */,
 			);
 			path = ComponentView;
@@ -251,6 +257,7 @@
 		82A310D52D7BD29400E2737F /* AdvicerCV */ = {
 			isa = PBXGroup;
 			children = (
+				822DCBDB2DC908CE00137E5A /* Info.plist */,
 				82A310D12D7BD29400E2737F /* Preview Content */,
 				82A310D22D7BD29400E2737F /* AdvicerCVApp.swift */,
 				823A1A0B2DC0397700E5D31E /* Keys.swift */,
@@ -314,6 +321,7 @@
 			);
 			name = AdvicerCV;
 			packageProductDependencies = (
+				822DCBD82DC9089A00137E5A /* GoogleMobileAds */,
 			);
 			productName = AdvicerCV;
 			productReference = 82A310BF2D7BD28600E2737F /* AdvicerCV.app */;
@@ -343,6 +351,9 @@
 			);
 			mainGroup = 82A310B62D7BD28600E2737F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				822DCBD72DC9089A00137E5A /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 82A310C02D7BD28600E2737F /* Products */;
 			projectDirPath = "";
@@ -370,6 +381,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				822DCBE22DC909FE00137E5A /* AdPresenterRepresentable.swift in Sources */,
 				8217C7A02DB9699700531F89 /* BottomGeneratorPanelView.swift in Sources */,
 				82029B852DB92DE500800347 /* WebView.swift in Sources */,
 				820679DA2DB82EFE00B8DEF6 /* AboutView.swift in Sources */,
@@ -550,6 +562,7 @@
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AdvicerCV/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "CV AI Advicer";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -562,7 +575,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dovhiy.AdvicerCV;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -582,6 +595,7 @@
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AdvicerCV/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "CV AI Advicer";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -594,7 +608,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dovhiy.AdvicerCV;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -625,6 +639,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		822DCBD72DC9089A00137E5A /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		822DCBD82DC9089A00137E5A /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 822DCBD72DC9089A00137E5A /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 82A310B72D7BD28600E2737F /* Project object */;
 }

@@ -6,10 +6,18 @@
 //
 
 import SwiftUI
-
+import Combine
 @main
 struct AdvicerCVApp: App {
     @State var appLoaded:Bool = false
+    static var adPresenting = PassthroughSubject<Bool, Never>()
+    static func triggerAdPresenting(with newValue: Bool = false) {
+        adPresenting.send(newValue)
+    }
+    static var bannerCompletedPresenting:(()->())?
+    @State var adPresenting:Bool = false
+    @State var adPresentingValue:Set<AnyCancellable> = []
+
     var body: some Scene {
         WindowGroup {
             VStack(content: {
@@ -26,6 +34,9 @@ struct AdvicerCVApp: App {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             })
                 .onAppear {
+                    AdvicerCVApp.adPresenting.sink { newValue in
+                        self.adPresenting = newValue
+                    }.store(in: &adPresentingValue)
                     DispatchQueue.init(label: "db", qos: .userInitiated).async {
                         NetworkModel().loadAppSettings {
                             DispatchQueue.main.async {
@@ -54,6 +65,20 @@ struct AdvicerCVApp: App {
                 
                      UINavigationBar.appearance().standardAppearance = appearance
                      UINavigationBar.appearance().scrollEdgeAppearance = appearance
+                }
+                .overlay {
+                    if adPresenting {
+                        AdPresenterRepresentable(dismissed: {
+                            AdvicerCVApp.bannerCompletedPresenting?()
+                            AdvicerCVApp.adPresenting.send(false)
+
+                        })
+                    } else {
+                        VStack{
+                            
+                        }.disabled(true)
+                    }
+                   
                 }
 //            GeneratorPDFView()
         }

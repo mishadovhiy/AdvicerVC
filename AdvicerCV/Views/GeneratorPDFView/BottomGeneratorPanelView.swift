@@ -29,7 +29,10 @@ struct BottomGeneratorPanelView: View {
                     Divider()
 
                     Button("Export") {
-                        viewModel.exportPressed()
+                        AdvicerCVApp.bannerCompletedPresenting = {
+                            viewModel.exportPressed()
+                        }
+                        AdvicerCVApp.adPresenting.send(true)
 
                     }
                     .tint(.darkBlue)

@@ -132,17 +132,20 @@ struct AdviceView: View {
         HStack {
             Spacer()
             Button(((document?.response != nil) ? "Re-" : "") + "Generate") {
-                generatePressed(completion: {
-                    if let document = document {
-                        self.db.db.documents.update(document)
-                        print(document.response?.value(for: .atsGrade), " fdgfdsg ")
-                        self.document = db.db.documents.first(where: {
-                            self.document?.id == $0.id
-                        })
-                        print(document.response?.value(for: .atsGrade), " gfhddfgd ")
+                AdvicerCVApp.bannerCompletedPresenting = {
+                    generatePressed(completion: {
+                        if let document = document {
+                            self.db.db.documents.update(document)
+                            print(document.response?.value(for: .atsGrade), " fdgfdsg ")
+                            self.document = db.db.documents.first(where: {
+                                self.document?.id == $0.id
+                            })
+                            print(document.response?.value(for: .atsGrade), " gfhddfgd ")
 
-                    }
-                })
+                        }
+                    })
+                }
+                AdvicerCVApp.adPresenting.send(true)
             }
             .tint(.white)
             .font(.system(size: 15, weight:.semibold))
